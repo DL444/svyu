@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvyU.Web", "SvyU.Web\SvyU.Web.csproj", "{5FB5958A-8B73-47F8-AAB1-1F3B18AE3821}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvyU.Web", "SvyU.Web\SvyU.Web.csproj", "{5FB5958A-8B73-47F8-AAB1-1F3B18AE3821}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvyU.Backend", "SvyU.Backend\SvyU.Backend.csproj", "{52EE307D-974E-4D49-92BF-8A3C7761AD01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvyU.Backend", "SvyU.Backend\SvyU.Backend.csproj", "{52EE307D-974E-4D49-92BF-8A3C7761AD01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvyU.Models", "SvyU.Models\SvyU.Models.csproj", "{F09F410C-CF22-46AC-9A9E-19433A78F12C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvyU.Models", "SvyU.Models\SvyU.Models.csproj", "{F09F410C-CF22-46AC-9A9E-19433A78F12C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvyU.Test", "SvyU.Test\SvyU.Test.csproj", "{66F43BE6-C316-4508-B84F-04E3B2BC3D8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvyU.Test", "SvyU.Test\SvyU.Test.csproj", "{66F43BE6-C316-4508-B84F-04E3B2BC3D8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
