@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvyU.Web", "SvyU.Web\SvyU.W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvyU.Backend", "SvyU.Backend\SvyU.Backend.csproj", "{52EE307D-974E-4D49-92BF-8A3C7761AD01}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvyU.Models", "SvyU.Models\SvyU.Models.csproj", "{F09F410C-CF22-46AC-9A9E-19433A78F12C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvyU.Test", "SvyU.Test\SvyU.Test.csproj", "{66F43BE6-C316-4508-B84F-04E3B2BC3D8D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{52EE307D-974E-4D49-92BF-8A3C7761AD01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52EE307D-974E-4D49-92BF-8A3C7761AD01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52EE307D-974E-4D49-92BF-8A3C7761AD01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F09F410C-CF22-46AC-9A9E-19433A78F12C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F09F410C-CF22-46AC-9A9E-19433A78F12C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F09F410C-CF22-46AC-9A9E-19433A78F12C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F09F410C-CF22-46AC-9A9E-19433A78F12C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66F43BE6-C316-4508-B84F-04E3B2BC3D8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66F43BE6-C316-4508-B84F-04E3B2BC3D8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66F43BE6-C316-4508-B84F-04E3B2BC3D8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66F43BE6-C316-4508-B84F-04E3B2BC3D8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
