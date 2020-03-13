@@ -15,7 +15,7 @@ namespace SvyU.Backend
     {
         [FunctionName("survey")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "survey/{id}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "survey/{id}")] HttpRequest req,
             [CosmosDB(databaseName: "Survey", collectionName: "Survey", ConnectionStringSetting = "DbConnection", 
                 PartitionKey = "{id}", Id = "survey-{id}")] SurveyEntity entity,
             [CosmosDB(databaseName: "Survey", collectionName: "Survey", ConnectionStringSetting = "DbConnection")] 
