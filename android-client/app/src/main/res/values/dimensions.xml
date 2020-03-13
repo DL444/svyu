@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="header">28sp</dimen>
+    <dimen name="subheader">20sp</dimen>
+    <dimen name="title">20sp</dimen>
+    <dimen name="summaryItem">16sp</dimen>
+    <dimen name="qHeader">24sp</dimen>
+    <dimen name="marginL">36dp</dimen>
+    <dimen name="marginM">24dp</dimen>
+    <dimen name="marginS">18dp</dimen>
+    <dimen name="marginXS">4dp</dimen>
+    <dimen name="appPadding">48dp</dimen>
+</resources>

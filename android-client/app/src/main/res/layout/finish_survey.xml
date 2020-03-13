@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/appPadding">
+
+    <!--  Start : Your code should be within this block -->
+
+    <TextView
+        android:id="@+id/welcome_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/final_jumbo"
+        style="@style/Header"/>
+    <TextView
+        android:id="@+id/welcome_subheader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/welcome_header"
+        android:text="@string/final_secondary"
+        style="@style/Subheader"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/welcome_subheader"
+        android:src="@drawable/moe"
+        android:scaleType="fitStart"/>
+
+    <Button
+        android:id="@+id/nextBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        style="@style/PrimaryButton"
+        android:text="@string/finish"/>
+
+    <!-- END    : Your code should be within this block -->
+
+</RelativeLayout>

@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">SvyU</string>
+    <string name="welcome_jumbo">Welcome to</string>
+    <string name="welcome_secondary">Take part in our survey!</string>
+    <string name="welcome_attn_title">Before we start, here are things you should know:</string>
+    <string name="welcome_attn_0">- Please be honest when making your choice.</string>
+    <string name="welcome_attn_1">- We are just doing a research so you don\'t have to fake your information.</string>
+    <string name="welcome_attn_2">- Please follow the step we designed for you and don\'t skip any questions.</string>
+    <string name="welcome_req_accept">I accept these requests.</string>
+    <string name="welcome_start">Let\'s start!</string>
+    <string name="next">Next</string>
+    <string name="final_jumbo">Thank you</string>
+    <string name="final_secondary">for your answers!</string>
+    <string name="finish">Save result</string>
+    <string name="summary">Summary</string>
+    <string name="questionHeader">Question %1$d</string>
+    <string name="cacheFailed">Failed to save your response.</string>
+</resources>
