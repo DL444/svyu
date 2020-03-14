@@ -1,0 +1,61 @@
+﻿a.brand {
+    font-size: 1.1rem;
+    color: white;
+}
+a.brand:hover {
+    text-decoration: none;
+}
+a.brand:visited {
+    color: white;
+}
+
+p.question {
+    color: #0080ff;
+    font-size: 1.34rem;
+    cursor: text;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    font-family: 'WinJS MDL2 Assets' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.icon-btn {
+    font-size: 0.8em;
+}
+.icon-Add:before {
+    content: "\e109";
+}
+.icon-Tick:before {
+    content: "\e10b";
+}
+.icon-Cross:before {
+    content: "\e10a";
+}
+
+.dropdown-item.arrow-cursor {
+    cursor: default
+}
+.btn.arrow-cursor {
+    cursor: default
+}
+
+.btn.btn-no-outline {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    background-color: #FFFFFF;
+    border-color: transparent;
+}
+.btn.btn-delete {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    background-color: #FFFFFF;
+    border-color: transparent;
+    color: #dc3545;
+}

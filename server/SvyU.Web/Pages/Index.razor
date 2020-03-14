@@ -1,7 +1,177 @@
-﻿@page "/"
+﻿@using PageModels;
+@using SvyU.Models;
+@page "/"
+@inject IJSRuntime jsRuntime;
+@inject SvyU.Web.Services.SurveyService SurveyService;
 
-<h1>Hello, world!</h1>
+<h3 class="mb-4">New survey</h3>
 
-Welcome to your new app.
+<EditForm Model="model" OnValidSubmit="Submit" autocomplete="off">
+    @foreach (IQuestionPageModel question in model.Questions)
+    {
+        if (question is ChoiceQuestionPageModel choiceQuestion)
+        {
+            if (question is SingleQuestionPageModel)
+            {
+                <p class="text-muted mt-4 mb-1">@($"{model.Questions.IndexOf(question) + 1}. Single answer")</p>
+            }
+            else
+            {
+                <p class="text-muted mt-4 mb-1">@($"{model.Questions.IndexOf(question) + 1}. Multiple answer")</p>
+            }
+            <div class="row no-gutters">
+                <div class="col-10 col-sm-11">
+                    @if (question.InEdit)
+                    {
+                        <InputText @bind-Value="question.Question" @onblur="_ => BlurQuestion(question)" class="form-control form-control-lg" placeholder="Question..." id="current-edit" />
+                    }
+                    else
+                    {
+                        <p class="question " @onclick="async _ => await FocusQuestion(question)">@(string.IsNullOrWhiteSpace(question.Question) ? "Question..." : question.Question)</p>
+                    }
+                </div>
+                <div class="col-2 col-sm-1">
+                    <button class="btn-delete btn btn-light float-right" type="button" @onclick="_ => RemoveQuestion(question)"><i class="icon-Cross" /></button>
+                </div>
+            </div>
+            @foreach (OptionPageModel option in choiceQuestion.Options)
+            {
+                <div class="row no-gutters mt-3">
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <a class="text-danger input-group-text" @onclick="_ => RemoveOption(choiceQuestion, option)"><i class="icon-Cross" /></a>
+                            </div>
+                            <InputText class="form-control" @bind-Value="option.Option" @onblur="_ => UpdateOptions(choiceQuestion)" />
+                        </div>
+                    </div>
+                </div>
+            }
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+            <div class="row no-gutters mt-3">
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="icon-Add" /></span>
+                        </div>
+                        <InputText class="form-control" placeholder="Add option" @bind-Value="choiceQuestion.OptionPlaceholder.Option" @onblur="_ => UpdateOptions(choiceQuestion)" />
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <p class="text-muted mt-4 mb-1">@($"{model.Questions.IndexOf(question) + 1}. Free input")</p>
+            <div class="row no-gutters">
+                <div class="col-11">
+                    @if (question.InEdit)
+                    {
+                        <InputText @bind-Value="question.Question" @onblur="_ => BlurQuestion(question)" class="form-control form-control-lg" placeholder="Question..." id="current-edit" />
+                    }
+                    else
+                    {
+                        <p class="question " @onclick="async _ => await FocusQuestion(question)">@(string.IsNullOrWhiteSpace(question.Question) ? "Question..." : question.Question)</p>
+                    }
+                </div>
+                <div class="col-1">
+                    <button class="btn-delete btn btn-light float-right" type="button" @onclick="_ => RemoveQuestion(question)"><i class="icon-Cross" /></button>
+                </div>
+            </div>
+        }
+    }
+
+    <div class="btn-group mt-4">
+        <button type="button" class="btn btn-primary arrow-cursor" @onclick="async _ => await AddQuestion(QuestionType.Single)">
+            <i class="icon-Add icon-btn mr-2" /> Single answer
+        </button>
+        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split arrow-cursor" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="sr-only">More question types</span>
+        </button>
+        <div class="dropdown-menu">
+            <a class="dropdown-item arrow-cursor" @onclick="async _ => await AddQuestion(QuestionType.Multiple)">Multiple answer</a>
+            <a class="dropdown-item arrow-cursor" @onclick="async _ => await AddQuestion(QuestionType.Text)">Free input</a>
+        </div>
+    </div>
+
+    @if (submitting)
+    {
+        <div class="float-right spinner-border text-primary mt-4 mr-4" role="status">
+            <span class="sr-only">Submitting</span>
+        </div>
+    }
+    else
+    {
+        <button class="btn btn-outline-primary mt-4 float-right arrow-cursor" type="submit"><i class="icon-Tick icon-btn mr-2" /> Submit</button>
+    }
+</EditForm>
+
+
+
+
+@code {
+    private async Task AddQuestion(QuestionType type)
+    {
+        model.Questions.ForEach(x => x.InEdit = false);
+        switch (type)
+        {
+            case QuestionType.Single:
+                model.Questions.Add(new SingleQuestionPageModel() { InEdit = true });
+                break;
+            case QuestionType.Multiple:
+                model.Questions.Add(new MultipleQuestionPageModel() { InEdit = true });
+                break;
+            case QuestionType.Text:
+                model.Questions.Add(new TextQuestionPageModel() { InEdit = true });
+                break;
+        }
+        await FocusCurrent();   
+    }
+
+    private void RemoveQuestion(IQuestionPageModel question)
+    {
+        model.Questions.Remove(question);
+    }
+
+    private void UpdateOptions(ChoiceQuestionPageModel question)
+    {
+        question.Options.RemoveAll(x => string.IsNullOrWhiteSpace(x.Option));
+        if (!string.IsNullOrWhiteSpace(question.OptionPlaceholder.Option))
+        {
+            question.Options.Add(question.OptionPlaceholder);
+            question.OptionPlaceholder = new OptionPageModel();
+        }
+    }
+
+    private void RemoveOption(ChoiceQuestionPageModel question, OptionPageModel option)
+    {
+        question.Options.Remove(option);
+    }
+
+    private async Task FocusQuestion(IQuestionPageModel question)
+    {
+        question.InEdit = true;
+        await FocusCurrent();
+    }
+
+    private void BlurQuestion(IQuestionPageModel question)
+    {
+        question.InEdit = false;
+    }
+
+    private async Task FocusCurrent()
+    {
+        await Task.Delay(200);
+        await jsRuntime.InvokeVoidAsync("focusHelpers.focusElement", new object[] { "current-edit" });
+    }
+
+    private async Task Submit()
+    {
+        submitting = true;
+        Survey surveyModel = model.GetSurveyModel();
+        Console.WriteLine(surveyModel.GetJson());
+        submitting = false;
+    }
+
+    private NewSurveyPageModel model = new NewSurveyPageModel();
+    private bool submitting = false;
+}
