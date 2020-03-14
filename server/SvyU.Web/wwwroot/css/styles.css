@@ -14,6 +14,14 @@ p.question {
     font-size: 1.34rem;
     cursor: text;
 }
+p.servey-id {
+    color: #0080ff;
+    font-size: 1.5rem;
+}
+
+.w-abs-20 {
+    width: 20rem;
+}
 
 [class^="icon-"], [class*=" icon-"] {
     font-family: 'WinJS MDL2 Assets' !important;
@@ -37,6 +45,9 @@ p.question {
 }
 .icon-Cross:before {
     content: "\e10a";
+}
+.icon-Save:before {
+    content: "\e105";
 }
 
 .dropdown-item.arrow-cursor {

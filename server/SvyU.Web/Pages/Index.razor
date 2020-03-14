@@ -2,7 +2,8 @@
 @using SvyU.Models;
 @page "/"
 @inject IJSRuntime jsRuntime;
-@inject SvyU.Web.Services.SurveyService SurveyService;
+@inject SvyU.Web.Services.SurveyService surveyService;
+@inject NavigationManager navMgr;
 
 <h3 class="mb-4">New survey</h3>
 
@@ -124,7 +125,7 @@
                 model.Questions.Add(new TextQuestionPageModel() { InEdit = true });
                 break;
         }
-        await FocusCurrent();   
+        await FocusCurrent();
     }
 
     private void RemoveQuestion(IQuestionPageModel question)
@@ -168,7 +169,8 @@
     {
         submitting = true;
         Survey surveyModel = model.GetSurveyModel();
-        Console.WriteLine(surveyModel.GetJson());
+        int id = await surveyService.AddSurvey(surveyModel);
+        navMgr.NavigateTo($"complete/{id}");
         submitting = false;
     }
 

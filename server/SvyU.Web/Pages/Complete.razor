@@ -1,7 +1,29 @@
-﻿@page "/complete"
+﻿@page "/complete/{id}"
+@inject ZXing.BarcodeWriterSvg writer;
 
-<h3>Complete</h3>
+<h3 class="mb-4">Complete</h3>
+
+<div class="mb-2">
+    <p>Scan this QR code with SvyU app.</p>
+    <p>Bookmark this page to access this code later.</p>
+</div>
+<div class="mb-2 w-abs-20 mx-auto">
+    @((MarkupString)Svg)
+</div>
+<div class="text-center mb-2">
+    <p>Survey ID: @Id</p>
+</div>
 
 @code {
+    [Parameter]
+    public string Id { get; set; }
 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        string svg = writer.Write(Id).Content;
+        Svg = svg.Substring(svg.IndexOf("<svg"));
+    }
+
+    private string Svg { get; set; }
 }
