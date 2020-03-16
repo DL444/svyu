@@ -5,12 +5,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.zxing.client.android.Intents;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +31,13 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+    /**
+     * when we click the button from beginscan.xml
+     *it can scan QR code
+     */
+    Button  btnscan;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,15 +98,67 @@ public class MainActivity extends AppCompatActivity {
             Log.wtf("Initialize", "JSON format exception - Invalid number format.");
         }
 
-        setContentView(R.layout.welcome);
+       // setContentView(R.layout.welcome);
         current = -1;
+
+
+
+
+        /**add Clicklistener for button "Scan" from welcome.xml*/
+        setContentView(R.layout.beginscan);
+        btnscan=findViewById(R.id.btn_scan);
+        btnscan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //create IntentIntegrator's object
+                IntentIntegrator intentIntegrator=new IntentIntegrator(MainActivity.this);
+                //10s
+                intentIntegrator.setTimeout(10000);
+                intentIntegrator.setOrientationLocked(false);
+                intentIntegrator.setBeepEnabled(true);
+                intentIntegrator.setPrompt("Please scan a QR code");
+                //设置自定义扫描activity
+                intentIntegrator.setCaptureActivity(CustomCaptureActivity.class);
+                //scan
+                intentIntegrator.initiateScan();
+            }
+        });
+
+
+
     }
+
+    // get scanning's result
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() == null) {
+                Toast.makeText(this, "No QR code", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "result:" + result.getContents(), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Event handler for the primary button of each page.
      * @param sender The view that triggered the handler.
      */
-    public void next(View sender) {
+   public void next(View sender) {
         if (finalized) {
             return;
         }
@@ -327,4 +392,5 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<ISurveyResponse> responses = new ArrayList<>();
     private Survey survey;
+
 }
