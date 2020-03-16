@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
      */
     Button  btnscan;
 
+    //The ID of a questionnaire
+    String questionnaireID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,8 +100,13 @@ public class MainActivity extends AppCompatActivity {
             Log.wtf("Initialize", "JSON format exception - Invalid number format.");
         }
 
+        //
        // setContentView(R.layout.welcome);
         current = -1;
+
+
+
+
 
 
 
@@ -125,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
     }
 
     // get scanning's result
@@ -136,16 +142,19 @@ public class MainActivity extends AppCompatActivity {
             if (result.getContents() == null) {
                 Toast.makeText(this, "No QR code", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "result:" + result.getContents(), Toast.LENGTH_SHORT).show();
+
+                questionnaireID=result.getContents();
+
+                //Toast.makeText(this, "result:" + result.getContents(), Toast.LENGTH_SHORT).show();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+
+
+        //输出问卷ID
+        //System.out.println(questionnaireID);
     }
-
-
-
-
 
 
 
