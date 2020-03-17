@@ -39,46 +39,14 @@ public class MainActivity extends AppCompatActivity {
      * when we click the button from beginscan.xml
      *it can scan QR code
      */
-    Button  btnscan;
+    private Button btnscan;
 
     //The ID of a questionnaire
-    String questionnaireID;
+    private String questionnaireID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (android.os.Build.VERSION.SDK_INT > 9) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
-        Json jsonObject=new Json();
-        json=jsonObject.getJson("https://svyu.azure-api.net/survey/12344134");
-        try {
-            survey = Survey.parse(json);
-        } catch (QuestionTypeNotSupportedException ex) {
-            Log.wtf("Initialize", "Unexpected question type: " + ex.getType());
-        } catch (JSONException ex) {
-            Log.wtf("Initialize", "JSON format exception - General.");
-        } catch (NumberFormatException ex) {
-            Log.wtf("Initialize", "JSON format exception - Invalid number format.");
-<<<<<<< HEAD
-        }Toast.makeText(this, json, Toast.LENGTH_LONG).show();
-        setContentView(R.layout.welcome);
-=======
-        }
-
-        //
-       // setContentView(R.layout.welcome);
->>>>>>> a4bbaa507011f2b6bf0bab233aafce720f6df0e6
-        current = -1;
-
-
-
-
-
-
-
-
         /**add Clicklistener for button "Scan" from welcome.xml*/
         setContentView(R.layout.beginscan);
         btnscan=findViewById(R.id.btn_scan);
@@ -99,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
     }
+
 
     // get scanning's result
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -112,24 +80,30 @@ public class MainActivity extends AppCompatActivity {
             } else {
 
                 questionnaireID=result.getContents();
-
-                //Toast.makeText(this, "result:" + result.getContents(), Toast.LENGTH_SHORT).show();
+                if (android.os.Build.VERSION.SDK_INT > 9) {
+                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                    StrictMode.setThreadPolicy(policy);
+                }
+                Json jsonObject=new Json();
+                json=jsonObject.getJson("https://svyu.azure-api.net/survey/"+questionnaireID);
+                try {
+                    survey = Survey.parse(json);
+                    setContentView(R.layout.welcome);
+                    current = -1;
+                } catch (QuestionTypeNotSupportedException ex) {
+                    Log.wtf("Initialize", "Unexpected question type: " + ex.getType());
+                } catch (JSONException ex) {
+                    Log.wtf("Initialize", "JSON format exception - General.");
+                } catch (NumberFormatException ex) {
+                    Log.wtf("Initialize", "JSON format exception - Invalid number format.");
+                }
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
-
-
         //输出问卷ID
         //System.out.println(questionnaireID);
     }
-
-
-
-
-
-
-
 
     /**
      * Event handler for the primary button of each page.
@@ -367,9 +341,5 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<ISurveyResponse> responses = new ArrayList<>();
     private Survey survey;
-<<<<<<< HEAD
     private String json;
-=======
-
->>>>>>> a4bbaa507011f2b6bf0bab233aafce720f6df0e6
 }

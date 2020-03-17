@@ -33,7 +33,6 @@ public class Json {
                 }
                 result = new String(bos.toByteArray());
                 is.close();
-//                Log.wtf("getResult", result);
             }
             if (connection.getResponseCode() == 404){
                 Log.wtf("getResult", "can not find ID");
