@@ -1,6 +1,8 @@
 package mg.studio.android.survey;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,11 +33,15 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private DataHelper dataHelper;
+    private SQLiteDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         survey = (Survey) this.getIntent().getSerializableExtra(getPackageName() + ".survey");
+        dataHelper = new DataHelper(this);
 
         current = -1;
         next(null);
@@ -243,11 +249,19 @@ public class MainActivity extends AppCompatActivity {
         switch (type) {
             case Single:
                 response = new SingleResponse();
+                ContentValues values;
                 ViewGroup opts = findViewById(R.id.opts);
                 for (int i = 0; i < opts.getChildCount(); i++) {
                     RadioButton optBtn = (RadioButton)opts.getChildAt(i);
                     if (optBtn.isChecked()) {
                         response.setResponse(optBtn.getText().toString());
+
+                        db = dataHelper.getWritableDatabase();
+                        values = new ContentValues();
+                        values.put("type", "single");
+                        values.put("answer", i);
+                        db.insert("q_answer", null, values);
+                        db.close();
                         break;
                     }
                 }
@@ -259,6 +273,12 @@ public class MainActivity extends AppCompatActivity {
                     CheckBox check = (CheckBox)checks.getChildAt(i);
                     if (check.isChecked()) {
                         response.setResponse(check.getText().toString());
+                        db = dataHelper.getWritableDatabase();
+                        values = new ContentValues();
+                        values.put("type", "multiple");
+                        values.put("answer", i);
+                        db.insert("q_answer", null, values);
+                        db.close();
                     }
                 }
                 break;
@@ -266,6 +286,12 @@ public class MainActivity extends AppCompatActivity {
                 response = new SingleResponse();
                 EditText inputBox = findViewById(R.id.inputBox);
                 response.setResponse(inputBox.getText().toString());
+                db = dataHelper.getWritableDatabase();
+                values = new ContentValues();
+                values.put("type", "text");
+                values.put("answer", inputBox.getText().toString());
+                db.insert("q_answer", null, values);
+                db.close();
                 break;
             default:
                 return null;
