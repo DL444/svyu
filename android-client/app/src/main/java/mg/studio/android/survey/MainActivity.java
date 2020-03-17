@@ -1,12 +1,14 @@
 package mg.studio.android.survey;
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -14,6 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.zxing.client.android.Intents;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,76 +35,81 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * when we click the button from beginscan.xml
+     *it can scan QR code
+     */
+    private Button btnscan;
+
+    //The ID of a questionnaire
+    private String questionnaireID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /**add Clicklistener for button "Scan" from welcome.xml*/
+        setContentView(R.layout.beginscan);
+        btnscan=findViewById(R.id.btn_scan);
+        btnscan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //create IntentIntegrator's object
+                IntentIntegrator intentIntegrator=new IntentIntegrator(MainActivity.this);
+                //10s
+                intentIntegrator.setTimeout(10000);
+                intentIntegrator.setOrientationLocked(false);
+                intentIntegrator.setBeepEnabled(true);
+                intentIntegrator.setPrompt("Please scan a QR code");
+                //设置自定义扫描activity
+                intentIntegrator.setCaptureActivity(CustomCaptureActivity.class);
+                //scan
+                intentIntegrator.initiateScan();
+            }
+        });
 
-        dataHelper=new DataHelper(this);
+    }
 
-        String json = "{\n" +
-                "    \"survey\": {\n" +
-                "        \"id\": \"12344134\",\n" +
-                "        \"len\": \"3\",\n" +
-                "        \"questions\": [\n" +
-                "            {\n" +
-                "                \"type\": \"single\",\n" +
-                "                \"question\": \"How well do the professors teach at this university?\",\n" +
-                "                \"options\": [\n" +
-                "                    {\n" +
-                "                        \"1\": \"Extremely well\"\n" +
-                "                    },\n" +
-                "                    {\n" +
-                "                        \"2\": \"Very well\"\n" +
-                "                    }\n" +
-                "                ]\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"type\": \"multiple\",\n" +
-                "                \"question\": \"How effective is the teaching outside yur major at the univesrity?\",\n" +
-                "                \"options\": [\n" +
-                "                    {\n" +
-                "                        \"1\": \"Extremetly effective\"\n" +
-                "                    },\n" +
-                "                    {\n" +
-                "                        \"2\": \"Very effective\"\n" +
-                "                    },\n" +
-                "                    {\n" +
-                "                        \"3\": \"Somewhat effective\"\n" +
-                "                    },\n" +
-                "                    {\n" +
-                "                        \"4\": \"Not so effective\"\n" +
-                "                    },\n" +
-                "                    {\n" +
-                "                        \"5\": \"Not at all effective\"\n" +
-                "                    }\n" +
-                "                ]\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"type\": \"text\",\n" +
-                "                \"question\": \"Test\"\n" +
-                "            }\n" +
-                "        ]\n" +
-                "    }\n" +
-                "}";
-        try {
-            survey = Survey.parse(json);
-        } catch (QuestionTypeNotSupportedException ex) {
-            Log.wtf("Initialize", "Unexpected question type: " + ex.getType());
-        } catch (JSONException ex) {
-            Log.wtf("Initialize", "JSON format exception - General.");
-        } catch (NumberFormatException ex) {
-            Log.wtf("Initialize", "JSON format exception - Invalid number format.");
+
+    // get scanning's result
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() == null) {
+                Toast.makeText(this, "No QR code", Toast.LENGTH_SHORT).show();
+            } else {
+
+                questionnaireID=result.getContents();
+                if (android.os.Build.VERSION.SDK_INT > 9) {
+                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                    StrictMode.setThreadPolicy(policy);
+                }
+                Json jsonObject=new Json();
+                json=jsonObject.getJson("https://svyu.azure-api.net/survey/"+questionnaireID);
+                try {
+                    survey = Survey.parse(json);
+                    setContentView(R.layout.welcome);
+                    current = -1;
+                } catch (QuestionTypeNotSupportedException ex) {
+                    Log.wtf("Initialize", "Unexpected question type: " + ex.getType());
+                } catch (JSONException ex) {
+                    Log.wtf("Initialize", "JSON format exception - General.");
+                } catch (NumberFormatException ex) {
+                    Log.wtf("Initialize", "JSON format exception - Invalid number format.");
+                }
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
-
-        setContentView(R.layout.welcome);
-        current = -1;
+        //输出问卷ID
+        //System.out.println(questionnaireID);
     }
 
     /**
      * Event handler for the primary button of each page.
      * @param sender The view that triggered the handler.
      */
-    public void next(View sender) {
+   public void next(View sender) {
         if (finalized) {
             return;
         }
@@ -222,7 +233,6 @@ public class MainActivity extends AppCompatActivity {
             return existingRoot.toString();
         }
     }
-
     /**
      * A helper method for navigate to summary activity.
      */
@@ -292,30 +302,16 @@ public class MainActivity extends AppCompatActivity {
      * @param type The type of the current question.
      * @return An ISurveyResponse object representing the user response.
      */
-
-    DataHelper dataHelper;
-    private SQLiteDatabase db;
-
     private ISurveyResponse getResponse(QuestionType type) {
         ISurveyResponse response;
-        ContentValues values;
-
         switch (type) {
             case Single:
                 response = new SingleResponse();
                 ViewGroup opts = findViewById(R.id.opts);
-
                 for (int i = 0; i < opts.getChildCount(); i++) {
                     RadioButton optBtn = (RadioButton)opts.getChildAt(i);
                     if (optBtn.isChecked()) {
                         response.setResponse(optBtn.getText().toString());
-
-                        db=dataHelper.getWritableDatabase();
-                        values=new ContentValues();
-                        values.put("type","single");
-                        values.put("answer",i);
-                        db.insert("q_answer",null,values);
-                        db.close();
                         break;
                     }
                 }
@@ -327,12 +323,6 @@ public class MainActivity extends AppCompatActivity {
                     CheckBox check = (CheckBox)checks.getChildAt(i);
                     if (check.isChecked()) {
                         response.setResponse(check.getText().toString());
-                        db=dataHelper.getWritableDatabase();
-                        values=new ContentValues();
-                        values.put("type","multiple");
-                        values.put("answer",i);
-                        db.insert("q_answer",null,values);
-                        db.close();
                     }
                 }
                 break;
@@ -340,36 +330,16 @@ public class MainActivity extends AppCompatActivity {
                 response = new SingleResponse();
                 EditText inputBox = findViewById(R.id.inputBox);
                 response.setResponse(inputBox.getText().toString());
-                db=dataHelper.getWritableDatabase();
-                values=new ContentValues();
-                values.put("type","text");
-                values.put("answer",inputBox.getText().toString());
-                db.insert("q_answer",null,values);
-                db.close();
-
                 break;
             default:
                 return null;
         }
         return response;
     }
-
-
-    /*
-    *Database create.
-     */
-//    public void writeDatabaseAnswer(){
-//        dataHelper =new DataHelper(this);
-//        db=dataHelper.getWritableDatabase();
-//    }
-
-    /*
-    *some values.
-     */
-
     private int current;
     private boolean finalized = false;
 
     private ArrayList<ISurveyResponse> responses = new ArrayList<>();
     private Survey survey;
+    private String json;
 }
