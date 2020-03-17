@@ -34,7 +34,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private DataHelper dataHelper;
-    private SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -255,13 +254,7 @@ public class MainActivity extends AppCompatActivity {
                     RadioButton optBtn = (RadioButton)opts.getChildAt(i);
                     if (optBtn.isChecked()) {
                         response.setResponse(optBtn.getText().toString());
-
-                        db = dataHelper.getWritableDatabase();
-                        values = new ContentValues();
-                        values.put("type", "single");
-                        values.put("answer", i);
-                        db.insert("q_answer", null, values);
-                        db.close();
+                        dataHelper.addResponse(current, QuestionType.Single, String.valueOf(i));
                         break;
                     }
                 }
@@ -269,29 +262,21 @@ public class MainActivity extends AppCompatActivity {
             case Multiple:
                 response = new MultipleResponse();
                 ViewGroup checks = findViewById(R.id.opts);
+                StringBuilder responseBuilder = new StringBuilder();
                 for (int i = 0; i < checks.getChildCount(); i++) {
                     CheckBox check = (CheckBox)checks.getChildAt(i);
                     if (check.isChecked()) {
                         response.setResponse(check.getText().toString());
-                        db = dataHelper.getWritableDatabase();
-                        values = new ContentValues();
-                        values.put("type", "multiple");
-                        values.put("answer", i);
-                        db.insert("q_answer", null, values);
-                        db.close();
+                        responseBuilder.append(i).append(" ");
                     }
                 }
+                dataHelper.addResponse(current, QuestionType.Multiple, responseBuilder.toString().trim());
                 break;
             case Text:
                 response = new SingleResponse();
                 EditText inputBox = findViewById(R.id.inputBox);
                 response.setResponse(inputBox.getText().toString());
-                db = dataHelper.getWritableDatabase();
-                values = new ContentValues();
-                values.put("type", "text");
-                values.put("answer", inputBox.getText().toString());
-                db.insert("q_answer", null, values);
-                db.close();
+                dataHelper.addResponse(current, QuestionType.Text, inputBox.getText().toString());
                 break;
             default:
                 return null;
