@@ -1,49 +1,41 @@
 package mg.studio.android.survey;
-import android.util.Log;
-import android.widget.Toast;
+
+import android.content.Context;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-public class Json {
-    public String getJson(String httpUrl){
-        HttpURLConnection connection = null;
-        String result = "";
-        byte[] buffer = new byte[1024];
-        try {
-            URL url = new URL(httpUrl);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setConnectTimeout(15000);
-            connection.setReadTimeout(60000);
-            connection.connect();
-            if (connection.getResponseCode() == 200) {
-                InputStream is = connection.getInputStream();
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                int len = -1;
-                while ((len = is.read(buffer)) != -1) {
-                    bos.write(buffer, 0, len);
+
+class JsonClient {
+
+    private JsonClient(Context appContext) {
+        requestQueue = Volley.newRequestQueue(appContext);
+    }
+
+    public static JsonClient getInstance(Context appContext) {
+        if (instance == null) {
+            synchronized (lock) {
+                if (instance == null) {
+                    instance = new JsonClient(appContext.getApplicationContext());
                 }
-                result = new String(bos.toByteArray());
-                is.close();
             }
-            if (connection.getResponseCode() == 404){
-                Log.wtf("getResult", "can not find ID");
-            }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        connection.disconnect();
-        return result;
+        return instance;
+    }
+
+    public void getJson(String httpUrl, Response.Listener<String> continueWith, Response.ErrorListener onError) {
+        StringRequest request = new StringRequest(Request.Method.GET, httpUrl, continueWith, onError);
+        requestQueue.add(request);
     }
 
     public void postJson(String httpUrl, String param){
@@ -82,4 +74,8 @@ public class Json {
         }
     }
 
+    private RequestQueue requestQueue;
+
+    private static volatile JsonClient instance;
+    private static final Object lock = new Object();
 }

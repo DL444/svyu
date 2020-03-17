@@ -35,20 +35,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: Extract and parse JSON.
-//        String json = "";
-//        try {
-//            survey = Survey.parse(json);
-//        } catch (QuestionTypeNotSupportedException ex) {
-//            Log.wtf("Initialize", "Unexpected question type: " + ex.getType());
-//        } catch (JSONException ex) {
-//            Log.wtf("Initialize", "JSON format exception - General.");
-//        } catch (NumberFormatException ex) {
-//            Log.wtf("Initialize", "JSON format exception - Invalid number format.");
-//        }
+        survey = (Survey) this.getIntent().getSerializableExtra(getPackageName() + ".survey");
 
-//        current = -1;
-//        next(null);
+        current = -1;
+        next(null);
     }
 
     /**
@@ -68,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 return;
             }
-        } else {
+        } else if (current > 0) {
             finalized = true;
             // TODO: Obtain ancillary info.
             // TODO: Generate and deliver response JSON.
