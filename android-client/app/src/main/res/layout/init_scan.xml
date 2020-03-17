@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="@dimen/appPadding">
+
+    <!--  Start : Your code should be within this block -->
+
+    <TextView
+        android:id="@+id/welcome_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome_jumbo"
+        style="@style/Header"/>
+    <TextView
+        android:id="@+id/welcome_subheader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/welcome_header"
+        android:text="@string/welcome_secondary"
+        style="@style/Subheader"/>
+
+    <TextView
+        android:id="@+id/welcome_attn_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/welcome_subheader"
+        android:layout_marginTop="@dimen/marginL"
+        android:text="@string/welcome_attn_title"
+        style="@style/Title"/>
+
+    <TextView
+        android:id="@+id/welcome_attn_0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/welcome_attn_title"
+        android:layout_marginTop="@dimen/marginM"
+        android:text="@string/welcome_attn_0" />
+    <TextView
+        android:id="@+id/welcome_attn_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/welcome_attn_0"
+        android:layout_marginTop="@dimen/marginM"
+        android:text="@string/welcome_attn_1" />
+    <TextView
+        android:id="@+id/welcome_attn_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/welcome_attn_1"
+        android:layout_marginTop="@dimen/marginM"
+        android:text="@string/welcome_attn_2" />
+
+    <FrameLayout
+        android:id="@+id/opts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/nextBtn"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="@dimen/marginM">
+        <CheckBox
+            android:id="@+id/welcome_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/welcome_req_accept"/>
+    </FrameLayout>
+    <Button
+        android:id="@+id/nextBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/welcome_start"
+        style="@style/PrimaryButtonNoAction"
+        android:onClick="initScan"/>
+
+    <!-- END    : Your code should be within this block -->
+</RelativeLayout>

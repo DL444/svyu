@@ -13,25 +13,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CustomViewfinderView"></activity>
-        <!-- <activity android:name=".CustomCaptureActivity"></activity> -->
-        <activity android:name=".SummaryActivity" />
-        <activity
-            android:name=".MainActivity"
-            android:windowSoftInputMode="adjustResize">
+        <activity android:name=".InitiateScanActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- 调整二维码扫描界面 -->
+        </activity>
+        <activity android:name=".SummaryActivity" />
         <activity
-            android:name="com.journeyapps.barcodescanner.CaptureActivity"
-            android:screenOrientation="fullSensor"
-            tools:replace="screenOrientation" />
+            android:name=".MainActivity"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
         <activity
             android:name=".CustomCaptureActivity"
-            android:label="自定义扫描界面"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:screenOrientation="fullSensor" />
     </application>
 

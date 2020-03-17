@@ -32,11 +32,8 @@ public class CustomCaptureActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //setContentView(com.google.zxing.client.android.R.layout.zxing_capture);
-        //mBarcodeView = (DecoratedBarcodeView)findViewById(com.google.zxing.client.android.R.id.zxing_barcode_scanner);
-
         setContentView(R.layout.activity_zxing_layout);
-        mBarcodeView=(DecoratedBarcodeView)findViewById(R.id.zxing_barcode_scanner);
+        mBarcodeView = findViewById(R.id.zxing_barcode_scanner);
 
         mCaptureManager = new CaptureManager(this, mBarcodeView);
         mCaptureManager.initializeFromIntent(getIntent(), savedInstanceState);

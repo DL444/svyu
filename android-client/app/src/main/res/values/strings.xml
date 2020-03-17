@@ -15,4 +15,5 @@
     <string name="summary">Summary</string>
     <string name="questionHeader">Question %1$d</string>
     <string name="cacheFailed">Failed to save your response.</string>
+    <string name="qrPrompt">Scan the code on SvyU website</string>
 </resources>

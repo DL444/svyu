@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.zxing.client.android.Intents;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -32,136 +31,25 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    /**
-     * when we click the button from beginscan.xml
-     *it can scan QR code
-     */
-    Button  btnscan;
-
-    //The ID of a questionnaire
-    String questionnaireID;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String json = "{\n" +
-                "    \"survey\": {\n" +
-                "        \"id\": \"12344134\",\n" +
-                "        \"len\": \"3\",\n" +
-                "        \"questions\": [\n" +
-                "            {\n" +
-                "                \"type\": \"single\",\n" +
-                "                \"question\": \"How well do the professors teach at this university?\",\n" +
-                "                \"options\": [\n" +
-                "                    {\n" +
-                "                        \"1\": \"Extremely well\"\n" +
-                "                    },\n" +
-                "                    {\n" +
-                "                        \"2\": \"Very well\"\n" +
-                "                    }\n" +
-                "                ]\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"type\": \"multiple\",\n" +
-                "                \"question\": \"How effective is the teaching outside yur major at the univesrity?\",\n" +
-                "                \"options\": [\n" +
-                "                    {\n" +
-                "                        \"1\": \"Extremetly effective\"\n" +
-                "                    },\n" +
-                "                    {\n" +
-                "                        \"2\": \"Very effective\"\n" +
-                "                    },\n" +
-                "                    {\n" +
-                "                        \"3\": \"Somewhat effective\"\n" +
-                "                    },\n" +
-                "                    {\n" +
-                "                        \"4\": \"Not so effective\"\n" +
-                "                    },\n" +
-                "                    {\n" +
-                "                        \"5\": \"Not at all effective\"\n" +
-                "                    }\n" +
-                "                ]\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"type\": \"text\",\n" +
-                "                \"question\": \"Test\"\n" +
-                "            }\n" +
-                "        ]\n" +
-                "    }\n" +
-                "}";
-        try {
-            survey = Survey.parse(json);
-        } catch (QuestionTypeNotSupportedException ex) {
-            Log.wtf("Initialize", "Unexpected question type: " + ex.getType());
-        } catch (JSONException ex) {
-            Log.wtf("Initialize", "JSON format exception - General.");
-        } catch (NumberFormatException ex) {
-            Log.wtf("Initialize", "JSON format exception - Invalid number format.");
-        }
+        // TODO: Extract and parse JSON.
+//        String json = "";
+//        try {
+//            survey = Survey.parse(json);
+//        } catch (QuestionTypeNotSupportedException ex) {
+//            Log.wtf("Initialize", "Unexpected question type: " + ex.getType());
+//        } catch (JSONException ex) {
+//            Log.wtf("Initialize", "JSON format exception - General.");
+//        } catch (NumberFormatException ex) {
+//            Log.wtf("Initialize", "JSON format exception - Invalid number format.");
+//        }
 
-        //
-       // setContentView(R.layout.welcome);
-        current = -1;
-
-
-
-
-
-
-
-
-        /**add Clicklistener for button "Scan" from welcome.xml*/
-        setContentView(R.layout.beginscan);
-        btnscan=findViewById(R.id.btn_scan);
-        btnscan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //create IntentIntegrator's object
-                IntentIntegrator intentIntegrator=new IntentIntegrator(MainActivity.this);
-                //10s
-                intentIntegrator.setTimeout(10000);
-                intentIntegrator.setOrientationLocked(false);
-                intentIntegrator.setBeepEnabled(true);
-                intentIntegrator.setPrompt("Please scan a QR code");
-                //设置自定义扫描activity
-                intentIntegrator.setCaptureActivity(CustomCaptureActivity.class);
-                //scan
-                intentIntegrator.initiateScan();
-            }
-        });
-
-
+//        current = -1;
+//        next(null);
     }
-
-    // get scanning's result
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null) {
-            if (result.getContents() == null) {
-                Toast.makeText(this, "No QR code", Toast.LENGTH_SHORT).show();
-            } else {
-
-                questionnaireID=result.getContents();
-
-                //Toast.makeText(this, "result:" + result.getContents(), Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-
-
-        //输出问卷ID
-        //System.out.println(questionnaireID);
-    }
-
-
-
-
-
-
-
 
     /**
      * Event handler for the primary button of each page.
@@ -172,20 +60,19 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        if (current == -1) {
-            CheckBox prerequisiteCheck = findViewById(R.id.welcome_check);
-            if (!prerequisiteCheck.isChecked()) {
-                return;
-            }
-        } else if (current >= 0 && current < survey.getLength()) {
+        if (current >= 0 && current < survey.getLength()) {
             ISurveyResponse response = getResponse(survey.getQuestions()[current].getType());
             if (response.hasResponse()) {
+                // TODO: Integrate response storage.
                 responses.add(response);
             } else {
                 return;
             }
         } else {
             finalized = true;
+            // TODO: Obtain ancillary info.
+            // TODO: Generate and deliver response JSON.
+            // TODO: Bring up screen lock.
             writeResultCache();
             navigateToSummary();
         }
@@ -401,5 +288,4 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<ISurveyResponse> responses = new ArrayList<>();
     private Survey survey;
-
 }
