@@ -2,6 +2,9 @@ package mg.studio.android.survey;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,52 +33,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        String json = "{\n" +
-                "    \"survey\": {\n" +
-                "        \"id\": \"12344134\",\n" +
-                "        \"len\": \"3\",\n" +
-                "        \"questions\": [\n" +
-                "            {\n" +
-                "                \"type\": \"single\",\n" +
-                "                \"question\": \"How well do the professors teach at this university?\",\n" +
-                "                \"options\": [\n" +
-                "                    {\n" +
-                "                        \"1\": \"Extremely well\"\n" +
-                "                    },\n" +
-                "                    {\n" +
-                "                        \"2\": \"Very well\"\n" +
-                "                    }\n" +
-                "                ]\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"type\": \"multiple\",\n" +
-                "                \"question\": \"How effective is the teaching outside yur major at the univesrity?\",\n" +
-                "                \"options\": [\n" +
-                "                    {\n" +
-                "                        \"1\": \"Extremetly effective\"\n" +
-                "                    },\n" +
-                "                    {\n" +
-                "                        \"2\": \"Very effective\"\n" +
-                "                    },\n" +
-                "                    {\n" +
-                "                        \"3\": \"Somewhat effective\"\n" +
-                "                    },\n" +
-                "                    {\n" +
-                "                        \"4\": \"Not so effective\"\n" +
-                "                    },\n" +
-                "                    {\n" +
-                "                        \"5\": \"Not at all effective\"\n" +
-                "                    }\n" +
-                "                ]\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"type\": \"text\",\n" +
-                "                \"question\": \"Test\"\n" +
-                "            }\n" +
-                "        ]\n" +
-                "    }\n" +
-                "}";
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+        Json jsonObject=new Json();
+        json=jsonObject.getJson("https://svyu.azure-api.net/survey/12344134");
         try {
             survey = Survey.parse(json);
         } catch (QuestionTypeNotSupportedException ex) {
@@ -83,8 +47,7 @@ public class MainActivity extends AppCompatActivity {
             Log.wtf("Initialize", "JSON format exception - General.");
         } catch (NumberFormatException ex) {
             Log.wtf("Initialize", "JSON format exception - Invalid number format.");
-        }
-
+        }Toast.makeText(this, json, Toast.LENGTH_LONG).show();
         setContentView(R.layout.welcome);
         current = -1;
     }
@@ -217,7 +180,6 @@ public class MainActivity extends AppCompatActivity {
             return existingRoot.toString();
         }
     }
-
     /**
      * A helper method for navigate to summary activity.
      */
@@ -321,10 +283,10 @@ public class MainActivity extends AppCompatActivity {
         }
         return response;
     }
-
     private int current;
     private boolean finalized = false;
 
     private ArrayList<ISurveyResponse> responses = new ArrayList<>();
     private Survey survey;
+    private String json;
 }
