@@ -3,8 +3,10 @@ package mg.studio.android.survey;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.widget.Toast;
 
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
@@ -69,6 +71,12 @@ public class CustomCaptureActivity extends AppCompatActivity {
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        if (requestCode == CaptureManager.getCameraPermissionReqCode()) {
+            if (permissions.length == 0 || grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                Toast.makeText(this, R.string.cameraPermRequired, Toast.LENGTH_LONG).show();
+                this.finish();
+            }
+        }
         mCaptureManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
