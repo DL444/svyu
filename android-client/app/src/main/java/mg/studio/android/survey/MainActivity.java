@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
      * Event handler for the primary button of each page.
      * @param sender The view that triggered the handler.
      */
-   public void next(View sender) {
+    public void next(View sender) {
         if (finalized) {
             return;
         }
