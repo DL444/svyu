@@ -1,10 +1,19 @@
 package mg.studio.android.survey;
 
+import android.Manifest;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +24,11 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.zxing.client.android.Intents;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -44,6 +57,29 @@ public class MainActivity extends AppCompatActivity {
     //The ID of a questionnaire
     private String questionnaireID;
 
+
+    //The Location Cache
+    private double latitude;
+    private double longitude;
+
+    //IMEI strings
+    private String imei_null="";
+    private String imei_meaningful="";
+
+    //For use of getting IMEI
+    private TelephonyManager tmg;
+
+    //PERMISSION CODE
+    private int PERMISSION_FINELOC_CODE = 1;
+    private int PERMISSION_COARSELOC_CODE = 2;
+    private int PERMISSION_INTERNET_CODE = 3;
+    private int PERMISSION_READPHONESTATE_CODE = 4;
+
+    //Location Manager for get Loc info
+    protected LocationManager locationManager;
+    protected Location locationinfo;
+    protected LocationListener locationListener;
+
     //database
     DataHelper dataHelper;
     private SQLiteDatabase db;
@@ -53,6 +89,31 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         /**add Clicklistener for button "Scan" from welcome.xml*/
         setContentView(R.layout.beginscan);
+
+        /**
+         * Location Listener for getting Location info.
+         *
+         */
+        final LocationListener locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                latitude=location.getLatitude();
+                longitude=location.getLongitude();
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+            }
+        };
+
         btnscan=findViewById(R.id.btn_scan);
         btnscan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -255,13 +316,16 @@ public class MainActivity extends AppCompatActivity {
          * Post json to server
          */
         try {
+            checkIMEI();
+            checkLocation();
+
             JSONObject jObject = new JSONObject();
             jObject.put("id", survey.getId());
             jObject.put("len", survey.getLength());
-            jObject.put("longitude", 0.00);
-            jObject.put("latitude", 0.00);
+            jObject.put("longitude", longitude);
+            jObject.put("latitude", latitude);
             jObject.put("time",System.currentTimeMillis());
-            jObject.put("imei","ABC");
+            jObject.put("imei",imei_meaningful);
             JSONArray answers = new JSONArray();
             Toast.makeText(this,str_postJson, Toast.LENGTH_LONG).show();
             String[] postJson = str_postJson.split("/");
@@ -283,13 +347,49 @@ public class MainActivity extends AppCompatActivity {
             }
             jObject.put("answers",answers);
             Toast.makeText(this,jObject.toString(), Toast.LENGTH_LONG).show();
-            if (android.os.Build.VERSION.SDK_INT > 9) {
+            if (Build.VERSION.SDK_INT > 9) {
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                 StrictMode.setThreadPolicy(policy);
             }
             Json jsonObject=new Json();
             jsonObject.postJson("https://svyu.azure-api.net/response",jObject);
         } catch (JSONException ex) {
+        }
+    }
+
+    private void checkIMEI() {
+        if (ContextCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.READ_PHONE_STATE)==PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(MainActivity.this, "You have already granted READ_PHONE_STATE permission!",Toast.LENGTH_SHORT).show();
+            try{
+                tmg = (TelephonyManager) getSystemService(MainActivity.this.TELEPHONY_SERVICE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    imei_meaningful=tmg.getImei();
+                }else{
+                    imei_meaningful=imei_null;
+                }
+            }catch (SecurityException e){
+                imei_meaningful=imei_null;
+            }
+        }else {
+            requestPhoneStatusPermission();
+        }
+    }
+
+    public void checkLocation() {
+        if (    ContextCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.INTERNET)==PackageManager.PERMISSION_GRANTED){
+
+            try{
+                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }else{
+            requestFineLocPermission();
+            requestCoarseLocPermission();
+            requestInternetPermission();
         }
     }
 
@@ -421,10 +521,177 @@ public class MainActivity extends AppCompatActivity {
         }
         return response;
     }
+
     private int current;
     private boolean finalized = false;
 
     private ArrayList<ISurveyResponse> responses = new ArrayList<>();
     private Survey survey;
     private String json;
+
+    /**
+     * These are permission requesting services.
+     * Incl. Phone Status, Fine/Coarse and Internet Request
+     * As well as Override onRequestPermissionsResult
+     */
+    public void requestPhoneStatusPermission(){
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE)){
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Permission needed")
+                    .setMessage("This permission is needed to let us differentiate devices")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.READ_PHONE_STATE},PERMISSION_READPHONESTATE_CODE);
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create().show();
+
+
+        }else{
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_PHONE_STATE},PERMISSION_READPHONESTATE_CODE);
+        }
+    }
+
+    public void requestFineLocPermission(){
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_FINE_LOCATION)){
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Permission needed")
+                    .setMessage("This permission is needed to let us know the survey position and differentiate these positions, no privacy info is gathered")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},PERMISSION_FINELOC_CODE);
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create().show();
+
+
+        }else{
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},PERMISSION_FINELOC_CODE);
+        }
+    }
+
+    public void requestCoarseLocPermission(){
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_COARSE_LOCATION)){
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Permission needed")
+                    .setMessage("This permission is needed to let us know the survey position and differentiate these positions, no privacy info is gathered")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},PERMISSION_COARSELOC_CODE);
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create().show();
+
+
+        }else{
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},PERMISSION_COARSELOC_CODE);
+        }
+    }
+
+    public void requestInternetPermission(){
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.INTERNET)){
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Permission needed")
+                    .setMessage("This permission is needed to let us know the survey position and differentiate these positions, no privacy info is gathered")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.INTERNET},PERMISSION_INTERNET_CODE);
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create().show();
+
+
+        }else{
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.INTERNET},PERMISSION_INTERNET_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode==PERMISSION_READPHONESTATE_CODE){
+            if (grantResults.length>0 && grantResults[0]== PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(this,"READ PHONE STATEGranted",Toast.LENGTH_SHORT).show();
+
+            }else {
+                Toast.makeText(this,"READ PHONE STATE Not Granted",Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this,"FINE LOCATION Granted",Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Toast.makeText(this,"FINE LOCATION Not Granted",Toast.LENGTH_SHORT).show();
+
+                }
+                return;
+            }
+            case 2:{
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this,"COARSE LOCATION Granted",Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Toast.makeText(this,"COARSE LOCATION Not Granted",Toast.LENGTH_SHORT).show();
+
+                }
+                return;
+
+            }
+            case 3:{
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this,"INTERNET LOCATION Granted",Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Toast.makeText(this,"INTERNET LOCATION Not Granted",Toast.LENGTH_SHORT).show();
+
+                }
+                return;
+            }
+            default:
+                throw new IllegalStateException("Unexpected value: " + requestCode);
+        }
+    }
+    /**PERMISSION SERVICE ENDS HERE---*/
+
 }
