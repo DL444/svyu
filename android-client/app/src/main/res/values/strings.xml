@@ -29,4 +29,7 @@
     <string name="cancel">Cancel</string>
     <string name="internetPermRequired">We need Internet permission to send and receive request.\nPlease grant this permission.</string>
     <string name="cameraPermRequired">Please grant camera permission so we can scan a QR code.</string>
+    <string name="settings">Settings</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="lockDevice">Lock device after completing survey</string>
 </resources>
