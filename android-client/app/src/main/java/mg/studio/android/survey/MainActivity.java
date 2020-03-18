@@ -4,8 +4,6 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
@@ -42,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
      *it can scan QR code
      */
     private Button btnscan;
-
+    private String str_postJson="";
     //The ID of a questionnaire
     private String questionnaireID;
 
@@ -253,7 +251,46 @@ public class MainActivity extends AppCompatActivity {
         navIntent.putExtra(getPackageName() + ".survey", survey);
         navIntent.putExtra(getPackageName() + ".responses", responses);
         startActivity(navIntent);
-        this.finish();
+        /***
+         * Post json to server
+         */
+        try {
+            JSONObject jObject = new JSONObject();
+            jObject.put("id", survey.getId());
+            jObject.put("len", survey.getLength());
+            jObject.put("longitude", 0.00);
+            jObject.put("latitude", 0.00);
+            jObject.put("time",System.currentTimeMillis());
+            jObject.put("imei","ABC");
+            JSONArray answers = new JSONArray();
+            Toast.makeText(this,str_postJson, Toast.LENGTH_LONG).show();
+            String[] postJson = str_postJson.split("/");
+            for(String s : postJson) {
+                String []pair=s.split(":");
+                JSONObject detail_answer=new JSONObject();
+                detail_answer.put("type",pair[0]);
+                if(pair[1].indexOf(",")==-1) detail_answer.put("answer",pair[1]);
+                else {
+                    String []detail=pair[1].split(",");
+                    String sum=null;
+                    JSONArray sequence = new JSONArray();
+                    for(String d: detail){
+                        sequence.put(d);
+                    }
+                    detail_answer.put("answer",sequence);
+                }
+                answers.put(detail_answer);
+            }
+            jObject.put("answers",answers);
+            Toast.makeText(this,jObject.toString(), Toast.LENGTH_LONG).show();
+            if (android.os.Build.VERSION.SDK_INT > 9) {
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+            }
+            Json jsonObject=new Json();
+            jsonObject.postJson("https://svyu.azure-api.net/response",jObject);
+        } catch (JSONException ex) {
+        }
     }
 
     /**
@@ -329,6 +366,8 @@ public class MainActivity extends AppCompatActivity {
                         values=new ContentValues();
                         values.put("type","single");
                         values.put("answer",i);
+                        if(current==survey.getLength()-1)str_postJson=str_postJson+"single"+":"+i;
+                        str_postJson=str_postJson+"single"+":"+i+"/";
                         db.insert("q_answer",null,values);
                         db.close();
                         break;
@@ -338,18 +377,30 @@ public class MainActivity extends AppCompatActivity {
             case Multiple:
                 response = new MultipleResponse();
                 ViewGroup checks = findViewById(R.id.opts);
+                String  sequence="";
+                int checksum=0;
+                int count=0;
+                for (int i = 0; i < checks.getChildCount(); i++) {
+                    CheckBox check = (CheckBox)checks.getChildAt(i);
+                    if(check.isChecked())checksum++;
+                }
                 for (int i = 0; i < checks.getChildCount(); i++) {
                     CheckBox check = (CheckBox)checks.getChildAt(i);
                     if (check.isChecked()) {
+                        count++;
                         response.setResponse(check.getText().toString());
                         db=dataHelper.getWritableDatabase();
                         values=new ContentValues();
                         values.put("type","multiple");
                         values.put("answer",i);
+                        if(count==checksum)sequence=sequence+i;
+                        else sequence=sequence+i+",";
                         db.insert("q_answer",null,values);
                         db.close();
                     }
                 }
+                if(current==survey.getLength()-1)str_postJson=str_postJson+"multiple"+":"+sequence;
+                str_postJson=str_postJson+"multiple"+":"+sequence+"/";
                 break;
             case Text:
                 response = new SingleResponse();
@@ -359,6 +410,8 @@ public class MainActivity extends AppCompatActivity {
                 values=new ContentValues();
                 values.put("type","text");
                 values.put("answer",inputBox.getText().toString());
+                if(current==survey.getLength()-1)str_postJson=str_postJson+"text"+":"+inputBox.getText().toString();
+                else str_postJson=str_postJson+"text"+":"+inputBox.getText().toString()+"/";
                 db.insert("q_answer",null,values);
                 db.close();
 

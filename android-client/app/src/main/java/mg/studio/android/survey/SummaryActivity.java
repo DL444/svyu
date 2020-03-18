@@ -1,5 +1,6 @@
 package mg.studio.android.survey;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -11,7 +12,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class SummaryActivity extends AppCompatActivity {
 
@@ -68,9 +77,9 @@ public class SummaryActivity extends AppCompatActivity {
                 result.append(",");
             }while(cursor.moveToNext());
         }
-        Toast.makeText(this,result.toString(),Toast.LENGTH_LONG).show();
 
         cursor.close();
         db.close();
+        String result_json=result.toString();
     }
 }
