@@ -51,25 +51,13 @@ public class MainActivity extends AppCompatActivity {
      * @param sender The view that triggered the handler.
      */
    public void next(View sender) {
-        if (finalized) {
-            return;
-        }
-
         if (current >= 0 && current < survey.getLength()) {
             ISurveyResponse response = getResponse(survey.getQuestions()[current].getType());
             if (response.hasResponse()) {
-                // TODO: Integrate response storage.
                 responses.add(response);
             } else {
                 return;
             }
-        } else if (current > 0) {
-            finalized = true;
-            // TODO: Obtain ancillary info.
-            // TODO: Generate and deliver response JSON.
-            // TODO: Bring up screen lock.
-            writeResultCache();
-            navigateToSummary();
         }
 
         current++;
@@ -86,7 +74,11 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         } else {
-            setContentView(R.layout.finish_survey);
+            Intent finalizeNavIntent = new Intent(this, FinalizeActivity.class);
+            finalizeNavIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            finalizeNavIntent.putExtra(getPackageName() + ".surveyId", survey.getId());
+            startActivity(finalizeNavIntent);
+            this.finish();
         }
     }
 

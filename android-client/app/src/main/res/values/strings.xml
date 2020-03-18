@@ -20,4 +20,5 @@
     <string name="connectFail">Unable to connect to the internet.</string>
     <string name="unsupportedVersion">This survey uses features not available in this version of the app. Please update the app.</string>
     <string name="unexpectedSurveyJson">There\'s a problem connecting to the service. Please check your connection or contact support.</string>
+    <string name="unexpectedResponseError">Something unexpected happened sending your answers. Please contact support.</string>
 </resources>

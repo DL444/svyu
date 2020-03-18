@@ -61,9 +61,9 @@ public class InitiateScanActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 try {
                     Survey survey = Survey.parse(response);
+                    new DataHelper(InitiateScanActivity.this).reset();
                     Intent navIntent = new Intent(InitiateScanActivity.this, MainActivity.class);
                     navIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    Log.i("Response", response);
                     navIntent.putExtra(getPackageName() + ".survey", survey);
                     startActivity(navIntent);
                     InitiateScanActivity.this.finish();

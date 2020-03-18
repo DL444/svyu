@@ -33,8 +33,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        style="@style/PrimaryButton"
-        android:text="@string/finish"/>
+        style="@style/PrimaryButtonNoAction"
+        android:text="@string/finish"
+        android:onClick="upload"/>
 
     <!-- END    : Your code should be within this block -->
 
