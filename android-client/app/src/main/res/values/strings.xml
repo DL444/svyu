@@ -21,4 +21,12 @@
     <string name="unsupportedVersion">This survey uses features not available in this version of the app. Please update the app.</string>
     <string name="unexpectedSurveyJson">There\'s a problem connecting to the service. Please check your connection or contact support.</string>
     <string name="unexpectedResponseError">Something unexpected happened sending your answers. Please contact support.</string>
+    <string name="permRequired">Permission required</string>
+    <string name="phoneIdPermReason">We need phone status permission to identify your device.</string>
+    <string name="locationPermReason">We need location permission to do whatever.</string>
+    <string name="internetPermReason">We need Internet permission to get surveys and send your results.</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="internetPermRequired">We need Internet permission to send and receive request.\nPlease grant this permission.</string>
+    <string name="cameraPermRequired">Please grant camera permission so we can scan a QR code.</string>
 </resources>
