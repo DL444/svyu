@@ -7,8 +7,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -33,6 +36,8 @@ public class FinalizeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        policyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
+        prefs = getSharedPreferences(getPackageName() + ".pref", MODE_PRIVATE);
         surveyId = String.valueOf(getIntent().getIntExtra(getPackageName() + ".surveyId", -1));
         setContentView(R.layout.finish_survey);
         getIMEI();
@@ -56,7 +61,14 @@ public class FinalizeActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // TODO: Bring up screen lock.
+                        if (prefs.getBoolean("lockDevice", false)
+                                && policyManager.isAdminActive(new ComponentName(FinalizeActivity.this, DeviceAdminListener.class))) {
+                            policyManager.lockNow();
+                            FinalizeActivity.this.finish();
+                        } else {
+                            Toast.makeText(FinalizeActivity.this, R.string.thanksToast, Toast.LENGTH_LONG).show();
+                            FinalizeActivity.this.finish();
+                        }
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -239,6 +251,8 @@ public class FinalizeActivity extends AppCompatActivity {
     private double longitude;
 
     private LocationManager locationManager;
+    private DevicePolicyManager policyManager;
+    private SharedPreferences prefs;
 
     //PERMISSION CODE
     private static final int PERMISSION_LOCATION_CODE = 1;
