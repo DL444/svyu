@@ -1,43 +1,15 @@
 package mg.studio.android.survey;
 
-import android.Manifest;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,9 +31,7 @@ public class MainActivity extends AppCompatActivity {
    public void next(View sender) {
         if (current >= 0 && current < survey.getLength()) {
             ISurveyResponse response = getResponse(survey.getQuestions()[current].getType());
-            if (response.hasResponse()) {
-                responses.add(response);
-            } else {
+            if (!response.hasResponse()) {
                 return;
             }
         }
@@ -86,102 +56,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(finalizeNavIntent);
             this.finish();
         }
-    }
-
-    /**
-     * Reads previously stored response data.
-     * @return A JSONArray object containing all the previously stored response data.
-     */
-    private JSONArray readResultCache() {
-        File file = new File(this.getExternalFilesDir(null), "results.json");
-        try {
-            FileInputStream input = new FileInputStream(file);
-            byte[] encoded = new byte[(int)file.length()];
-            input.read(encoded);
-            input.close();
-            String json = new String(encoded);
-            JSONArray cache = new JSONArray(json);
-            return cache;
-        } catch (FileNotFoundException ex) {
-            Log.i("Result Load", "Result load failed because the file was not found.", ex);
-            return null;
-        } catch (IOException ex) {
-            Log.e("Result Load", "Result load failed because IO operation failed.", ex);
-            return null;
-        } catch (JSONException ex) {
-            Log.e("Result Load", "Result load failed because deserialization failed.", ex);
-            return null;
-        }
-    }
-
-    /**
-     * Appends the responses of current session to the response store.
-     * @return A boolean value signaling if the operation was successful.
-     */
-    private boolean writeResultCache() {
-        String json = jsonSerializeResults(readResultCache());
-        byte[] content = json.getBytes(Charset.forName("utf-8"));
-        File file = new File(this.getExternalFilesDir(null), "results.json");
-        return writeFile(file, content);
-    }
-
-    /**
-     * Helper method for writing encoded file content.
-     * @param file A File object describing the file to write to.
-     * @param content A byte array containing encoded data to write.
-     * @return A boolean value signaling if the operation was successful.
-     */
-    private boolean writeFile(File file, byte[] content) {
-        try {
-            if (file.exists()) {
-                file.delete();
-            }
-            file.createNewFile();
-            FileOutputStream output = new FileOutputStream(file);
-            output.write(content);
-            output.flush();
-            output.close();
-            return true;
-        } catch (IOException ex) {
-            Log.e("Internal Save", "Result save failed because IO operation failed.", ex);
-            return false;
-        }
-    }
-
-    /**
-     * Serialize he responses of current session and append the result to previously stored data.
-     * @param existingRoot The root JSONArray for existing data.
-     * @return Serialized JSON string.
-     */
-    private String jsonSerializeResults(JSONArray existingRoot) {
-        try {
-            if (existingRoot == null) {
-                existingRoot = new JSONArray();
-            }
-            JSONObject jObject = new JSONObject();
-            jObject.put("id", survey.getId());
-            JSONArray responses = new JSONArray();
-            for (ISurveyResponse r : this.responses) {
-                responses.put(r.getResponse());
-            }
-            jObject.put("responses", responses);
-            existingRoot.put(jObject);
-            return existingRoot.toString();
-        } catch (JSONException ex) {
-            return existingRoot.toString();
-        }
-    }
-
-    /**
-     * A helper method for navigate to summary activity.
-     */
-    private void navigateToSummary() {
-        Intent navIntent = new Intent(this, SummaryActivity.class);
-        navIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        navIntent.putExtra(getPackageName() + ".survey", survey);
-        navIntent.putExtra(getPackageName() + ".responses", responses);
-        startActivity(navIntent);
-        this.finish();
     }
 
     /**
@@ -246,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
         switch (type) {
             case Single:
                 response = new SingleResponse();
-                ContentValues values;
                 ViewGroup opts = findViewById(R.id.opts);
                 for (int i = 0; i < opts.getChildCount(); i++) {
                     RadioButton optBtn = (RadioButton)opts.getChildAt(i);
@@ -284,7 +157,6 @@ public class MainActivity extends AppCompatActivity {
 
     private int current;
 
-    private ArrayList<ISurveyResponse> responses = new ArrayList<>();
     private Survey survey;
     private DataHelper dataHelper;
 }

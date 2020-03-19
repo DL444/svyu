@@ -12,8 +12,8 @@ namespace SvyU.Web
         {
             services.AddSingleton(new Random((int)DateTimeOffset.UtcNow.Ticks));
             services.AddTransient<SurveyService>();
-            services.AddTransient(_ => new BarcodeWriterSvg() 
-            { 
+            services.AddTransient(_ => new BarcodeWriterSvg()
+            {
                 Format = BarcodeFormat.QR_CODE,
                 Options = new ZXing.Common.EncodingOptions()
                 {

@@ -1,11 +1,10 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 namespace SvyU.Models
 {
     [JsonObject(
-        NamingStrategyType = typeof(CamelCaseNamingStrategy), 
+        NamingStrategyType = typeof(CamelCaseNamingStrategy),
         NamingStrategyParameters = new object[] { false, false })]
     public class Survey
     {

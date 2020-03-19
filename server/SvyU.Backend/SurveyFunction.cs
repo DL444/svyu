@@ -1,13 +1,9 @@
-using System;
-using System.IO;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using SvyU.Models;
 
 namespace SvyU.Backend
 {
@@ -16,9 +12,9 @@ namespace SvyU.Backend
         [FunctionName("survey")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "survey/{id}")] HttpRequest req,
-            [CosmosDB(databaseName: "Survey", collectionName: "Survey", ConnectionStringSetting = "DbConnection", 
+            [CosmosDB(databaseName: "Survey", collectionName: "Survey", ConnectionStringSetting = "DbConnection",
                 PartitionKey = "{id}", Id = "survey-{id}")] SurveyEntity entity,
-            [CosmosDB(databaseName: "Survey", collectionName: "Survey", ConnectionStringSetting = "DbConnection")] 
+            [CosmosDB(databaseName: "Survey", collectionName: "Survey", ConnectionStringSetting = "DbConnection")]
                 IAsyncCollector<SurveyEntity> entityCollector,
             string id, ILogger log)
         {
