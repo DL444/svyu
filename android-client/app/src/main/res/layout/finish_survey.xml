@@ -28,13 +28,23 @@
         android:src="@drawable/moe"
         android:scaleType="fitStart"/>
 
+    <ProgressBar
+        android:id="@+id/submitProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/nextBtn"
+        android:layout_margin="@dimen/marginS"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
+
     <Button
         android:id="@+id/nextBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        style="@style/PrimaryButton"
-        android:text="@string/finish"/>
+        style="@style/PrimaryButtonNoAction"
+        android:text="@string/finish"
+        android:onClick="upload"/>
 
     <!-- END    : Your code should be within this block -->
 

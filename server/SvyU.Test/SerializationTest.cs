@@ -1,5 +1,3 @@
-using System;
-using Newtonsoft.Json;
 using SvyU.Models;
 using Xunit;
 
@@ -8,7 +6,7 @@ namespace SvyU.Test
     public class SerializationTest
     {
         [Fact]
-        public void TestSerialization()
+        public void TestSurveySerialization()
         {
             string expected = "{\"survey\":{\"id\":\"12344134\",\"len\":\"3\",\"questions\":[{\"type\":\"single\"," +
                 "\"question\":\"How well do the professors teach at this university?\",\"options\":[{\"1\":\"Extremely well\"}," +
@@ -50,6 +48,34 @@ namespace SvyU.Test
             };
 
             Assert.Equal(expected, survey.GetJson());
+        }
+
+        [Fact]
+        public void TestResponseDeserialization()
+        {
+            string json = "{\"id\":\"1234567\",\"len\":3,\"longitude\":18.23,\"latitude\":19.25,\"time\":12345,\"imei\":\"ABC\"," +
+                "\"answers\":[{\"type\":\"single\",\"answer\":1},{\"type\":\"multiple\",\"answer\":[0,1,3]},{\"type\":\"text\",\"answer\":\"something\"}]}";
+            Response response = Response.Parse(json);
+
+            Assert.Equal("1234567", response.Id);
+            Assert.Equal(3, response.Length);
+            Assert.Equal(18.23, response.Longitude);
+            Assert.Equal(19.25, response.Latitude);
+            Assert.Equal(12345, response.Timestamp);
+            Assert.Equal("ABC", response.Imei);
+            Assert.Equal(3, response.Responses.Length);
+
+            Assert.Equal(QuestionType.Single, response.Responses[0].Type);
+            Assert.IsType<SingleResponse>(response.Responses[0]);
+            Assert.Equal(1, ((SingleResponse)response.Responses[0]).Response);
+
+            Assert.Equal(QuestionType.Multiple, response.Responses[1].Type);
+            Assert.IsType<MultipleResponse>(response.Responses[1]);
+            Assert.Equal(new[] { 0, 1, 3 }, ((MultipleResponse)response.Responses[1]).Response);
+
+            Assert.Equal(QuestionType.Text, response.Responses[2].Type);
+            Assert.IsType<TextResponse>(response.Responses[2]);
+            Assert.Equal("something", ((TextResponse)response.Responses[2]).Response);
         }
     }
 }

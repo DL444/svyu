@@ -35,6 +35,11 @@
         <item name="android:onClick">next</item>
     </style>
 
+    <style name="PrimaryButtonNoAction">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColor">@color/alt</item>
+    </style>
+
     <style name="SummaryTitle">
         <item name="android:textColor">@color/base</item>
         <item name="android:textSize">@dimen/title</item>

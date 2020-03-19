@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">SvyU</string>
-    <string name="welcome_jumbo">Welcome to</string>
+    <string name="welcome_jumbo">Welcome</string>
     <string name="welcome_secondary">Take part in our survey!</string>
     <string name="welcome_attn_title">Before we start, here are things you should know:</string>
     <string name="welcome_attn_0">- Please be honest when making your choice.</string>
@@ -11,8 +11,31 @@
     <string name="next">Next</string>
     <string name="final_jumbo">Thank you</string>
     <string name="final_secondary">for your answers!</string>
-    <string name="finish">Save result</string>
+    <string name="finish">Submit result</string>
     <string name="summary">Summary</string>
     <string name="questionHeader">Question %1$d</string>
     <string name="cacheFailed">Failed to save your response.</string>
+    <string name="qrPrompt">Scan the code on SvyU website</string>
+    <string name="surveyNotFound">Sorry, survey not found.</string>
+    <string name="connectFail">Unable to connect to the internet.</string>
+    <string name="unsupportedVersion">This survey uses features not available in this version of the app. Please update the app.</string>
+    <string name="unexpectedSurveyJson">There\'s a problem connecting to the service. Please check your connection or contact support.</string>
+    <string name="unexpectedResponseError">Something unexpected happened sending your answers. Please contact support.</string>
+    <string name="permRequired">Permission required</string>
+    <string name="phoneIdPermReason">We need phone status permission to identify your device.</string>
+    <string name="locationPermReason">We need location permission to do whatever.</string>
+    <string name="internetPermReason">We need Internet permission to get surveys and send your results.</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="internetPermRequired">We need Internet permission to send and receive request.\nPlease grant this permission.</string>
+    <string name="cameraPermRequired">Please grant camera permission so we can scan a QR code.</string>
+    <string name="settings">Settings</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="lockDevice">Lock device after completing survey</string>
+    <string name="deviceAdminDisable">Device Admin permission revoked. We will not be able to lock your phone after survey completion.</string>
+    <string name="deviceAdminDisabledTip">This option is not available because Device Admin is disabled.</string>
+    <string name="enable">Enable</string>
+    <string name="deviceAdminReason">Enable Device Admin so we can lock the phone after survey completion.</string>
+    <string name="deviceAdminDescription">Enables device locking after completing survey.</string>
+    <string name="thanksToast">Thank you for your participation.</string>
 </resources>
