@@ -19,6 +19,7 @@ class ResponseJsonObjectFactory {
                     optArray.put(Integer.valueOf(o));
                 }
                 obj.put("answer", optArray);
+                break;
             case "text":
                 obj.put("answer", entity.getResponse());
                 break;

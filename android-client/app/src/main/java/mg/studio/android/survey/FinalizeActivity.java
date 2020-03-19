@@ -221,7 +221,6 @@ public class FinalizeActivity extends AppCompatActivity {
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(FinalizeActivity.this, R.string.internetPermRequired, Toast.LENGTH_LONG).show();
                             dialog.dismiss();
                         }
                     })
@@ -247,7 +246,6 @@ public class FinalizeActivity extends AppCompatActivity {
             case PERMISSION_INTERNET_CODE:
                 if (grantResults.length == 0
                         || grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                    Toast.makeText(this,R.string.internetPermRequired, Toast.LENGTH_LONG).show();
                 }
                 return;
             case 4:
