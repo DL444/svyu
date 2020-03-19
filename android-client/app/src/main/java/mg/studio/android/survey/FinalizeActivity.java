@@ -21,6 +21,8 @@ import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.NetworkError;
@@ -45,6 +47,7 @@ public class FinalizeActivity extends AppCompatActivity {
     }
 
     public void upload(View sender) {
+        setProgress(true);
         final DataHelper dataHelper = new DataHelper(this);
         SurveyReport report = new SurveyReport(surveyId, dataHelper.getResponses(), System.currentTimeMillis(),
                 latitude, longitude, imei);
@@ -54,6 +57,7 @@ public class FinalizeActivity extends AppCompatActivity {
         } catch (JSONException ex) {
             Log.wtf("Upload.JSON", "Json serialization failed!");
             Toast.makeText(this, R.string.unexpectedResponseError, Toast.LENGTH_SHORT).show();
+            setProgress(false);
             return;
         }
 
@@ -61,6 +65,7 @@ public class FinalizeActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        setProgress(false);
                         if (prefs.getBoolean("lockDevice", false)
                                 && policyManager.isAdminActive(new ComponentName(FinalizeActivity.this, DeviceAdminListener.class))) {
                             policyManager.lockNow();
@@ -78,8 +83,21 @@ public class FinalizeActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(FinalizeActivity.this, R.string.unexpectedResponseError, Toast.LENGTH_SHORT).show();
                         }
+                        setProgress(false);
                     }
                 });
+    }
+
+    private void setProgress(boolean active) {
+        ProgressBar progressBar = findViewById(R.id.submitProgress);
+        Button nextBtn = findViewById(R.id.nextBtn);
+        if (active) {
+            progressBar.setVisibility(View.VISIBLE);
+            nextBtn.setEnabled(false);
+        } else {
+            progressBar.setVisibility(View.GONE);
+            nextBtn.setEnabled(true);
+        }
     }
 
     private final LocationListener locationListener = new LocationListener() {

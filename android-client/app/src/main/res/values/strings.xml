@@ -11,7 +11,7 @@
     <string name="next">Next</string>
     <string name="final_jumbo">Thank you</string>
     <string name="final_secondary">for your answers!</string>
-    <string name="finish">Save result</string>
+    <string name="finish">Submit result</string>
     <string name="summary">Summary</string>
     <string name="questionHeader">Question %1$d</string>
     <string name="cacheFailed">Failed to save your response.</string>

@@ -53,6 +53,15 @@
         android:layout_marginTop="@dimen/marginM"
         android:text="@string/welcome_attn_2" />
 
+    <ProgressBar
+        android:id="@+id/receiveProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/opts"
+        android:layout_margin="@dimen/marginS"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
+
     <FrameLayout
         android:id="@+id/opts"
         android:layout_width="wrap_content"

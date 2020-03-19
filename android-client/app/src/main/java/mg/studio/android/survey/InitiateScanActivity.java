@@ -9,7 +9,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.NetworkError;
@@ -48,8 +50,7 @@ public class InitiateScanActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void initScan(View sender)
-    {
+    public void initScan(View sender) {
         CheckBox check = findViewById(R.id.welcome_check);
         if (!check.isChecked()) {
             return;
@@ -64,6 +65,18 @@ public class InitiateScanActivity extends AppCompatActivity {
         intentIntegrator.initiateScan();
     }
 
+    private void setProgress(boolean active) {
+        ProgressBar progressBar = findViewById(R.id.receiveProgress);
+        Button nextBtn = findViewById(R.id.nextBtn);
+        if (active) {
+            progressBar.setVisibility(View.VISIBLE);
+            nextBtn.setEnabled(false);
+        } else {
+            progressBar.setVisibility(View.GONE);
+            nextBtn.setEnabled(true);
+        }
+    }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         String id;
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
@@ -74,6 +87,7 @@ public class InitiateScanActivity extends AppCompatActivity {
             return;
         }
 
+        setProgress(true);
         JsonClient client = JsonClient.getInstance(getApplicationContext());
         client.getJson("https://svyu.azure-api.net/survey/" + id, new Response.Listener<String>() {
             @Override
@@ -92,6 +106,8 @@ public class InitiateScanActivity extends AppCompatActivity {
                     Toast.makeText(InitiateScanActivity.this, R.string.unexpectedSurveyJson, Toast.LENGTH_LONG).show();
                 } catch (NumberFormatException ex) {
                     Toast.makeText(InitiateScanActivity.this, R.string.unexpectedSurveyJson, Toast.LENGTH_LONG).show();
+                } finally {
+                    setProgress(false);
                 }
             }
         }, new Response.ErrorListener() {
@@ -99,8 +115,10 @@ public class InitiateScanActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof NetworkError || error instanceof TimeoutError) {
                     Toast.makeText(InitiateScanActivity.this, R.string.connectFail, Toast.LENGTH_SHORT).show();
+                    setProgress(false);
                 } else if (error.networkResponse != null && error.networkResponse.statusCode == 404) {
                     Toast.makeText(InitiateScanActivity.this, R.string.surveyNotFound, Toast.LENGTH_SHORT).show();
+                    setProgress(false);
                 }
             }
         });
