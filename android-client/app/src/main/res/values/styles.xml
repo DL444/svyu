@@ -30,20 +30,20 @@
     </style>
 
     <style name="PrimaryButton">
-        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:background">@drawable/button_primary</item>
         <item name="android:textColor">@color/alt</item>
         <item name="android:onClick">next</item>
     </style>
 
     <style name="PrimaryButtonNoAction">
-        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:background">@drawable/button_primary</item>
         <item name="android:textColor">@color/alt</item>
     </style>
 
     <style name="SummaryTitle">
         <item name="android:textColor">@color/base</item>
         <item name="android:textSize">@dimen/title</item>
-        <item name="android:layout_marginBottom">@dimen/marginXS</item>
+        <item name="android:layout_marginBottom">@dimen/marginXXS</item>
     </style>
     <style name="SummaryItem">
         <item name="android:textSize">@dimen/summaryItem</item>

@@ -46,6 +46,11 @@ public class InitiateScanActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void preliminaryCheckClick(View sender) {
+        Button nextBtn = findViewById(R.id.nextBtn);
+        nextBtn.setEnabled(((CheckBox)sender).isChecked());
+    }
+
     public void initScan(View sender) {
         CheckBox check = findViewById(R.id.welcome_check);
         if (!check.isChecked()) {

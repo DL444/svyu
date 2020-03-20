@@ -8,6 +8,7 @@
     <dimen name="marginL">36dp</dimen>
     <dimen name="marginM">24dp</dimen>
     <dimen name="marginS">18dp</dimen>
-    <dimen name="marginXS">4dp</dimen>
+    <dimen name="marginXS">12dp</dimen>
+    <dimen name="marginXXS">4dp</dimen>
     <dimen name="appPadding">48dp</dimen>
 </resources>

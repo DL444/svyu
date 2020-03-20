@@ -22,8 +22,8 @@
     <string name="unexpectedSurveyJson">There\'s a problem connecting to the service. Please check your connection or contact support.</string>
     <string name="unexpectedResponseError">Something unexpected happened sending your answers. Please contact support.</string>
     <string name="permRequired">Permission required</string>
-    <string name="phoneIdPermReason">We need phone status permission to identify your device.</string>
-    <string name="locationPermReason">We need location permission to do whatever.</string>
+    <string name="phoneIdPermReason">We need phone status permission to anonymously identify you.</string>
+    <string name="locationPermReason">We need location permission to anonymously identify you.</string>
     <string name="internetPermReason">We need Internet permission to get surveys and send your results.</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -38,4 +38,7 @@
     <string name="deviceAdminReason">Enable Device Admin so we can lock the phone after survey completion.</string>
     <string name="deviceAdminDescription">Enables device locking after completing survey.</string>
     <string name="thanksToast">Thank you for your participation.</string>
+    <string name="initPermExplain">- We will need to use your camera to scan a QR code.
+        We also need phone and location permission to anonymously identify you.
+        Please grant these permissions to help the survey.</string>
 </resources>

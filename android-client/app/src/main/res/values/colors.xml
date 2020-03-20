@@ -5,4 +5,5 @@
     <color name="colorAccent">#8BC34A</color>
     <color name="base">#000000</color>
     <color name="alt">#FFFFFF</color>
+    <color name="baseMedium">#808080</color>
 </resources>

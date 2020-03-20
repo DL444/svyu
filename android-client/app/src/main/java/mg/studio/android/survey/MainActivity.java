@@ -2,9 +2,13 @@ package mg.studio.android.survey;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -69,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         String[] options = question.getOptions();
         for (String opt : options) {
             RadioButton optBtn = new RadioButton(this);
+            optBtn.setOnClickListener(checkClicked);
             optBtn.setText(opt);
             optGroup.addView(optBtn);
         }
@@ -85,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         String[] options = question.getOptions();
         for (String opt : options) {
             CheckBox optBtn = new CheckBox(this);
+            optBtn.setOnClickListener(checkClicked);
             optBtn.setText(opt);
             optGroup.addView(optBtn);
         }
@@ -96,6 +102,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private void bindLayout(TextQuestion question) {
         setContentView(R.layout.question_text);
+        EditText inputBox = findViewById(R.id.inputBox);
+        inputBox.addTextChangedListener(textInputWatcher);
         bindLayoutTitle(question);
     }
 
@@ -109,6 +117,38 @@ public class MainActivity extends AppCompatActivity {
         textView = findViewById(R.id.title);
         textView.setText(question.getQuestion());
     }
+
+    private View.OnClickListener checkClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Button nextBtn = findViewById(R.id.nextBtn);
+            ViewGroup opts = findViewById(R.id.opts);
+            for (int i = 0; i < opts.getChildCount(); i++) {
+                CompoundButton optBtn = (CompoundButton)opts.getChildAt(i);
+                if (optBtn.isChecked()) {
+                    nextBtn.setEnabled(true);
+                    return;
+                }
+            }
+            nextBtn.setEnabled(false);
+        }
+    };
+
+    private TextWatcher textInputWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) { }
+        @Override
+        public void afterTextChanged(Editable s) {
+            Button nextBtn = findViewById(R.id.nextBtn);
+            if (s.toString().equals("")) {
+                nextBtn.setEnabled(false);
+            } else {
+                nextBtn.setEnabled(true);
+            }
+        }
+    };
 
     /**
      * Gets the user response of current page.

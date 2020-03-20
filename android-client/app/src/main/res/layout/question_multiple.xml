@@ -20,22 +20,26 @@
         android:layout_marginTop="@dimen/marginL"
         style="@style/Title" />
 
-    <LinearLayout
-        android:id="@+id/opts"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
-        android:layout_marginTop="@dimen/marginM"
-        android:layout_marginStart="@dimen/marginS"
-        android:layout_marginLeft="@dimen/marginS"
-        android:orientation="vertical">
-    </LinearLayout>
+        android:layout_marginTop="@dimen/marginM">
+        <LinearLayout
+            android:id="@+id/opts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        </LinearLayout>
+    </ScrollView>
+
 
     <Button
         android:id="@+id/nextBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:enabled="false"
         style="@style/PrimaryButton"
         android:text="@string/next"/>
 

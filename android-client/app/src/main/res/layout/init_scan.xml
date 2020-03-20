@@ -27,31 +27,45 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/welcome_subheader"
-        android:layout_marginTop="@dimen/marginL"
+        android:layout_marginTop="@dimen/marginS"
         android:text="@string/welcome_attn_title"
         style="@style/Title"/>
 
-    <TextView
-        android:id="@+id/welcome_attn_0"
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/welcome_attn_title"
-        android:layout_marginTop="@dimen/marginM"
-        android:text="@string/welcome_attn_0" />
-    <TextView
-        android:id="@+id/welcome_attn_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/welcome_attn_0"
-        android:layout_marginTop="@dimen/marginM"
-        android:text="@string/welcome_attn_1" />
-    <TextView
-        android:id="@+id/welcome_attn_2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/welcome_attn_1"
-        android:layout_marginTop="@dimen/marginM"
-        android:text="@string/welcome_attn_2" />
+        android:layout_marginTop="@dimen/marginM">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/welcome_attn_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/welcome_attn_0" />
+            <TextView
+                android:id="@+id/welcome_attn_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginXS"
+                android:text="@string/welcome_attn_1" />
+            <TextView
+                android:id="@+id/welcome_attn_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginXS"
+                android:text="@string/welcome_attn_2" />
+
+            <TextView
+                android:id="@+id/welcome_attn_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginXS"
+                android:text="@string/initPermExplain" />
+        </LinearLayout>
+    </ScrollView>
 
     <ProgressBar
         android:id="@+id/receiveProgress"
@@ -73,13 +87,15 @@
             android:id="@+id/welcome_check"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/welcome_req_accept"/>
+            android:text="@string/welcome_req_accept"
+            android:onClick="preliminaryCheckClick"/>
     </FrameLayout>
     <Button
         android:id="@+id/nextBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:enabled="false"
         android:text="@string/welcome_start"
         style="@style/PrimaryButtonNoAction"
         android:onClick="initScan"/>
