@@ -1,8 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat">
         <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@color/alt</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -25,14 +26,12 @@
         <item name="android:textSize">@dimen/title</item>
     </style>
 
-    <style name="PrimaryButtonNext">
-        <item name="android:background">@drawable/button_primary</item>
-        <item name="android:textColor">@color/alt</item>
+    <style name="PrimaryButtonNext" parent="PrimaryButton">
         <item name="android:onClick">next</item>
     </style>
 
     <style name="PrimaryButton">
         <item name="android:background">@drawable/button_primary</item>
-        <item name="android:textColor">@color/alt</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 </resources>

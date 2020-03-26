@@ -3,7 +3,8 @@
     <color name="colorPrimary">#0080FF</color>
     <color name="colorPrimaryDark">#005AFF</color>
     <color name="colorAccent">#0080FF</color>
-    <color name="base">#000000</color>
-    <color name="alt">#FFFFFF</color>
+    <color name="base">#FFFFFF</color>
+    <color name="alt">#000000</color>
     <color name="baseMedium">#808080</color>
+    <color name="white">#FFFFFF</color>
 </resources>
