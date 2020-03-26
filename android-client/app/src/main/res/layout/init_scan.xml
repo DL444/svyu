@@ -97,7 +97,7 @@
         android:layout_alignParentBottom="true"
         android:enabled="false"
         android:text="@string/welcome_start"
-        style="@style/PrimaryButtonNoAction"
+        style="@style/PrimaryButton"
         android:onClick="initScan"/>
 
     <!-- END    : Your code should be within this block -->

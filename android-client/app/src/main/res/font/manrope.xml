@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:app="http://schemas.android.com/apk/res-auto">
+    <font
+        app:fontStyle="normal"
+        app:fontWeight="500"
+        app:font="@font/manrope500" />
+    <font
+        app:fontStyle="normal"
+        app:fontWeight="800"
+        app:font="@font/manrope800" />
+    <font
+        app:fontStyle="normal"
+        app:fontWeight="200"
+        app:font="@font/manrope200" />
+</font-family>

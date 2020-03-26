@@ -42,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        style="@style/PrimaryButtonNoAction"
+        style="@style/PrimaryButton"
         android:text="@string/finish"
         android:onClick="upload"/>
 

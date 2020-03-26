@@ -10,15 +10,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/questionHeader"
-        style="@style/QuestionHeader" />
+        style="@style/Title" />
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/header"
-        android:layout_marginTop="@dimen/marginL"
-        style="@style/Title" />
+        style="@style/Header" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -38,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:enabled="false"
-        style="@style/PrimaryButton"
+        style="@style/PrimaryButtonNext"
         android:text="@string/next"/>
 
 </RelativeLayout>

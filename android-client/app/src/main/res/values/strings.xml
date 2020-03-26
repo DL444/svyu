@@ -6,13 +6,15 @@
     <string name="welcome_attn_0">- Please be honest when making your choice.</string>
     <string name="welcome_attn_1">- We are just doing a research so you don\'t have to fake your information.</string>
     <string name="welcome_attn_2">- Please follow the step we designed for you and don\'t skip any questions.</string>
+    <string name="initPermExplain">- We will need to use your camera to scan a QR code.
+        We also need phone and location permission to anonymously identify you.
+        Please grant these permissions to help the survey.</string>
     <string name="welcome_req_accept">I accept these requests.</string>
     <string name="welcome_start">Let\'s start!</string>
     <string name="next">Next</string>
     <string name="final_jumbo">Thank you</string>
     <string name="final_secondary">for your answers!</string>
-    <string name="finish">Submit result</string>
-    <string name="summary">Summary</string>
+    <string name="finish">Submit</string>
     <string name="questionHeader">Question %1$d</string>
     <string name="cacheFailed">Failed to save your response.</string>
     <string name="qrPrompt">Scan the code on SvyU website</string>
@@ -38,7 +40,4 @@
     <string name="deviceAdminReason">Enable Device Admin so we can lock the phone after survey completion.</string>
     <string name="deviceAdminDescription">Enables device locking after completing survey.</string>
     <string name="thanksToast">Thank you for your participation.</string>
-    <string name="initPermExplain">- We will need to use your camera to scan a QR code.
-        We also need phone and location permission to anonymously identify you.
-        Please grant these permissions to help the survey.</string>
 </resources>

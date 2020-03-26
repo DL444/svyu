@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -6,48 +6,33 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor" tools:targetApi="lollipop">@color/colorPrimary</item>
+        <item name="android:fontFamily">@font/manrope</item>
     </style>
 
     <style name="Header">
         <item name="android:textColor">@color/base</item>
         <item name="android:textSize">@dimen/header</item>
-        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="Subheader">
         <item name="android:textColor">@color/base</item>
         <item name="android:textSize">@dimen/subheader</item>
-        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="Title">
         <item name="android:textSize">@dimen/title</item>
     </style>
 
-    <style name="QuestionHeader">
-        <item name="android:textColor">@color/base</item>
-        <item name="android:textSize">@dimen/qHeader</item>
-    </style>
-
-    <style name="PrimaryButton">
+    <style name="PrimaryButtonNext">
         <item name="android:background">@drawable/button_primary</item>
         <item name="android:textColor">@color/alt</item>
         <item name="android:onClick">next</item>
     </style>
 
-    <style name="PrimaryButtonNoAction">
+    <style name="PrimaryButton">
         <item name="android:background">@drawable/button_primary</item>
         <item name="android:textColor">@color/alt</item>
     </style>
-
-    <style name="SummaryTitle">
-        <item name="android:textColor">@color/base</item>
-        <item name="android:textSize">@dimen/title</item>
-        <item name="android:layout_marginBottom">@dimen/marginXXS</item>
-    </style>
-    <style name="SummaryItem">
-        <item name="android:textSize">@dimen/summaryItem</item>
-        <item name="android:layout_marginBottom">@dimen/marginM</item>
-    </style>
-
 </resources>
