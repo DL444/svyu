@@ -1,11 +1,11 @@
-package mg.studio.android.survey;
+package mg.studio.android.survey.models;
 
 import java.io.Serializable;
 
 /**
  * An interface representing a survey question.
  */
-interface ISurveyQuestion extends Serializable {
+public interface IQuestion extends Serializable {
     /**
      * Gets the type of the question.
      * @return A QuestionType object representing the type of the question.
@@ -17,4 +17,9 @@ interface ISurveyQuestion extends Serializable {
      * @return The text of the question.
      */
     String getQuestion();
+
+    /**
+     * Sets the text of the question.
+     */
+    void setQuestion(String question);
 }

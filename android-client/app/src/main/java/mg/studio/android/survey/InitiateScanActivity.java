@@ -13,14 +13,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.NetworkError;
-import com.android.volley.Response;
-import com.android.volley.TimeoutError;
-import com.android.volley.VolleyError;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import org.json.JSONException;
+import mg.studio.android.survey.clients.ClientErrorType;
+import mg.studio.android.survey.clients.ClientFactory;
+import mg.studio.android.survey.clients.ISurveyClient;
+import mg.studio.android.survey.clients.ISurveyClientCallback;
+import mg.studio.android.survey.models.SurveyModel;
 
 public class InitiateScanActivity extends AppCompatActivity {
 
@@ -89,39 +89,41 @@ public class InitiateScanActivity extends AppCompatActivity {
         }
 
         setProgress(true);
-        JsonClient client = JsonClient.getInstance(getApplicationContext());
-        client.getJson("https://svyu.azure-api.net/survey/" + id, new Response.Listener<String>() {
+        ISurveyClient client = new ClientFactory(getApplicationContext()).getSurveyClient();
+        client.getSurvey(id, new ISurveyClientCallback() {
             @Override
-            public void onResponse(String response) {
-                try {
-                    Survey survey = Survey.parse(response);
-                    new DataHelper(InitiateScanActivity.this).reset();
-                    Intent navIntent = new Intent(InitiateScanActivity.this, MainActivity.class);
-                    navIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    navIntent.putExtra(getPackageName() + ".survey", survey);
-                    startActivity(navIntent);
-                    InitiateScanActivity.this.finish();
-                } catch (QuestionTypeNotSupportedException ex) {
-                    Toast.makeText(InitiateScanActivity.this, R.string.unsupportedVersion, Toast.LENGTH_LONG).show();
-                } catch (JSONException ex) {
-                    Toast.makeText(InitiateScanActivity.this, R.string.unexpectedSurveyJson, Toast.LENGTH_LONG).show();
-                } catch (NumberFormatException ex) {
-                    Toast.makeText(InitiateScanActivity.this, R.string.unexpectedSurveyJson, Toast.LENGTH_LONG).show();
-                } finally {
-                    setProgress(false);
-                }
+            public void onComplete(SurveyModel survey) {
+                new DataHelper(InitiateScanActivity.this).reset();
+                Intent navIntent = new Intent(InitiateScanActivity.this, MainActivity.class);
+                navIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                navIntent.putExtra(getPackageName() + ".survey", survey);
+                startActivity(navIntent);
+                setProgress(false);
+                InitiateScanActivity.this.finish();
             }
-        }, new Response.ErrorListener() {
+
             @Override
-            public void onErrorResponse(VolleyError error) {
-                if (error instanceof NetworkError || error instanceof TimeoutError) {
-                    Toast.makeText(InitiateScanActivity.this, R.string.connectFail, Toast.LENGTH_SHORT).show();
-                    setProgress(false);
-                } else if (error.networkResponse != null && error.networkResponse.statusCode == 404) {
-                    Toast.makeText(InitiateScanActivity.this, R.string.surveyNotFound, Toast.LENGTH_SHORT).show();
-                    setProgress(false);
+            public void onError(ClientErrorType errorType, Exception exception) {
+                switch (errorType) {
+                    case IO:
+                        Toast.makeText(InitiateScanActivity.this, R.string.connectFail, Toast.LENGTH_SHORT).show();
+                        break;
+                    case NotFound:
+                        Toast.makeText(InitiateScanActivity.this, R.string.surveyNotFound, Toast.LENGTH_SHORT).show();
+                        break;
+                    case Versioning:
+                        Toast.makeText(InitiateScanActivity.this, R.string.unsupportedVersion, Toast.LENGTH_LONG).show();
+                        break;
+                    case NotSupported:
+                        // TODO: Give a message about this.
+                        break;
+                    case Serialization:
+                    case Unknown:
+                        Toast.makeText(InitiateScanActivity.this, R.string.unexpectedSurveyJson, Toast.LENGTH_LONG).show();
+                        break;
                 }
             }
         });
+        setProgress(false);
     }
 }

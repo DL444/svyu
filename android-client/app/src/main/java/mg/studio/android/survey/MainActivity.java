@@ -15,13 +15,21 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+
+import mg.studio.android.survey.models.IQuestion;
+import mg.studio.android.survey.models.MultiChoiceQuestion;
+import mg.studio.android.survey.models.SingleChoiceQuestion;
+import mg.studio.android.survey.models.SurveyModel;
+import mg.studio.android.survey.models.TextQuestion;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        survey = (Survey) this.getIntent().getSerializableExtra(getPackageName() + ".survey");
+        survey = (SurveyModel) this.getIntent().getSerializableExtra(getPackageName() + ".survey");
         dataHelper = new DataHelper(this);
 
         current = -1;
@@ -34,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
      */
    public void next(View sender) {
         if (current >= 0 && current < survey.getLength()) {
-            ISurveyResponse response = getResponse(survey.getQuestions()[current].getType());
+            ISurveyResponse response = getResponse(survey.questions().get(current).getType());
             if (!response.hasResponse()) {
                 return;
             }
@@ -42,15 +50,16 @@ public class MainActivity extends AppCompatActivity {
 
         current++;
         if (current < survey.getLength()) {
-            switch (survey.getQuestions()[current].getType()) {
+            IQuestion question = survey.questions().get(current);
+            switch (survey.questions().get(current).getType()) {
                 case Single:
-                    bindLayout((SingleResponseQuestion) survey.getQuestions()[current]);
+                    bindLayout((SingleChoiceQuestion)question);
                     break;
                 case Multiple:
-                    bindLayout((MultipleResponseQuestion) survey.getQuestions()[current]);
+                    bindLayout((MultiChoiceQuestion)question);
                     break;
                 case Text:
-                    bindLayout((TextQuestion) survey.getQuestions()[current]);
+                    bindLayout((mg.studio.android.survey.models.TextQuestion)question);
                     break;
             }
         } else {
@@ -66,11 +75,11 @@ public class MainActivity extends AppCompatActivity {
      * Binds the app layout to a survey question.
      * @param question The question for the layout to bind to.
      */
-    private void bindLayout(SingleResponseQuestion question) {
+    private void bindLayout(SingleChoiceQuestion question) {
         setContentView(R.layout.question_single);
         bindLayoutTitle(question);
         ViewGroup optGroup = findViewById(R.id.opts);
-        String[] options = question.getOptions();
+        ArrayList<String> options = question.options();
         for (String opt : options) {
             RadioButton optBtn = new RadioButton(this);
             optBtn.setOnClickListener(checkClicked);
@@ -83,11 +92,11 @@ public class MainActivity extends AppCompatActivity {
      * Binds the app layout to a survey question.
      * @param question The question for the layout to bind to.
      */
-    private void bindLayout(MultipleResponseQuestion question) {
+    private void bindLayout(MultiChoiceQuestion question) {
         setContentView(R.layout.question_multiple);
         bindLayoutTitle(question);
         ViewGroup optGroup = findViewById(R.id.opts);
-        String[] options = question.getOptions();
+        ArrayList<String> options = question.options();
         for (String opt : options) {
             CheckBox optBtn = new CheckBox(this);
             optBtn.setOnClickListener(checkClicked);
@@ -111,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
      * A helper method for binding the title of the question.
      * @param question The question for the layout to bind to.
      */
-    private void bindLayoutTitle(ISurveyQuestion question) {
+    private void bindLayoutTitle(IQuestion question) {
         TextView textView = findViewById(R.id.header);
         textView.setText(getString(R.string.questionHeader, current + 1));
         textView = findViewById(R.id.title);
@@ -155,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
      * @param type The type of the current question.
      * @return An ISurveyResponse object representing the user response.
      */
-    private ISurveyResponse getResponse(QuestionType type) {
+    private ISurveyResponse getResponse(mg.studio.android.survey.models.QuestionType type) {
         ISurveyResponse response;
         switch (type) {
             case Single:
@@ -197,6 +206,6 @@ public class MainActivity extends AppCompatActivity {
 
     private int current;
 
-    private Survey survey;
+    private SurveyModel survey;
     private DataHelper dataHelper;
 }

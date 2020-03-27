@@ -1,17 +1,9 @@
-package mg.studio.android.survey;
+package mg.studio.android.survey.models;
 
 /**
  * Representing a question that accepts text input responses.
  */
-final class TextQuestion implements ISurveyQuestion {
-    /**
-     * Constructs an instance of TextQuestion.
-     * @param question The question to be asked.
-     */
-    public TextQuestion(String question) {
-        this.question = question;
-    }
-
+public class TextQuestion implements IQuestion {
     /**
      * {@inheritDoc}
      */
@@ -26,6 +18,14 @@ final class TextQuestion implements ISurveyQuestion {
     @Override
     public String getQuestion() {
         return question;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setQuestion(String question) {
+        this.question = question;
     }
 
     private String question;
