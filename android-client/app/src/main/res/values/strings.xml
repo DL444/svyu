@@ -40,4 +40,6 @@
     <string name="deviceAdminReason">Enable Device Admin so we can lock the phone after survey completion.</string>
     <string name="deviceAdminDescription">Enables device locking after completing survey.</string>
     <string name="thanksToast">Thank you for your participation.</string>
+    <string name="surveyProgressText">%1$d of %2$d</string>
+    <string name="textResponseHint">Answer here…</string>
 </resources>

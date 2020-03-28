@@ -4,10 +4,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Hashtable;
+import javax.inject.Inject;
 
 import mg.studio.android.survey.models.IResponse;
-import mg.studio.android.survey.models.QuestionType;
 import mg.studio.android.survey.models.ResultModel;
 
 /**
@@ -15,19 +14,9 @@ import mg.studio.android.survey.models.ResultModel;
  */
 public final class ResultSerializer {
 
-    /**
-     * Gets the singleton instance of ResultSerializer class.
-     * @return The singleton instance.
-     */
-    public static ResultSerializer getInstance() {
-        if (instance == null) {
-            synchronized (lock) {
-                if (instance == null) {
-                    instance = new ResultSerializer();
-                }
-            }
-        }
-        return instance;
+    @Inject
+    public ResultSerializer(ResponseSerializerSelector selector) {
+        this.selector = selector;
     }
 
     /**
@@ -48,7 +37,7 @@ public final class ResultSerializer {
         result.setImei(jObject.getString("imei"));
         JSONArray responseArray = jObject.getJSONArray("answers");
         for (int i = 0; i < responseArray.length(); i++) {
-            result.responses().add(dispatchForDeserialize(responseArray.getJSONObject(i)));
+            result.responses().add(selector.deserialize(responseArray.getJSONObject(i)));
         }
         return result;
     }
@@ -71,41 +60,11 @@ public final class ResultSerializer {
         jObject.put("imei", model.getImei());
         JSONArray responseArray = new JSONArray();
         for (IResponse r : model.responses()) {
-            responseArray.put(dispatchForSerialize(r));
+            responseArray.put(selector.serialize(r));
         }
         jObject.put("answers", responseArray);
         return jObject.toString();
     }
 
-    private JSONObject dispatchForSerialize(IResponse model)
-            throws JSONException, QuestionTypeNotSupportedException {
-        String type = model.getType().toString();
-        if (dispatchTable.containsKey(type)) {
-            return dispatchTable.get(type).serialize(model);
-        } else {
-            throw new QuestionTypeNotSupportedException(type);
-        }
-    }
-
-    private IResponse dispatchForDeserialize(JSONObject json)
-            throws JSONException, QuestionTypeNotSupportedException {
-        String type = json.getString("type").toLowerCase();
-        if (dispatchTable.containsKey(type)) {
-            return dispatchTable.get(type).deserialize(json);
-        } else {
-            throw new QuestionTypeNotSupportedException(type);
-        }
-    }
-
-    private ResultSerializer() {
-        // Register all response serializers here.
-        dispatchTable.put(QuestionType.Single.toString(), new SingleChoiceResponseSerializer());
-        dispatchTable.put(QuestionType.Multiple.toString(), new MultiChoiceResponseSerializer());
-        dispatchTable.put(QuestionType.Text.toString(), new TextResponseSerializer());
-    }
-
-    private Hashtable<String, IResponseSerializer> dispatchTable = new Hashtable<>();
-
-    private static volatile ResultSerializer instance;
-    private static final Object lock = new Object();
+    private ResponseSerializerSelector selector;
 }

@@ -2,36 +2,29 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="@dimen/appPadding">
 
-    <TextView
-        android:id="@+id/header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/questionHeader"
-        style="@style/Title" />
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/header"
-        style="@style/Header" />
-
-    <ScrollView
+    <ProgressBar
+        android:id="@+id/surveyProgressBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/title"
-        android:layout_marginTop="@dimen/marginM">
-        <LinearLayout
-            android:id="@+id/opts"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-        </LinearLayout>
-    </ScrollView>
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal" />
 
+    <TextView
+        android:id="@+id/surveyProgressText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/surveyProgressBar"
+        android:text="@string/surveyProgressText"/>
+
+    <FrameLayout
+        android:id="@+id/questionFrame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/surveyProgressText"
+        android:layout_above="@id/nextBtn"
+        android:layout_marginTop="@dimen/marginS"
+        android:layout_marginBottom="@dimen/marginS" />
 
     <Button
         android:id="@+id/nextBtn"

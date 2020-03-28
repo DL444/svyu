@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import javax.inject.Inject;
+
 import mg.studio.android.survey.clients.ClientErrorType;
 import mg.studio.android.survey.clients.ClientFactory;
 import mg.studio.android.survey.clients.IClient;
@@ -27,6 +29,7 @@ public class InitiateScanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((SurveyApplication)getApplication()).getComponent().inject(this);
         setContentView(R.layout.init_scan);
     }
 
@@ -89,7 +92,7 @@ public class InitiateScanActivity extends AppCompatActivity {
         }
 
         setProgress(true);
-        IClient client = new ClientFactory(getApplicationContext()).getClient();
+        IClient client = clientFactory.getClient();
         client.getSurvey(id, new ISurveyClientCallback() {
             @Override
             public void onComplete(SurveyModel survey) {
@@ -103,6 +106,7 @@ public class InitiateScanActivity extends AppCompatActivity {
 
             @Override
             public void onError(ClientErrorType errorType, Exception exception) {
+                setProgress(false);
                 switch (errorType) {
                     case IO:
                         Toast.makeText(InitiateScanActivity.this, R.string.connectFail, Toast.LENGTH_SHORT).show();
@@ -123,6 +127,7 @@ public class InitiateScanActivity extends AppCompatActivity {
                 }
             }
         });
-        setProgress(false);
     }
+
+    @Inject ClientFactory clientFactory;
 }

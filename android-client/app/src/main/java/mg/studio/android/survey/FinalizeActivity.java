@@ -1,11 +1,5 @@
 package mg.studio.android.survey;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
@@ -25,12 +19,13 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.android.volley.NetworkError;
-import com.android.volley.Response;
-import com.android.volley.TimeoutError;
-import com.android.volley.VolleyError;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
-import org.json.JSONException;
+import javax.inject.Inject;
 
 import mg.studio.android.survey.clients.ClientErrorType;
 import mg.studio.android.survey.clients.ClientFactory;
@@ -43,6 +38,7 @@ public class FinalizeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((SurveyApplication)getApplication()).getComponent().inject(this);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         policyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
         prefs = getSharedPreferences(getPackageName() + ".pref", MODE_PRIVATE);
@@ -60,7 +56,7 @@ public class FinalizeActivity extends AppCompatActivity {
         result.setLongitude(longitude);
         result.setImei(imei);
 
-        IClient client = new ClientFactory(getApplicationContext()).getClient();
+        IClient client = clientFactory.getClient();
         client.postResult(result, new IResultClientCallback() {
             @Override
             public void onComplete(ResultModel result) {
@@ -266,6 +262,8 @@ public class FinalizeActivity extends AppCompatActivity {
                 throw new IllegalStateException("Unexpected value: " + requestCode);
         }
     }
+
+    @Inject ClientFactory clientFactory;
 
     private ResultModel result;
     private String imei;

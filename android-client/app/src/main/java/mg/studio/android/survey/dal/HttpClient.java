@@ -10,25 +10,20 @@ import com.android.volley.toolbox.Volley;
 
 import java.nio.charset.Charset;
 
+import javax.inject.Inject;
+
 /**
- * Singleton class of the abstraction of an HTTP client.
+ * Represents an HTTP client.
  */
 public final class HttpClient {
 
     /**
-     * Gets the singleton instance of HttpClient class.
-     * @param appContext The application context to create an HTTP client in.
-     * @return The singleton instance.
+     * Creates an instance of HttpClient class.
+     * @param appContext The application context to create the instance in.
      */
-    public static HttpClient getInstance(Context appContext) {
-        if (instance == null) {
-            synchronized (lock) {
-                if (instance == null) {
-                    instance = new HttpClient(appContext.getApplicationContext());
-                }
-            }
-        }
-        return instance;
+    @Inject
+    public HttpClient(Context appContext) {
+        requestQueue = Volley.newRequestQueue(appContext);
     }
 
     /**
@@ -77,12 +72,5 @@ public final class HttpClient {
         post(httpUrl, json.getBytes(Charset.forName("utf-8")), "application/json", continueWith, onError);
     }
 
-    private HttpClient(Context appContext) {
-        requestQueue = Volley.newRequestQueue(appContext);
-    }
-
     private RequestQueue requestQueue;
-
-    private static volatile HttpClient instance;
-    private static final Object lock = new Object();
 }

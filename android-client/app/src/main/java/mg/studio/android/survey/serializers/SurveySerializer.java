@@ -4,10 +4,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Hashtable;
+import javax.inject.Inject;
 
 import mg.studio.android.survey.models.IQuestion;
-import mg.studio.android.survey.models.QuestionType;
 import mg.studio.android.survey.models.SurveyModel;
 
 /**
@@ -16,18 +15,12 @@ import mg.studio.android.survey.models.SurveyModel;
 public final class SurveySerializer {
 
     /**
-     * Gets the singleton instance of SurveySerializer class.
-     * @return The singleton instance.
+     * Constructs an instance of SurveySerializer class.
+     * @param selector The question serialization selector to use.
      */
-    public static SurveySerializer getInstance() {
-        if (instance == null) {
-            synchronized (lock) {
-                if (instance == null) {
-                    instance = new SurveySerializer();
-                }
-            }
-        }
-        return instance;
+    @Inject
+    public SurveySerializer(QuestionSerializerSelector selector) {
+        this.selector = selector;
     }
 
     /**
@@ -44,7 +37,7 @@ public final class SurveySerializer {
         survey.setId(jObject.getString("id"));
         JSONArray questionsArray = jObject.getJSONArray("questions");
         for (int i = 0; i < questionsArray.length(); i++) {
-            survey.questions().add(dispatchForDeserialize(questionsArray.getJSONObject(i)));
+            survey.questions().add(selector.deserialize(questionsArray.getJSONObject(i)));
         }
         return survey;
     }
@@ -63,7 +56,7 @@ public final class SurveySerializer {
         jObject.put("len", model.getLength());
         JSONArray questionsArray = new JSONArray();
         for (IQuestion q : model.questions()) {
-            questionsArray.put(dispatchForSerialize(q));
+            questionsArray.put(selector.serialize(q));
         }
         jObject.put("questions", questionsArray);
         JSONObject root = new JSONObject();
@@ -71,36 +64,5 @@ public final class SurveySerializer {
         return root.toString();
     }
 
-    private JSONObject dispatchForSerialize(IQuestion model)
-            throws JSONException, QuestionTypeNotSupportedException {
-        String type = model.getType().toString();
-        if (dispatchTable.containsKey(type)) {
-            return dispatchTable.get(type).serialize(model);
-        } else {
-            throw new QuestionTypeNotSupportedException(type);
-        }
-    }
-
-    private IQuestion dispatchForDeserialize(JSONObject questionJson)
-            throws JSONException, QuestionTypeNotSupportedException {
-        String type = questionJson.getString("type").toLowerCase();
-        if (dispatchTable.containsKey(type)) {
-            return dispatchTable.get(type).deserialize(questionJson);
-        } else {
-            throw new QuestionTypeNotSupportedException(type);
-        }
-    }
-
-    private SurveySerializer() {
-        // Register all question serializers here.
-        ChoiceQuestionSerializer choiceSerializer = new ChoiceQuestionSerializer();
-        dispatchTable.put(QuestionType.Single.toString(), choiceSerializer);
-        dispatchTable.put(QuestionType.Multiple.toString(), choiceSerializer);
-        dispatchTable.put(QuestionType.Text.toString(), new TextQuestionSerializer());
-    }
-
-    private Hashtable<String, IQuestionSerializer> dispatchTable = new Hashtable<>();
-
-    private static volatile SurveySerializer instance;
-    private static final Object lock = new Object();
+    private QuestionSerializerSelector selector;
 }

@@ -9,25 +9,20 @@ import android.util.Pair;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 /**
- * Singleton class of the abstraction of a key-value database.
+ * Represents an abstraction of a key-value database.
  */
 public final class DbClient extends SQLiteOpenHelper {
 
     /**
-     * Gets the singleton instance of DbClient class.
-     * @param appContext The application context to create or open database in.
-     * @return The singleton instance.
+     * Creates an instance of DbClient class.
+     * @param context The application context to create the instance in.
      */
-    public static DbClient getInstance(Context appContext) {
-        if (instance == null) {
-            synchronized (lock) {
-                if (instance == null) {
-                    instance = new DbClient(appContext.getApplicationContext());
-                }
-            }
-        }
-        return instance;
+    @Inject
+    public DbClient(Context context) {
+        super(context, "svyu.db", null, 1);
     }
 
     /**
@@ -137,11 +132,4 @@ public final class DbClient extends SQLiteOpenHelper {
         db.delete(collection, null, null);
         db.close();
     }
-
-    private DbClient(Context context) {
-        super(context, "svyu.db", null, 1);
-    }
-
-    private static volatile DbClient instance;
-    private static final Object lock = new Object();
 }
