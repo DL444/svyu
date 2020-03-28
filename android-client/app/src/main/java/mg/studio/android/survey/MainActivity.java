@@ -1,19 +1,17 @@
 package mg.studio.android.survey;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
 import java.util.ArrayList;
 
@@ -21,11 +19,8 @@ import javax.inject.Inject;
 
 import mg.studio.android.survey.models.IQuestion;
 import mg.studio.android.survey.models.IResponse;
-import mg.studio.android.survey.models.MultiChoiceResponse;
 import mg.studio.android.survey.models.ResultModel;
-import mg.studio.android.survey.models.SingleChoiceResponse;
 import mg.studio.android.survey.models.SurveyModel;
-import mg.studio.android.survey.models.TextResponse;
 import mg.studio.android.survey.views.IResponseValidityChangedListener;
 import mg.studio.android.survey.views.QuestionViewBase;
 import mg.studio.android.survey.views.QuestionViewSelector;
@@ -70,7 +65,9 @@ public class MainActivity extends AppCompatActivity implements IResponseValidity
         current++;
         ProgressBar progressBar = findViewById(R.id.surveyProgressBar);
         int progress = (int)Math.round((double)current / survey.getLength() * 100);
-        progressBar.setProgress(progress);
+        ObjectAnimator progressAnimation = ObjectAnimator.ofInt(progressBar, "progress", progress).setDuration(300);
+        progressAnimation.setInterpolator(new FastOutSlowInInterpolator());
+        progressAnimation.start();
         TextView progressText = findViewById(R.id.surveyProgressText);
         progressText.setText(getString(R.string.surveyProgressText, current + 1, survey.getLength()));
 
@@ -79,8 +76,8 @@ public class MainActivity extends AppCompatActivity implements IResponseValidity
 
             currentView = viewSelector.getBoundView(question);
             FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.slide_left_in_anim, R.anim.slide_left_out_anim);
             transaction.replace(R.id.questionFrame, currentView);
-            // TODO: Set up transition here: transaction.setTransition().
             transaction.commit();
         } else {
             Intent finalizeNavIntent = new Intent(this, FinalizeActivity.class);
