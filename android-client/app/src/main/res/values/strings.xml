@@ -17,7 +17,7 @@
     <string name="finish">Submit</string>
     <string name="questionHeader">Question %1$d</string>
     <string name="cacheFailed">Failed to save your response.</string>
-    <string name="qrPrompt">Scan the code on SvyU website</string>
+    <string name="qrPrompt">Scan the code for the survey</string>
     <string name="surveyNotFound">Sorry, survey not found.</string>
     <string name="connectFail">Unable to connect to the internet.</string>
     <string name="unsupportedVersion">This survey uses features not available in this version of the app. Please update the app.</string>

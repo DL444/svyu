@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">SvyU</string>
+    <string name="welcome_jumbo">欢迎</string>
+    <string name="welcome_secondary">感谢您参与调查</string>
+    <string name="welcome_attn_title">填写之前，请知悉：</string>
+    <string name="welcome_attn_0">- 请按自己的实际情况作答</string>
+    <string name="welcome_attn_1">- 调查仅供研究使用，您可放心填写真实信息</string>
+    <string name="welcome_attn_2">- 请按照我们设计的顺序作答，不要跳题</string>
+    <string name="initPermExplain">- 我们需要使用相机来扫描问卷二维码。
+        我们还需要电话与位置权限，以便在不收集个人信息的前提下，标识参与调查者。
+        请允许这些权限，给我们的调查帮忙。</string>
+    <string name="welcome_req_accept">我同意以上请求</string>
+    <string name="welcome_start">开始</string>
+    <string name="next">继续</string>
+    <string name="final_jumbo">非常感谢</string>
+    <string name="final_secondary">感谢您参与调查</string>
+    <string name="finish">提交</string>
+    <string name="questionHeader">第 %1$d 题</string>
+    <string name="cacheFailed">保存答案失败</string>
+    <string name="qrPrompt">扫描问卷二维码</string>
+    <string name="surveyNotFound">抱歉，找不到问卷</string>
+    <string name="connectFail">无法连接到网络</string>
+    <string name="unsupportedVersion">这个调查使用了此版本应用不支持的功能，请更新应用。</string>
+    <string name="unexpectedSurveyJson">服务连接失败。请检查网络连接，或联系技术支持。</string>
+    <string name="unexpectedResponseError">提交答案时发生意外错误，请联系技术支持。</string>
+    <string name="permRequired">需要权限</string>
+    <string name="phoneIdPermReason">我们需要电话状态权限，以便标识参与调查者。</string>
+    <string name="locationPermReason">我们需要位置权限，以便标识参与调查者。</string>
+    <string name="internetPermReason">我们需要网络权限，以便将答案发送给调查者。</string>
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="internetPermRequired">我们需要网络权限来收发问卷信息，请允许。</string>
+    <string name="cameraPermRequired">请允许相机权限，以扫描二维码。</string>
+    <string name="settings">设置</string>
+    <string name="title_activity_settings">设置</string>
+    <string name="lockDevice">完成调查后锁定屏幕</string>
+    <string name="deviceAdminDisable">未允许设备管理权限，我们将无法在完成调查后锁定屏幕。</string>
+    <string name="deviceAdminDisabledTip">未允许设备管理权限，无法启用该功能</string>
+    <string name="enable">启用</string>
+    <string name="deviceAdminReason">允许设备管理权限，以便我们在完成调查后锁定屏幕。</string>
+    <string name="deviceAdminDescription">用于在完成调查后锁定屏幕</string>
+    <string name="thanksToast">感谢您的参与</string>
+</resources>
