@@ -32,6 +32,12 @@ import com.android.volley.VolleyError;
 
 import org.json.JSONException;
 
+import mg.studio.android.survey.clients.ClientErrorType;
+import mg.studio.android.survey.clients.ClientFactory;
+import mg.studio.android.survey.clients.IClient;
+import mg.studio.android.survey.clients.IResultClientCallback;
+import mg.studio.android.survey.models.ResultModel;
+
 public class FinalizeActivity extends AppCompatActivity {
 
     @Override
@@ -40,7 +46,7 @@ public class FinalizeActivity extends AppCompatActivity {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         policyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
         prefs = getSharedPreferences(getPackageName() + ".pref", MODE_PRIVATE);
-        surveyId = String.valueOf(getIntent().getIntExtra(getPackageName() + ".surveyId", -1));
+        result = (ResultModel) getIntent().getSerializableExtra(getPackageName() + ".result");
         setContentView(R.layout.finish_survey);
         getIMEI();
         getLocation();
@@ -48,44 +54,44 @@ public class FinalizeActivity extends AppCompatActivity {
 
     public void upload(View sender) {
         setProgress(true);
-        final DataHelper dataHelper = new DataHelper(this);
-        SurveyReport report = new SurveyReport(surveyId, dataHelper.getResponses(), System.currentTimeMillis(),
-                latitude, longitude, imei);
-        String json;
-        try {
-            json = report.getJson();
-        } catch (JSONException ex) {
-            Log.wtf("Upload.JSON", "Json serialization failed!");
-            Toast.makeText(this, R.string.unexpectedResponseError, Toast.LENGTH_SHORT).show();
-            setProgress(false);
-            return;
-        }
 
-        JsonClient.getInstance(getApplicationContext()).postJson("https://svyu.azure-api.net/response", json,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        setProgress(false);
-                        if (prefs.getBoolean("lockDevice", false)
-                                && policyManager.isAdminActive(new ComponentName(FinalizeActivity.this, DeviceAdminListener.class))) {
-                            policyManager.lockNow();
-                            FinalizeActivity.this.finish();
-                        } else {
-                            Toast.makeText(FinalizeActivity.this, R.string.thanksToast, Toast.LENGTH_LONG).show();
-                            FinalizeActivity.this.finish();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        if (error instanceof NetworkError || error instanceof TimeoutError) {
-                            Toast.makeText(FinalizeActivity.this, R.string.connectFail, Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(FinalizeActivity.this, R.string.unexpectedResponseError, Toast.LENGTH_SHORT).show();
-                        }
-                        setProgress(false);
-                    }
-                });
+        result.setTime(System.currentTimeMillis());
+        result.setLatitude(latitude);
+        result.setLongitude(longitude);
+        result.setImei(imei);
+
+        IClient client = new ClientFactory(getApplicationContext()).getClient();
+        client.postResult(result, new IResultClientCallback() {
+            @Override
+            public void onComplete(ResultModel result) {
+                setProgress(false);
+                if (prefs.getBoolean("lockDevice", false)
+                        && policyManager.isAdminActive(new ComponentName(FinalizeActivity.this, DeviceAdminListener.class))) {
+                    policyManager.lockNow();
+                    FinalizeActivity.this.finish();
+                } else {
+                    Toast.makeText(FinalizeActivity.this, R.string.thanksToast, Toast.LENGTH_LONG).show();
+                    FinalizeActivity.this.finish();
+                }
+            }
+
+            @Override
+            public void onError(ClientErrorType errorType, Exception exception) {
+                setProgress(false);
+                switch (errorType) {
+                    case Serialization:
+                        Log.wtf("Upload.JSON", "Json serialization failed!");
+                        Toast.makeText(FinalizeActivity.this, R.string.unexpectedResponseError, Toast.LENGTH_SHORT).show();
+                        break;
+                    case IO:
+                        Toast.makeText(FinalizeActivity.this, R.string.connectFail, Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        Toast.makeText(FinalizeActivity.this, R.string.unexpectedResponseError, Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });
     }
 
     private void setProgress(boolean active) {
@@ -261,7 +267,7 @@ public class FinalizeActivity extends AppCompatActivity {
         }
     }
 
-    private String surveyId;
+    private ResultModel result;
     private String imei;
     private double latitude;
     private double longitude;

@@ -13,7 +13,7 @@ import mg.studio.android.survey.models.SurveyModel;
 /**
  * Represents a serializer that serializes and deserializes survey models.
  */
-public class SurveySerializer {
+public final class SurveySerializer {
 
     /**
      * Gets the singleton instance of SurveySerializer class.
@@ -41,7 +41,7 @@ public class SurveySerializer {
             throws JSONException, QuestionTypeNotSupportedException {
         JSONObject jObject = new JSONObject(json).getJSONObject("survey");
         SurveyModel survey = new SurveyModel();
-        survey.setId(jObject.getInt("id"));
+        survey.setId(jObject.getString("id"));
         JSONArray questionsArray = jObject.getJSONArray("questions");
         for (int i = 0; i < questionsArray.length(); i++) {
             survey.questions().add(dispatchForDeserialize(questionsArray.getJSONObject(i)));

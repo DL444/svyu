@@ -12,16 +12,28 @@ import org.json.JSONException;
 import java.util.Random;
 
 import mg.studio.android.survey.dal.HttpClient;
+import mg.studio.android.survey.models.ResultModel;
 import mg.studio.android.survey.models.SurveyModel;
 import mg.studio.android.survey.serializers.QuestionTypeNotSupportedException;
+import mg.studio.android.survey.serializers.ResultSerializer;
 import mg.studio.android.survey.serializers.SurveySerializer;
 
-final class HttpSurveyClient implements ISurveyClient {
+/**
+ * Represents a client that retrieves and stores data to a remote server through HTTP.
+ */
+final class OnlineClient implements IClient {
 
-    public HttpSurveyClient(Context appContext) {
+    /**
+     * Creates a OnlineClient object.
+     * @param appContext The application context to create the client in.
+     */
+    public OnlineClient(Context appContext) {
         context = appContext.getApplicationContext();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void getSurvey(String id, final ISurveyClientCallback callback) {
         HttpClient client = HttpClient.getInstance(context);
@@ -48,6 +60,9 @@ final class HttpSurveyClient implements ISurveyClient {
                 });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void postSurvey(final SurveyModel survey, final ISurveyClientCallback callback) {
         HttpClient client = HttpClient.getInstance(context);
@@ -55,7 +70,7 @@ final class HttpSurveyClient implements ISurveyClient {
         do {
             conflictRetryStatus.conflict = false;
             int id = random.nextInt();
-            survey.setId(id);
+            survey.setId(String.valueOf(id));
             try {
                 client.postJson("https://svyu.azure-api.net/survey/" + id,
                         SurveySerializer.getInstance().getJson(survey),
@@ -84,12 +99,48 @@ final class HttpSurveyClient implements ISurveyClient {
         } while (conflictRetryStatus.conflict);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteSurvey(int id, ISurveyClientCallback callback) {
         callback.onError(ClientErrorType.NotSupported, null);
     }
 
-    private boolean handleDefaultErrors(VolleyError error, ISurveyClientCallback callback) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void postResult(final ResultModel result, final IResultClientCallback callback) {
+        HttpClient client = HttpClient.getInstance(context);
+        String json;
+        try{
+            json = ResultSerializer.getInstance().getJson(result);
+        } catch (JSONException ex) {
+            callback.onError(ClientErrorType.Serialization, ex);
+            return;
+        } catch (QuestionTypeNotSupportedException ex) {
+            callback.onError(ClientErrorType.Versioning, ex);
+            return;
+        }
+        client.postJson("https://svyu.azure-api.net/response", json,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        callback.onComplete(result);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (!handleDefaultErrors(error, callback)) {
+                            callback.onError(ClientErrorType.Unknown, error);
+                        }
+                    }
+                });
+    }
+
+
+    private boolean handleDefaultErrors(VolleyError error, IClientCallback callback) {
         if (error instanceof NetworkError || error instanceof TimeoutError) {
             callback.onError(ClientErrorType.IO, error);
             return true;
@@ -99,8 +150,8 @@ final class HttpSurveyClient implements ISurveyClient {
         }
         return false;
     }
-
     private Context context;
+
     private Random random = new Random(System.currentTimeMillis());
 
     private class ConflictRetryStatus {

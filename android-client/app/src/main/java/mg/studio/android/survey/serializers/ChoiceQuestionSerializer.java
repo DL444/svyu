@@ -17,7 +17,7 @@ import mg.studio.android.survey.models.SingleChoiceQuestion;
 /**
  * Represents a serializer for questions that accepts choice-based response.
  */
-class ChoiceQuestionSerializer implements IQuestionSerializer {
+final class ChoiceQuestionSerializer implements IQuestionSerializer {
     /**
      * {@inheritDoc}
      */

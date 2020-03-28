@@ -18,7 +18,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 import mg.studio.android.survey.clients.ClientErrorType;
 import mg.studio.android.survey.clients.ClientFactory;
-import mg.studio.android.survey.clients.ISurveyClient;
+import mg.studio.android.survey.clients.IClient;
 import mg.studio.android.survey.clients.ISurveyClientCallback;
 import mg.studio.android.survey.models.SurveyModel;
 
@@ -89,11 +89,10 @@ public class InitiateScanActivity extends AppCompatActivity {
         }
 
         setProgress(true);
-        ISurveyClient client = new ClientFactory(getApplicationContext()).getSurveyClient();
+        IClient client = new ClientFactory(getApplicationContext()).getClient();
         client.getSurvey(id, new ISurveyClientCallback() {
             @Override
             public void onComplete(SurveyModel survey) {
-                new DataHelper(InitiateScanActivity.this).reset();
                 Intent navIntent = new Intent(InitiateScanActivity.this, MainActivity.class);
                 navIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 navIntent.putExtra(getPackageName() + ".survey", survey);

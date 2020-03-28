@@ -3,7 +3,7 @@ package mg.studio.android.survey.models;
 /**
  * Representing a question that accepts a single response.
  */
-public class SingleChoiceQuestion extends ChoiceQuestionBase {
+public final class SingleChoiceQuestion extends ChoiceQuestionBase {
 
     /**
      * {@inheritDoc}

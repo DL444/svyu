@@ -5,7 +5,7 @@ import mg.studio.android.survey.models.SurveyModel;
 /**
  * Represents a set of callback methods executed when a survey client operation completes.
  */
-public interface ISurveyClientCallback {
+public interface ISurveyClientCallback extends IClientCallback {
     /**
      * A callback method executed when an operation successfully completes.
      * @param survey The survey model related to the operation.
@@ -13,9 +13,7 @@ public interface ISurveyClientCallback {
     void onComplete(SurveyModel survey);
 
     /**
-     * A callback method executed when an operation completed with error.
-     * @param errorType The type of error occurred.
-     * @param exception The exception, if any, that caused the error.
+     * {@inheritDoc}
      */
     void onError(ClientErrorType errorType, Exception exception);
 }

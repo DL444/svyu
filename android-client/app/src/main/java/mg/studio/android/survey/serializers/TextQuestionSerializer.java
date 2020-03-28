@@ -11,7 +11,7 @@ import mg.studio.android.survey.models.TextQuestion;
 /**
  * Represents a serializer for questions that accepts arbitrary text response.
  */
-class TextQuestionSerializer implements IQuestionSerializer {
+final class TextQuestionSerializer implements IQuestionSerializer {
     /**
      * {@inheritDoc}
      */

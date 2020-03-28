@@ -3,7 +3,7 @@ package mg.studio.android.survey.models;
 /**
  * Representing a question that accepts text input responses.
  */
-public class TextQuestion implements IQuestion {
+public final class TextQuestion implements IQuestion {
     /**
      * {@inheritDoc}
      */

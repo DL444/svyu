@@ -18,10 +18,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 
 import mg.studio.android.survey.models.IQuestion;
+import mg.studio.android.survey.models.IResponse;
 import mg.studio.android.survey.models.MultiChoiceQuestion;
+import mg.studio.android.survey.models.MultiChoiceResponse;
+import mg.studio.android.survey.models.ResultModel;
 import mg.studio.android.survey.models.SingleChoiceQuestion;
+import mg.studio.android.survey.models.SingleChoiceResponse;
 import mg.studio.android.survey.models.SurveyModel;
 import mg.studio.android.survey.models.TextQuestion;
+import mg.studio.android.survey.models.TextResponse;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,7 +35,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         survey = (SurveyModel) this.getIntent().getSerializableExtra(getPackageName() + ".survey");
-        dataHelper = new DataHelper(this);
+        result = new ResultModel();
+        result.setId(survey.getId());
 
         current = -1;
         next(null);
@@ -42,9 +48,16 @@ public class MainActivity extends AppCompatActivity {
      */
    public void next(View sender) {
         if (current >= 0 && current < survey.getLength()) {
-            ISurveyResponse response = getResponse(survey.questions().get(current).getType());
+            IResponse response = getResponse(survey.questions().get(current).getType());
             if (!response.hasResponse()) {
                 return;
+            } else {
+                ArrayList<IResponse> responses = result.responses();
+                if (current < responses.size()) {
+                    responses.set(current, response);
+                } else {
+                    responses.add(response);
+                }
             }
         }
 
@@ -65,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Intent finalizeNavIntent = new Intent(this, FinalizeActivity.class);
             finalizeNavIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            finalizeNavIntent.putExtra(getPackageName() + ".surveyId", survey.getId());
+            finalizeNavIntent.putExtra(getPackageName() + ".result", result);
             startActivity(finalizeNavIntent);
             this.finish();
         }
@@ -162,50 +175,44 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Gets the user response of current page.
      * @param type The type of the current question.
-     * @return An ISurveyResponse object representing the user response.
+     * @return An IResponse object representing the user response.
      */
-    private ISurveyResponse getResponse(mg.studio.android.survey.models.QuestionType type) {
-        ISurveyResponse response;
+    private IResponse getResponse(mg.studio.android.survey.models.QuestionType type) {
+        // TODO: Switch to using binders.
         switch (type) {
             case Single:
-                response = new SingleResponse();
+                SingleChoiceResponse singleResponse = new SingleChoiceResponse();
                 ViewGroup opts = findViewById(R.id.opts);
                 for (int i = 0; i < opts.getChildCount(); i++) {
                     RadioButton optBtn = (RadioButton)opts.getChildAt(i);
                     if (optBtn.isChecked()) {
-                        response.setResponse(optBtn.getText().toString());
-                        dataHelper.addResponse(current, QuestionType.Single, String.valueOf(i));
-                        break;
+                        singleResponse.setResponse(i);
+                        return singleResponse;
                     }
                 }
-                break;
+                return singleResponse;
             case Multiple:
-                response = new MultipleResponse();
+                MultiChoiceResponse multiResponse = new MultiChoiceResponse();
                 ViewGroup checks = findViewById(R.id.opts);
-                StringBuilder responseBuilder = new StringBuilder();
                 for (int i = 0; i < checks.getChildCount(); i++) {
                     CheckBox check = (CheckBox)checks.getChildAt(i);
                     if (check.isChecked()) {
-                        response.setResponse(check.getText().toString());
-                        responseBuilder.append(i).append(" ");
+                        multiResponse.setResponse(i);
                     }
                 }
-                dataHelper.addResponse(current, QuestionType.Multiple, responseBuilder.toString().trim());
-                break;
+                return multiResponse;
             case Text:
-                response = new SingleResponse();
+                TextResponse textResponse = new TextResponse();
                 EditText inputBox = findViewById(R.id.inputBox);
-                response.setResponse(inputBox.getText().toString());
-                dataHelper.addResponse(current, QuestionType.Text, inputBox.getText().toString());
-                break;
+                textResponse.setResponse(inputBox.getText().toString());
+                return textResponse;
             default:
                 return null;
         }
-        return response;
     }
 
     private int current;
 
     private SurveyModel survey;
-    private DataHelper dataHelper;
+    private ResultModel result;
 }
