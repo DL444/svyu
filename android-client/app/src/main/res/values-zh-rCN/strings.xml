@@ -40,4 +40,6 @@
     <string name="deviceAdminReason">允许设备管理权限，以便我们在完成调查后锁定屏幕。</string>
     <string name="deviceAdminDescription">用于在完成调查后锁定屏幕</string>
     <string name="thanksToast">感谢您的参与</string>
+    <string name="surveyProgressText">第 %1$d 题，共 %2$d 题</string>
+    <string name="textResponseHint">你的答案…</string>
 </resources>
