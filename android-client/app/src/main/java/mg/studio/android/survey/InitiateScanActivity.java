@@ -37,6 +37,9 @@ public class InitiateScanActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
+        MenuItem item = menu.findItem(R.id.action_new_survey);
+        Button newSurveyBtn = item.getActionView().findViewById(R.id.newSurveyBtn);
+        newSurveyBtn.setOnClickListener(newSurveyListener);
         return true;
     }
 
@@ -123,6 +126,14 @@ public class InitiateScanActivity extends AppCompatActivity {
             }
         });
     }
+
+    private Button.OnClickListener newSurveyListener = new Button.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent navIntent = new Intent(InitiateScanActivity.this, SurveyComposerQuestionListActivity.class);
+            startActivity(navIntent);
+        }
+    };
 
     @Inject ClientFactory clientFactory;
     private SharedPreferences prefs;

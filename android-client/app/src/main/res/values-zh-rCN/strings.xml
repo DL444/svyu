@@ -48,4 +48,6 @@
     <string name="unexpectedSyncError">服务连接失败。请检查网络连接，或联系技术支持。</string>
     <string name="syncSuccess">大功告成，同步了 %1$d 条问卷结果</string>
     <string name="noResultSynced">所有结果都已同步，请放心!</string>
+    <string name="newSurvey">创建问卷</string>
+    <string name="composerTitle">编制问卷</string>
 </resources>

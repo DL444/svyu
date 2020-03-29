@@ -2,8 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_new_survey"
+        android:title="@string/newSurvey"
+        app:actionLayout="@layout/new_survey_action_layout"
+        app:showAsAction="always"/>
+    <item
         android:id="@+id/action_settings"
         android:icon="@drawable/ic_settings"
         android:title="@string/settings"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 </menu>

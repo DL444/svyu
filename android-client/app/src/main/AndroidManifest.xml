@@ -18,7 +18,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SettingsActivity" android:label="@string/settings" />
+        <activity
+            android:name=".SurveyComposerQuestionListActivity"
+            android:label="@string/composerTitle" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/settings" />
         <activity android:name=".FinalizeActivity" />
         <activity android:name=".InitiateScanActivity">
             <intent-filter>
@@ -34,12 +39,16 @@
             android:name=".CustomCaptureActivity"
             android:screenOrientation="fullSensor"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <receiver android:name=".DeviceAdminListener"
+
+        <receiver
+            android:name=".DeviceAdminListener"
             android:description="@string/deviceAdminDescription"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_DEVICE_ADMIN">
-            <meta-data android:name="android.app.device_admin"
+            <meta-data
+                android:name="android.app.device_admin"
                 android:resource="@xml/policies" />
+
             <intent-filter>
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
             </intent-filter>

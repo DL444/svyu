@@ -48,4 +48,6 @@
     <string name="unexpectedSyncError">There\'s a problem connecting to the service. Please check your connection or contact support.</string>
     <string name="syncSuccess">%1$d results synced. You\'re all set!</string>
     <string name="noResultSynced">All results synced. You\'re all set!</string>
+    <string name="newSurvey">New survey</string>
+    <string name="composerTitle">Composer</string>
 </resources>
