@@ -11,6 +11,7 @@ import java.util.Random;
 
 import javax.inject.Inject;
 
+import mg.studio.android.survey.dal.DbClient;
 import mg.studio.android.survey.dal.HttpClient;
 import mg.studio.android.survey.models.ResultModel;
 import mg.studio.android.survey.models.SurveyModel;
@@ -21,24 +22,32 @@ import mg.studio.android.survey.serializers.SurveySerializer;
 /**
  * Represents a client that retrieves and stores data to a remote server through HTTP.
  */
-final class OnlineClient implements IClient {
+final class OnlineClient implements IClient, IDraftClient {
 
     /**
-     * Creates a OnlineClient object.
+     * Creates an OnlineClient object.
      * @param httpClient The HTTP client to use.
+     * @param dbClient The database client to use.
      * @param surveySerializer The survey serializer to use.
      * @param resultSerializer The result serializer to use.
+     * @param draftClient The draft client to use.
      * @param random The random number generator to use.
      */
     @Inject
     public OnlineClient(HttpClient httpClient,
+                        DbClient dbClient,
                         SurveySerializer surveySerializer,
                         ResultSerializer resultSerializer,
+                        IDraftClient draftClient,
                         Random random) {
         this.httpClient = httpClient;
+        this.dbClient = dbClient;
         this.surveySerializer = surveySerializer;
         this.resultSerializer = resultSerializer;
+        this.draftClient = draftClient;
         this.random = random;
+
+        dbClient.createCollection(cachedSurveyCollection);
     }
 
     /**
@@ -52,6 +61,7 @@ final class OnlineClient implements IClient {
                     public void onResponse(String response) {
                         try {
                             SurveyModel survey = surveySerializer.getModel(response);
+                            dbClient.upsert(cachedSurveyCollection, cachedSurveyKey, response);
                             callback.onComplete(survey);
                         } catch (JSONException ex) {
                             callback.onError(ClientErrorType.Serialization, ex);
@@ -111,14 +121,6 @@ final class OnlineClient implements IClient {
      * {@inheritDoc}
      */
     @Override
-    public void deleteSurvey(int id, ISurveyClientCallback callback) {
-        callback.onError(ClientErrorType.NotSupported, null);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void postResult(final ResultModel result, final IResultClientCallback callback) {
         String json;
         try{
@@ -146,6 +148,22 @@ final class OnlineClient implements IClient {
                 });
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void getSurveyDraft(ISurveyClientCallback callback) {
+        draftClient.getSurveyDraft(callback);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void saveSurveyDraft(SurveyModel model, ISurveyClientCallback callback) {
+        draftClient.saveSurveyDraft(model, callback);
+    }
+
 
     private boolean handleDefaultErrors(VolleyError error, IClientCallback callback) {
         if (error instanceof NetworkError || error instanceof TimeoutError) {
@@ -158,9 +176,14 @@ final class OnlineClient implements IClient {
         return false;
     }
 
+    private static final String cachedSurveyCollection = "cachedSurvey";
+    private static final String cachedSurveyKey = "latest";
+
     private final HttpClient httpClient;
+    private final DbClient dbClient;
     private final SurveySerializer surveySerializer;
     private final ResultSerializer resultSerializer;
+    private final IDraftClient draftClient;
     private final Random random;
 
     private class ConflictRetryStatus {

@@ -22,13 +22,6 @@ public interface IClient {
     void postSurvey(SurveyModel survey, ISurveyClientCallback callback);
 
     /**
-     * Deletes a survey model.
-     * @param id The ID of the survey to delete.
-     * @param callback The callback methods executed when the operation completes.
-     */
-    void deleteSurvey(int id, ISurveyClientCallback callback);
-
-    /**
      * Posts a survey result model.
      * @param result The result model to be posted.
      * @param callback The callback methods executed when the operation completes.

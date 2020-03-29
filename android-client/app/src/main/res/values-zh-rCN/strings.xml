@@ -9,8 +9,7 @@
     <string name="initPermExplain">- 我们需要使用相机来扫描问卷二维码。
         我们还需要电话与位置权限，以便在不收集个人信息的前提下，标识参与调查者。
         请允许这些权限，给我们的调查帮忙。</string>
-    <string name="welcome_req_accept">我同意以上请求</string>
-    <string name="welcome_start">开始</string>
+    <string name="welcome_start">同意并开始</string>
     <string name="next">继续</string>
     <string name="final_jumbo">非常感谢</string>
     <string name="final_secondary">感谢您参与调查</string>
@@ -42,4 +41,8 @@
     <string name="thanksToast">感谢您的参与</string>
     <string name="surveyProgressText">第 %1$d 题，共 %2$d 题</string>
     <string name="textResponseHint">你的答案…</string>
+    <string name="workOffline">脱机工作</string>
+    <string name="workOfflineHintOnline">新问卷结果将会保存到云。点按按钮发送既有的脱机问卷结果。</string>
+    <string name="workOfflineHintOffline">只能填写上次填写的问卷。新问卷结果将会保存到本地。关闭脱机模式，以便将结果发送到云。</string>
+    <string name="sync">同步</string>
 </resources>

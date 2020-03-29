@@ -25,6 +25,10 @@ public enum ClientErrorType {
      */
     Versioning,
     /**
+     * Represents that there is currently no cached models to enable working offline.
+     */
+    CacheMiss,
+    /**
      * Represents an unknown error.
      */
     Unknown

@@ -1,8 +1,11 @@
 package mg.studio.android.survey.clients;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import javax.inject.Inject;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Represents a factory class that creates client instances.
@@ -11,12 +14,15 @@ public final class ClientFactory {
     /**
      * Creates an instance of ClientFactory class.
      * @param appContext The application context to create clients with.
+     * @param onlineClient The online version of client to provide.
+     * @param offlineClient The offline version of client to provide.
      */
     @Inject
-    public ClientFactory(Context appContext, OnlineClient onlineClient) {
-        context = appContext.getApplicationContext();
+    public ClientFactory(Context appContext, OnlineClient onlineClient, OfflineClient offlineClient) {
+        Context context = appContext.getApplicationContext();
         this.onlineClient = onlineClient;
-        // TODO: Set offline field based on preference.
+        this.offlineClient = offlineClient;
+        prefs = context.getSharedPreferences(context.getPackageName() + ".pref", MODE_PRIVATE);
     }
 
     /**
@@ -24,15 +30,16 @@ public final class ClientFactory {
      * @return Created client instance.
      */
     public IClient getClient() {
-        // TODO: Create instances based on online/offline preferences.
+        boolean offline = prefs.getBoolean(workOfflineKey, false);
         if (offline) {
-            throw new RuntimeException("Not implemented.");
+            return offlineClient;
         } else {
             return onlineClient;
         }
     }
 
-    private Context context;
-    private OnlineClient onlineClient;
-    private boolean offline = false;
+    private final SharedPreferences prefs;
+    private final OnlineClient onlineClient;
+    private final OfflineClient offlineClient;
+    private static final String workOfflineKey = "workOffline";
 }

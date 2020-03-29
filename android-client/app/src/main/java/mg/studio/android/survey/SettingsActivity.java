@@ -1,8 +1,5 @@
 package mg.studio.android.survey;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
@@ -11,8 +8,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -45,35 +46,53 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void updateSwitchState() {
-        Switch lockCheck = findViewById(R.id.lockDeviceCheck);
-        lockCheck.setOnClickListener(switchClickListener);
-        if (prefs.getBoolean("lockDevice", false)) {
-            lockCheck.setChecked(true);
+        Switch check = findViewById(R.id.lockDeviceCheck);
+        check.setOnCheckedChangeListener(switchChangedListener);
+        if (prefs.getBoolean(lockDeviceKey, false)) {
+            check.setChecked(true);
         } else {
-            lockCheck.setChecked(false);
+            check.setChecked(false);
         }
 
-        TextView disabledTip = findViewById(R.id.deviceAdminTip);
-        Button enableBtn = findViewById(R.id.enableDeviceAdminBtn);
+        TextView tip = findViewById(R.id.deviceAdminTip);
+        Button btn = findViewById(R.id.enableDeviceAdminBtn);
         if (policyManager.isAdminActive(deviceAdminComponentName)) {
-            lockCheck.setEnabled(true);
-            disabledTip.setVisibility(View.GONE);
-            enableBtn.setVisibility(View.GONE);
+            check.setEnabled(true);
+            tip.setVisibility(View.GONE);
+            btn.setVisibility(View.GONE);
         } else {
-            lockCheck.setEnabled(false);
-            disabledTip.setVisibility(View.VISIBLE);
-            enableBtn.setVisibility(View.VISIBLE);
+            check.setEnabled(false);
+            tip.setVisibility(View.VISIBLE);
+            btn.setVisibility(View.VISIBLE);
+        }
+
+        check = findViewById(R.id.workOfflineCheck);
+        check.setOnCheckedChangeListener(switchChangedListener);
+        tip = findViewById(R.id.workOfflineHint);
+        btn = findViewById(R.id.syncBtn);
+        if (prefs.getBoolean(workOfflineKey, false)) {
+            check.setChecked(true);
+            tip.setText(R.string.workOfflineHintOffline);
+            btn.setVisibility(View.GONE);
+        } else {
+            check.setChecked(false);
+            tip.setText(R.string.workOfflineHintOnline);
+            btn.setVisibility(View.VISIBLE);
         }
     }
 
-    private Switch.OnClickListener switchClickListener = new Switch.OnClickListener() {
+    private Switch.OnCheckedChangeListener switchChangedListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
-        public void onClick(View v) {
-            if (v.getId() == R.id.lockDeviceCheck) {
-                Switch lockCheck = (Switch)v;
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            if (buttonView.getId() == R.id.lockDeviceCheck) {
                 SharedPreferences.Editor editor = prefs.edit();
-                editor.putBoolean("lockDevice", lockCheck.isChecked());
+                editor.putBoolean(lockDeviceKey, isChecked);
                 editor.apply();
+            } else if (buttonView.getId() == R.id.workOfflineCheck) {
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean(workOfflineKey, isChecked);
+                editor.apply();
+                updateSwitchState();
             }
         }
     };
@@ -83,4 +102,6 @@ public class SettingsActivity extends AppCompatActivity {
     private ComponentName deviceAdminComponentName;
     
     private static final int DEVICE_ADMIN_REQUEST_CODE = 42;
+    private static final String lockDeviceKey = "lockDevice";
+    private static final String workOfflineKey = "workOffline";
 }

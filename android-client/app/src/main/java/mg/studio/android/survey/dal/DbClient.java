@@ -49,7 +49,7 @@ public final class DbClient extends SQLiteOpenHelper {
      */
     public void createCollection(String collectionName) {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("create table if not exist " + collectionName + " ( rowKey varchar(100), value text )");
+        db.execSQL("create table if not exists " + collectionName + " ( rowKey varchar(100) primary key, value text )");
         db.close();
     }
 
@@ -76,7 +76,7 @@ public final class DbClient extends SQLiteOpenHelper {
      * Gets the value corresponding to a key.
      * @param collection The collection containing the key-value pair.
      * @param key The key of the pair.
-     * @return The value of the pair.
+     * @return The value of the pair, or null if the key was not found.
      */
     public String getOne(String collection, String key) {
         SQLiteDatabase db = getReadableDatabase();

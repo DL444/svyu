@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:padding="@dimen/appPadding">
 
@@ -71,31 +70,16 @@
         android:id="@+id/receiveProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/opts"
+        android:layout_above="@id/nextBtn"
         android:layout_margin="@dimen/marginS"
         android:layout_centerHorizontal="true"
         android:visibility="gone"/>
 
-    <FrameLayout
-        android:id="@+id/opts"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/nextBtn"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="@dimen/marginM">
-        <CheckBox
-            android:id="@+id/welcome_check"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/welcome_req_accept"
-            android:onClick="preliminaryCheckClick"/>
-    </FrameLayout>
     <Button
         android:id="@+id/nextBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:enabled="false"
         android:text="@string/welcome_start"
         style="@style/PrimaryButton"
         android:onClick="initScan"/>

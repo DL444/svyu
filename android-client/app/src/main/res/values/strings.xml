@@ -9,8 +9,7 @@
     <string name="initPermExplain">- We will need to use your camera to scan a QR code.
         We also need phone and location permission to anonymously identify you.
         Please grant these permissions to help the survey.</string>
-    <string name="welcome_req_accept">I accept these requests.</string>
-    <string name="welcome_start">Let\'s start!</string>
+    <string name="welcome_start">Accept and start</string>
     <string name="next">Next</string>
     <string name="final_jumbo">Thank you</string>
     <string name="final_secondary">for your answers!</string>
@@ -42,4 +41,8 @@
     <string name="thanksToast">Thank you for your participation.</string>
     <string name="surveyProgressText">%1$d of %2$d</string>
     <string name="textResponseHint">Answer here…</string>
+    <string name="workOffline">Work offline</string>
+    <string name="workOfflineHintOnline">New survey results will be sent to the cloud. Press the button to send existing offline results to the cloud.</string>
+    <string name="workOfflineHintOffline">You can only access the survey you last filled out. New results will be saved locally. Switch off to send results to the cloud.</string>
+    <string name="sync">Sync</string>
 </resources>

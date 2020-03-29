@@ -1,12 +1,12 @@
 package mg.studio.android.survey;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -30,6 +30,7 @@ public class InitiateScanActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((SurveyApplication)getApplication()).getComponent().inject(this);
+        prefs= getSharedPreferences(getPackageName() + ".pref", MODE_PRIVATE);
         setContentView(R.layout.init_scan);
     }
 
@@ -49,24 +50,19 @@ public class InitiateScanActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void preliminaryCheckClick(View sender) {
-        Button nextBtn = findViewById(R.id.nextBtn);
-        nextBtn.setEnabled(((CheckBox)sender).isChecked());
-    }
-
     public void initScan(View sender) {
-        CheckBox check = findViewById(R.id.welcome_check);
-        if (!check.isChecked()) {
-            return;
+        boolean workOffline = prefs.getBoolean(workOfflineKey, false);
+        if (workOffline) {
+            getSurveyAndProceed(null);
+        } else {
+            IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+            intentIntegrator.setOrientationLocked(true);
+            intentIntegrator.setBarcodeImageEnabled(true);
+            intentIntegrator.setBeepEnabled(true);
+            intentIntegrator.setPrompt(getText(R.string.qrPrompt).toString());
+            intentIntegrator.setCaptureActivity(CustomCaptureActivity.class);
+            intentIntegrator.initiateScan();
         }
-
-        IntentIntegrator intentIntegrator = new IntentIntegrator(this);
-        intentIntegrator.setOrientationLocked(true);
-        intentIntegrator.setBarcodeImageEnabled(true);
-        intentIntegrator.setBeepEnabled(true);
-        intentIntegrator.setPrompt(getText(R.string.qrPrompt).toString());
-        intentIntegrator.setCaptureActivity(CustomCaptureActivity.class);
-        intentIntegrator.initiateScan();
     }
 
     private void setProgress(boolean active) {
@@ -82,15 +78,16 @@ public class InitiateScanActivity extends AppCompatActivity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String id;
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null && result.getContents() != null) {
-            id = result.getContents();
+            String id = result.getContents();
+            getSurveyAndProceed(id);
         } else {
             super.onActivityResult(requestCode, resultCode, data);
-            return;
         }
+    }
 
+    private void getSurveyAndProceed(String id) {
         setProgress(true);
         IClient client = clientFactory.getClient();
         client.getSurvey(id, new ISurveyClientCallback() {
@@ -109,6 +106,7 @@ public class InitiateScanActivity extends AppCompatActivity {
                 setProgress(false);
                 switch (errorType) {
                     case IO:
+                    case CacheMiss:
                         Toast.makeText(InitiateScanActivity.this, R.string.connectFail, Toast.LENGTH_SHORT).show();
                         break;
                     case NotFound:
@@ -117,11 +115,8 @@ public class InitiateScanActivity extends AppCompatActivity {
                     case Versioning:
                         Toast.makeText(InitiateScanActivity.this, R.string.unsupportedVersion, Toast.LENGTH_LONG).show();
                         break;
-                    case NotSupported:
-                        // TODO: Give a message about this.
-                        break;
                     case Serialization:
-                    case Unknown:
+                    default:
                         Toast.makeText(InitiateScanActivity.this, R.string.unexpectedSurveyJson, Toast.LENGTH_LONG).show();
                         break;
                 }
@@ -130,4 +125,6 @@ public class InitiateScanActivity extends AppCompatActivity {
     }
 
     @Inject ClientFactory clientFactory;
+    private SharedPreferences prefs;
+    private static final String workOfflineKey = "workOffline";
 }
