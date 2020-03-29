@@ -9,7 +9,7 @@
 ## Roadmap
 - [x] Refactor
 - [x] I18n for zh-CN
-- [ ] Offline work
+- [x] Offline work
 - [ ] Survey composer
 - [ ] New question types
 - [ ] UI scaling
