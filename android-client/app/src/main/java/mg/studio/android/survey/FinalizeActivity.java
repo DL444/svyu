@@ -29,7 +29,7 @@ import javax.inject.Inject;
 
 import mg.studio.android.survey.clients.ClientErrorType;
 import mg.studio.android.survey.clients.ClientFactory;
-import mg.studio.android.survey.clients.IClient;
+import mg.studio.android.survey.clients.IResultClient;
 import mg.studio.android.survey.clients.IResultClientCallback;
 import mg.studio.android.survey.models.ResultModel;
 
@@ -56,7 +56,7 @@ public class FinalizeActivity extends AppCompatActivity {
         result.setLongitude(longitude);
         result.setImei(imei);
 
-        IClient client = clientFactory.getClient();
+        IResultClient client = clientFactory.getResultClient();
         client.postResult(result, new IResultClientCallback() {
             @Override
             public void onComplete(ResultModel result) {

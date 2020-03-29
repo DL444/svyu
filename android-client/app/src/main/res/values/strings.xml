@@ -45,4 +45,7 @@
     <string name="workOfflineHintOnline">New survey results will be sent to the cloud. Press the button to send existing offline results to the cloud.</string>
     <string name="workOfflineHintOffline">You can only access the survey you last filled out. New results will be saved locally. Switch off to send results to the cloud.</string>
     <string name="sync">Sync</string>
+    <string name="unexpectedSyncError">There\'s a problem connecting to the service. Please check your connection or contact support.</string>
+    <string name="syncSuccess">%1$d results synced. You\'re all set!</string>
+    <string name="noResultSynced">All results synced. You\'re all set!</string>
 </resources>

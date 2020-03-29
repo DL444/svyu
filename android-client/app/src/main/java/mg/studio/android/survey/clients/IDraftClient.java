@@ -2,6 +2,9 @@ package mg.studio.android.survey.clients;
 
 import mg.studio.android.survey.models.SurveyModel;
 
+/**
+ * Represents an abstract client that handles draft storage.
+ */
 public interface IDraftClient {
 
     /**

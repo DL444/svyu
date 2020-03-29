@@ -20,7 +20,7 @@ import javax.inject.Inject;
 
 import mg.studio.android.survey.clients.ClientErrorType;
 import mg.studio.android.survey.clients.ClientFactory;
-import mg.studio.android.survey.clients.IClient;
+import mg.studio.android.survey.clients.ISurveyClient;
 import mg.studio.android.survey.clients.ISurveyClientCallback;
 import mg.studio.android.survey.models.SurveyModel;
 
@@ -89,7 +89,7 @@ public class InitiateScanActivity extends AppCompatActivity {
 
     private void getSurveyAndProceed(String id) {
         setProgress(true);
-        IClient client = clientFactory.getClient();
+        ISurveyClient client = clientFactory.getSurveyClient();
         client.getSurvey(id, new ISurveyClientCallback() {
             @Override
             public void onComplete(SurveyModel survey) {

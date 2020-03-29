@@ -14,32 +14,55 @@ public final class ClientFactory {
     /**
      * Creates an instance of ClientFactory class.
      * @param appContext The application context to create clients with.
-     * @param onlineClient The online version of client to provide.
-     * @param offlineClient The offline version of client to provide.
+     * @param onlineSurveyClient The online survey client to provide.
+     * @param offlineSurveyClient The offline survey of client to provide.
+     * @param onlineResultClient The online result client to provide.
+     * @param offlineResultClient The offline result client to provide.
      */
     @Inject
-    public ClientFactory(Context appContext, OnlineClient onlineClient, OfflineClient offlineClient) {
+    public ClientFactory(Context appContext,
+                         OnlineSurveyClient onlineSurveyClient,
+                         OfflineSurveyClient offlineSurveyClient,
+                         OnlineResultClient onlineResultClient,
+                         OfflineResultClient offlineResultClient) {
         Context context = appContext.getApplicationContext();
-        this.onlineClient = onlineClient;
-        this.offlineClient = offlineClient;
+        this.onlineSurveyClient = onlineSurveyClient;
+        this.offlineSurveyClient = offlineSurveyClient;
+        this.onlineResultClient = onlineResultClient;
+        this.offlineResultClient = offlineResultClient;
         prefs = context.getSharedPreferences(context.getPackageName() + ".pref", MODE_PRIVATE);
     }
 
     /**
-     * Creates a client instance.
-     * @return Created client instance.
+     * Creates a survey client instance.
+     * @return Created survey client instance.
      */
-    public IClient getClient() {
+    public ISurveyClient getSurveyClient() {
         boolean offline = prefs.getBoolean(workOfflineKey, false);
         if (offline) {
-            return offlineClient;
+            return offlineSurveyClient;
         } else {
-            return onlineClient;
+            return onlineSurveyClient;
+        }
+    }
+
+    /**
+     * Creates a result client instance.
+     * @return Created result client instance.
+     */
+    public IResultClient getResultClient() {
+        boolean offline = prefs.getBoolean(workOfflineKey, false);
+        if (offline) {
+            return offlineResultClient;
+        } else {
+            return onlineResultClient;
         }
     }
 
     private final SharedPreferences prefs;
-    private final OnlineClient onlineClient;
-    private final OfflineClient offlineClient;
+    private final OnlineSurveyClient onlineSurveyClient;
+    private final OfflineSurveyClient offlineSurveyClient;
+    private final OnlineResultClient onlineResultClient;
+    private final OfflineResultClient offlineResultClient;
     private static final String workOfflineKey = "workOffline";
 }

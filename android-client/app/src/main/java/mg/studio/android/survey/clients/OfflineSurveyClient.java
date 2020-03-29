@@ -14,27 +14,20 @@ import mg.studio.android.survey.serializers.ResultSerializer;
 import mg.studio.android.survey.serializers.SurveySerializer;
 
 /**
- * Represents a client that retrieves and stores data to a local database.
+ * Represents a client that retrieves and stores survey data to a local database.
  */
-class OfflineClient implements IClient, IDraftClient {
+final class OfflineSurveyClient implements ISurveyClient {
 
     /**
-     * Creates an OfflineClient object.
+     * Creates an OfflineSurveyClient object.
      * @param dbClient The database client to use.
      * @param surveySerializer The survey serializer to use.
-     * @param resultSerializer The result serializer to use.
      */
     @Inject
-    public OfflineClient(DbClient dbClient,
-                         SurveySerializer surveySerializer,
-                         ResultSerializer resultSerializer,
-                         IDraftClient draftClient) {
+    public OfflineSurveyClient(DbClient dbClient, SurveySerializer surveySerializer) {
         this.dbClient = dbClient;
         this.surveySerializer = surveySerializer;
-        this.resultSerializer = resultSerializer;
-        this.draftClient = draftClient;
 
-        dbClient.createCollection(resultCollection);
         dbClient.createCollection(cachedSurveyCollection);
     }
 
@@ -66,45 +59,10 @@ class OfflineClient implements IClient, IDraftClient {
         callback.onError(ClientErrorType.NotSupported, null);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void postResult(ResultModel result, IResultClientCallback callback) {
-        try {
-            String key = UUID.randomUUID().toString();
-            String value = resultSerializer.getJson(result);
-            dbClient.upsert(resultCollection, key, value);
-            callback.onComplete(result);
-        } catch (JSONException ex) {
-            callback.onError(ClientErrorType.Serialization, ex);
-        } catch (QuestionTypeNotSupportedException ex) {
-            callback.onError(ClientErrorType.Versioning, ex);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void getSurveyDraft(ISurveyClientCallback callback) {
-        draftClient.getSurveyDraft(callback);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void saveSurveyDraft(SurveyModel model, ISurveyClientCallback callback) {
-        draftClient.saveSurveyDraft(model, callback);
-    }
-
     private static final String resultCollection = "results";
     private static final String cachedSurveyCollection = "cachedSurvey";
     private static final String cachedSurveyKey = "latest";
 
     private final DbClient dbClient;
     private final SurveySerializer surveySerializer;
-    private final ResultSerializer resultSerializer;
-    private final IDraftClient draftClient;
 }

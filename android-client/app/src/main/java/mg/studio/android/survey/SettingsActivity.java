@@ -9,11 +9,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import javax.inject.Inject;
+
+import mg.studio.android.survey.clients.ClientErrorType;
+import mg.studio.android.survey.clients.IResultSynchronizeCallback;
+import mg.studio.android.survey.clients.SynchronizeClient;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -23,7 +31,7 @@ public class SettingsActivity extends AppCompatActivity {
         prefs = getSharedPreferences(getPackageName() + ".pref", MODE_PRIVATE);
         policyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
         deviceAdminComponentName = new ComponentName(this, DeviceAdminListener.class);
-
+        ((SurveyApplication)getApplication()).getComponent().inject(this);
         setContentView(R.layout.activity_settings);
         updateSwitchState();
     }
@@ -43,6 +51,31 @@ public class SettingsActivity extends AppCompatActivity {
         deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, deviceAdminComponentName);
         deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, getString(R.string.deviceAdminReason));
         startActivityForResult(deviceAdminIntent, DEVICE_ADMIN_REQUEST_CODE);
+    }
+
+    public void syncData(View sender) {
+        setSyncProgress(true);
+        syncClient.synchronizeResults(new IResultSynchronizeCallback() {
+            @Override
+            public void onComplete(int count) {
+                setSyncProgress(false);
+                if (count == 0) {
+                    Toast.makeText(SettingsActivity.this, R.string.noResultSynced, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(SettingsActivity.this, getString(R.string.syncSuccess, count), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onError(ClientErrorType errorType, Exception exception) {
+                setSyncProgress(false);
+                if (errorType == ClientErrorType.IO) {
+                    Toast.makeText(SettingsActivity.this, R.string.connectFail, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(SettingsActivity.this, R.string.unexpectedSyncError, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     private void updateSwitchState() {
@@ -81,6 +114,13 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    private void setSyncProgress(boolean active) {
+        Button btn = findViewById(R.id.syncBtn);
+        btn.setEnabled(!active);
+        ProgressBar progressBar = findViewById(R.id.syncProgress);
+        progressBar.setVisibility(active ? View.VISIBLE : View.GONE);
+    }
+
     private Switch.OnCheckedChangeListener switchChangedListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -96,6 +136,8 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }
     };
+
+    @Inject SynchronizeClient syncClient;
 
     private SharedPreferences prefs;
     private DevicePolicyManager policyManager;
