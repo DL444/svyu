@@ -21,12 +21,12 @@
         android:text="@string/final_secondary"
         style="@style/Subheader"/>
 
-    <ImageView
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/welcome_subheader"
-        android:src="@drawable/moe"
-        android:scaleType="fitStart"/>
+        android:layout_marginTop="@dimen/marginS"
+        android:text="@string/submitHint"/>
 
     <ProgressBar
         android:id="@+id/submitProgress"

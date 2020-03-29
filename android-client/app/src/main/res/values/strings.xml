@@ -50,4 +50,5 @@
     <string name="noResultSynced">All results synced. You\'re all set!</string>
     <string name="newSurvey">New survey</string>
     <string name="composerTitle">Composer</string>
+    <string name="submitHint">Tap the button to submit your answers. \n\nGrant all requested permissions so we can identify you without knowing your personal information.</string>
 </resources>

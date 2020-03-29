@@ -50,4 +50,5 @@
     <string name="noResultSynced">所有结果都已同步，请放心!</string>
     <string name="newSurvey">创建问卷</string>
     <string name="composerTitle">编制问卷</string>
+    <string name="submitHint">请点按按钮，提交问卷。\n\n请允许所有的权限请求，以便我们在不收集个人信息的前提下，标识参与调查者。</string>
 </resources>
