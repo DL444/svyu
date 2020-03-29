@@ -63,15 +63,16 @@ public class MainActivity extends AppCompatActivity implements IResponseValidity
         }
 
         current++;
-        ProgressBar progressBar = findViewById(R.id.surveyProgressBar);
-        int progress = (int)Math.round((double)current / survey.getLength() * 100);
-        ObjectAnimator progressAnimation = ObjectAnimator.ofInt(progressBar, "progress", progress).setDuration(300);
-        progressAnimation.setInterpolator(new FastOutSlowInInterpolator());
-        progressAnimation.start();
-        TextView progressText = findViewById(R.id.surveyProgressText);
-        progressText.setText(getString(R.string.surveyProgressText, current + 1, survey.getLength()));
 
         if (current < survey.getLength()) {
+            ProgressBar progressBar = findViewById(R.id.surveyProgressBar);
+            int progress = (int)Math.round((double)current / survey.getLength() * 100);
+            ObjectAnimator progressAnimation = ObjectAnimator.ofInt(progressBar, "progress", progress).setDuration(300);
+            progressAnimation.setInterpolator(new FastOutSlowInInterpolator());
+            progressAnimation.start();
+            TextView progressText = findViewById(R.id.surveyProgressText);
+            progressText.setText(getString(R.string.surveyProgressText, current + 1, survey.getLength()));
+
             IQuestion question = survey.questions().get(current);
 
             currentView = viewSelector.getBoundView(question);
