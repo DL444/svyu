@@ -7,6 +7,7 @@ import mg.studio.android.survey.FinalizeActivity;
 import mg.studio.android.survey.InitiateScanActivity;
 import mg.studio.android.survey.MainActivity;
 import mg.studio.android.survey.SettingsActivity;
+import mg.studio.android.survey.SurveyComposerActivity;
 
 /**
  * An abstraction of dagger components that performs dependency injection.
@@ -18,4 +19,5 @@ public interface InjectionComponent {
     void inject(FinalizeActivity activity);
     void inject(MainActivity activity);
     void inject(SettingsActivity activity);
+    void inject(SurveyComposerActivity activity);
 }

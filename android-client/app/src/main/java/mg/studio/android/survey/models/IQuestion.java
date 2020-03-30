@@ -20,6 +20,7 @@ public interface IQuestion extends Serializable {
 
     /**
      * Sets the text of the question.
+     * @param question The text of the question.
      */
     void setQuestion(String question);
 }

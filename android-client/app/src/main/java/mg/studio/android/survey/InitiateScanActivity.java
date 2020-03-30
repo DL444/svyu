@@ -130,7 +130,7 @@ public class InitiateScanActivity extends AppCompatActivity {
     private Button.OnClickListener newSurveyListener = new Button.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent navIntent = new Intent(InitiateScanActivity.this, SurveyComposerQuestionListActivity.class);
+            Intent navIntent = new Intent(InitiateScanActivity.this, SurveyComposerActivity.class);
             startActivity(navIntent);
         }
     };

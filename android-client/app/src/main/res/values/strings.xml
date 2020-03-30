@@ -51,4 +51,15 @@
     <string name="newSurvey">New survey</string>
     <string name="composerTitle">Composer</string>
     <string name="submitHint">Tap the button to submit your answers. \n\nGrant all requested permissions so we can identify you without knowing your personal information.</string>
+    <string name="singleChoiceQuestionDescription">Single answer, %1$d options</string>
+    <string name="singleChoiceQuestionEmptyDescription">Single answer, tap to add options</string>
+    <string name="multiChoiceQuestionDescription">Multiple answers, %1$d options</string>
+    <string name="multiChoiceQuestionEmptyDescription">Multiple answers, tap to add options</string>
+    <string name="textQuestionDescription">Free input</string>
+    <string name="questionPlaceholder">(Your question…)</string>
+    <string name="singleChoiceQuestionAdd">Single answer</string>
+    <string name="multiChoiceQuestionAdd">Multiple answers</string>
+    <string name="textQuestionAdd">Free input</string>
+    <string name="questionHint">Question here…</string>
+    <string name="textQuestionExplain">Survey takers can answer as they wish.</string>
 </resources>

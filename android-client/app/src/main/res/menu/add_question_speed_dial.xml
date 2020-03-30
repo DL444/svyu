@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/singleChoiceQuestonAdd"
+        android:icon="@drawable/ic_tick"
+        android:title="@string/singleChoiceQuestionAdd" />
+    <item android:id="@+id/multiChoiceQuestionAdd"
+        android:icon="@drawable/ic_tick_double"
+        android:title="@string/multiChoiceQuestionAdd" />
+    <item android:id="@+id/textQuestionAdd"
+        android:icon="@drawable/ic_cursor"
+        android:title="@string/textQuestionAdd" />
+</menu>

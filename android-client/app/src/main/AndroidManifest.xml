@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SurveyComposerQuestionListActivity"
+            android:name=".SurveyComposerActivity"
             android:label="@string/composerTitle" />
         <activity
             android:name=".SettingsActivity"

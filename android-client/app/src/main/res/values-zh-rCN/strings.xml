@@ -51,4 +51,15 @@
     <string name="newSurvey">创建问卷</string>
     <string name="composerTitle">编制问卷</string>
     <string name="submitHint">请点按按钮，提交问卷。\n\n请允许所有的权限请求，以便我们在不收集个人信息的前提下，标识参与调查者。</string>
+    <string name="singleChoiceQuestionDescription">单选，共 %1$d 项</string>
+    <string name="singleChoiceQuestionEmptyDescription">单选，点按添加选项</string>
+    <string name="multiChoiceQuestionDescription">多选，共 %1$d 项</string>
+    <string name="multiChoiceQuestionEmptyDescription">多选，点按添加选项</string>
+    <string name="textQuestionDescription">任意输入</string>
+    <string name="questionPlaceholder">(你的问题…)</string>
+    <string name="singleChoiceQuestionAdd">单选</string>
+    <string name="multiChoiceQuestionAdd">多选</string>
+    <string name="textQuestionAdd">任意输入</string>
+    <string name="questionHint">你的问题…</string>
+    <string name="textQuestionExplain">被调查者可以任意回答。</string>
 </resources>
