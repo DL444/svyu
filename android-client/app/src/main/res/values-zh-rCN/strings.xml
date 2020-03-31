@@ -64,4 +64,7 @@
     <string name="textQuestionExplain">被调查者可以任意回答。</string>
     <string name="options">选项</string>
     <string name="composerNoQuestions">问点问题吧!</string>
+    <string name="add">添加</string>
+    <string name="questionRemoveHint">问题已删除。</string>
+    <string name="undo">撤销</string>
 </resources>

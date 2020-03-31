@@ -2,6 +2,7 @@ package mg.studio.android.survey.views;
 
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +13,7 @@ public final class ComposerListItem extends RecyclerView.ViewHolder {
 
     public ComposerListItem(@NonNull ConstraintLayout root) {
         super(root);
+        this.root = root;
         header = root.findViewById(R.id.composerListItemHeader);
         caption = root.findViewById(R.id.composerListItemCaption);
     }
@@ -24,6 +26,11 @@ public final class ComposerListItem extends RecyclerView.ViewHolder {
         this.caption.setText(caption);
     }
 
+    public void setBackground(@ColorInt int color) {
+        root.setBackgroundColor(color);
+    }
+
+    private final ConstraintLayout root;
     private final TextView header;
     private final TextView caption;
 }

@@ -64,4 +64,7 @@
     <string name="textQuestionExplain">Survey takers can answer as they wish.</string>
     <string name="options">Options</string>
     <string name="composerNoQuestions">Let\'s add some question!</string>
+    <string name="add">Add</string>
+    <string name="questionRemoveHint">Question removed.</string>
+    <string name="undo">Undo</string>
 </resources>
