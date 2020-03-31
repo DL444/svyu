@@ -49,5 +49,5 @@ public final class TextQuestionViewModel implements IQuestionViewModel {
     }
 
     private final TextQuestion model;
-    private final Context context;
+    private transient final Context context;
 }

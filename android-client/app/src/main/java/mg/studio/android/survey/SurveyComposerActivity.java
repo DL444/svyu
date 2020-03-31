@@ -28,26 +28,25 @@ public class SurveyComposerActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey_composer);
         ((SurveyApplication)getApplication()).getComponent().inject(this);
+        fragmentMgr = getSupportFragmentManager();
 
-        if (savedInstanceState == null) {
-            draftClient.getSurveyDraft(new ISurveyClientCallback() {
-                @Override
-                public void onComplete(SurveyModel survey) {
-                    if (survey == null) {
-                        listView = ComposerListFragment.newInstance();
-                        navigateToQuestionList();
-                    } else {
-                        listView = ComposerListFragment.newInstance(converter.getSurveyViewModel(survey));
-                        navigateToQuestionList();
-                    }
-                }
-                @Override
-                public void onError(ClientErrorType errorType, Exception exception) {
+        draftClient.getSurveyDraft(new ISurveyClientCallback() {
+            @Override
+            public void onComplete(SurveyModel survey) {
+                if (survey == null) {
                     listView = ComposerListFragment.newInstance();
                     navigateToQuestionList();
+                } else {
+                    listView = ComposerListFragment.newInstance(converter.getSurveyViewModel(survey));
+                    navigateToQuestionList();
                 }
-            });
-        }
+            }
+            @Override
+            public void onError(ClientErrorType errorType, Exception exception) {
+                listView = ComposerListFragment.newInstance();
+                navigateToQuestionList();
+            }
+        });
     }
 
     @Override
@@ -95,7 +94,6 @@ public class SurveyComposerActivity extends AppCompatActivity
     }
 
     private void navigateToQuestionList() {
-        fragmentMgr = getSupportFragmentManager();
         fragmentMgr.beginTransaction()
                 .add(R.id.composerFrame, listView)
                 .commit();

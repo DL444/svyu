@@ -46,5 +46,5 @@ public abstract class ChoiceQuestionViewModelBase implements IQuestionViewModel 
     }
 
     protected final ChoiceQuestionBase model;
-    protected final Context context;
+    protected transient final Context context;
 }
