@@ -62,6 +62,14 @@ public final class LocalDraftClient implements IDraftClient {
         }
     }
 
+    @Override
+    public void clearSurveyDraft(ISurveyClientCallback callback) {
+        dbClient.clear(draftSurveyCollection);
+        if (callback != null) {
+            callback.onComplete(null);
+        }
+    }
+
     private static final String draftSurveyCollection = "draftSurvey";
     private static final String draftSurveyKey = "draft";
 

@@ -63,7 +63,7 @@
     <string name="questionHint">Question here…</string>
     <string name="textQuestionExplain">Survey takers can answer as they wish.</string>
     <string name="options">Options</string>
-    <string name="composerNoQuestions">Let\'s add some question!</string>
+    <string name="composerNoQuestions">Let\'s add some questions!</string>
     <string name="add">Add</string>
     <string name="questionRemoveHint">Question removed.</string>
     <string name="undo">Undo</string>
@@ -74,4 +74,8 @@
     <string name="cancelSurveyOk">Give up</string>
     <string name="cancelSurveyCancel">Continue answering</string>
     <string name="composerUpload">Upload survey</string>
+    <string name="surveyEmptyError">Survey is empty. Add some questions first?</string>
+    <string name="surveyQuestionInvalidError">Some questions are not right. Try fixing them first.</string>
+    <string name="surveyUploadOfflineError">You are working offline. Turn it off in settings to upload.</string>
+    <string name="surveyUploadActivityTitle">Your new survey</string>
 </resources>

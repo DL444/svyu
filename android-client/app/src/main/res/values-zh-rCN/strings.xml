@@ -74,4 +74,8 @@
     <string name="cancelSurveyOk">放弃</string>
     <string name="cancelSurveyCancel">继续作答</string>
     <string name="composerUpload">上传问卷</string>
+    <string name="surveyEmptyError">问卷还没有问题。先添加一些？</string>
+    <string name="surveyQuestionInvalidError">有些问题有错误，请先改正问题。</string>
+    <string name="surveyUploadOfflineError">正在脱机工作，请先在设置中关闭脱机模式。</string>
+    <string name="surveyUploadActivityTitle">你的新问卷</string>
 </resources>

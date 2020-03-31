@@ -48,6 +48,11 @@ public final class TextQuestionViewModel implements IQuestionViewModel {
         return q != null && !q.trim().isEmpty();
     }
 
+    @Override
+    public boolean isValid() {
+        return hasQuestion();
+    }
+
     private final TextQuestion model;
     private transient final Context context;
 }

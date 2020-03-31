@@ -1,11 +1,18 @@
 package mg.studio.android.survey;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -32,6 +39,7 @@ public class SurveyComposerActivity extends AppCompatActivity
         ((SurveyApplication)getApplication()).getComponent().inject(this);
         fragmentMgr = getSupportFragmentManager();
         fragmentMgr.addOnBackStackChangedListener(backStackChangedListener);
+        prefs = getSharedPreferences(getPackageName() + ".pref", MODE_PRIVATE);
 
         draftClient.getSurveyDraft(new ISurveyClientCallback() {
             @Override
@@ -72,6 +80,27 @@ public class SurveyComposerActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.composer_menu, menu);
         uploadAction = menu.findItem(R.id.action_upload_survey);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_upload_survey) {
+            if (checkSurvey()) {
+                boolean workOffline = prefs.getBoolean(workOfflineKey, false);
+                if (workOffline) {
+                    Snackbar.make(findViewById(R.id.composerActivityRoot), R.string.surveyUploadOfflineError, Snackbar.LENGTH_LONG).show();
+                } else {
+                    SurveyModel model = converter.getSurveyModel(listView.getQuestions());
+                    Intent navIntent = new Intent(this, ComposerUploadSurveyActivity.class);
+                    navIntent.putExtra(getPackageName() + ".survey", model);
+                    navIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(navIntent);
+                    this.finish();
+                }
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -119,10 +148,27 @@ public class SurveyComposerActivity extends AppCompatActivity
         }
     };
 
+    private boolean checkSurvey() {
+        ArrayList<IQuestionViewModel> questions = listView.getQuestions();
+        if (questions.size() == 0) {
+            Snackbar.make(findViewById(R.id.composerActivityRoot), R.string.surveyEmptyError, Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+        for (IQuestionViewModel q : questions) {
+            if (!q.isValid()) {
+                Snackbar.make(findViewById(R.id.composerActivityRoot), R.string.surveyQuestionInvalidError, Snackbar.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+        return true;
+    }
+
     private ComposerListFragment listView;
     private FragmentManager fragmentMgr;
     private MenuItem uploadAction;
+    private SharedPreferences prefs;
     @Inject ComposerQuestionViewSelector selector;
     @Inject IDraftClient draftClient;
     @Inject ViewModelConverter converter;
+    private static final String workOfflineKey = "workOffline";
 }

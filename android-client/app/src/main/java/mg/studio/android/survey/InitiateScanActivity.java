@@ -33,7 +33,7 @@ public class InitiateScanActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((SurveyApplication)getApplication()).getComponent().inject(this);
-        prefs= getSharedPreferences(getPackageName() + ".pref", MODE_PRIVATE);
+        prefs = getSharedPreferences(getPackageName() + ".pref", MODE_PRIVATE);
         setContentView(R.layout.init_scan);
 
         progressClient.getProgress(new ISurveyProgressClientCallback() {

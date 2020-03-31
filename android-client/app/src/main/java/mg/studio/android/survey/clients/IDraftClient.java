@@ -19,4 +19,10 @@ public interface IDraftClient {
      * @param callback The callback methods executed when the operation completes.
      */
     void saveSurveyDraft(SurveyModel model, ISurveyClientCallback callback);
+
+    /**
+     * Clears all existing survey drafts.
+     * @param callback The callback methods executed when the operation completes.
+     */
+    void clearSurveyDraft(ISurveyClientCallback callback);
 }

@@ -41,6 +41,11 @@ public abstract class ChoiceQuestionViewModelBase implements IQuestionViewModel 
         return q != null && !q.trim().isEmpty();
     }
 
+    @Override
+    public boolean isValid() {
+        return hasQuestion() && options().size() > 0;
+    }
+
     public ArrayList<String> options() {
         return model.options();
     }

@@ -38,4 +38,10 @@ public interface IQuestionViewModel extends Serializable {
      * @return True if the question is set, false otherwise.
      */
     boolean hasQuestion();
+
+    /**
+     * Determines if the question view model is currently in a valid state.
+     * @return True if valid, false otherwise.
+     */
+    boolean isValid();
 }
