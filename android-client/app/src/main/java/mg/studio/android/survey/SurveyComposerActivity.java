@@ -1,6 +1,8 @@
 package mg.studio.android.survey;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -24,11 +26,12 @@ public class SurveyComposerActivity extends AppCompatActivity
         implements IQuestionOperationRequestListener, IQuestionOperationCompleteListener {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey_composer);
         ((SurveyApplication)getApplication()).getComponent().inject(this);
         fragmentMgr = getSupportFragmentManager();
+        fragmentMgr.addOnBackStackChangedListener(backStackChangedListener);
 
         draftClient.getSurveyDraft(new ISurveyClientCallback() {
             @Override
@@ -51,6 +54,8 @@ public class SurveyComposerActivity extends AppCompatActivity
 
     @Override
     protected void onStop() {
+        fragmentMgr.removeOnBackStackChangedListener(backStackChangedListener);
+        fragmentMgr.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         SurveyModel model = converter.getSurveyModel(listView.getQuestions());
         draftClient.saveSurveyDraft(model, new ISurveyClientCallback() {
             @Override
@@ -59,6 +64,14 @@ public class SurveyComposerActivity extends AppCompatActivity
             public void onError(ClientErrorType errorType, Exception exception) { }
         });
         super.onStop();
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.composer_menu, menu);
+        uploadAction = menu.findItem(R.id.action_upload_survey);
+        return true;
     }
 
     @Override
@@ -95,12 +108,20 @@ public class SurveyComposerActivity extends AppCompatActivity
 
     private void navigateToQuestionList() {
         fragmentMgr.beginTransaction()
-                .add(R.id.composerFrame, listView)
+                .replace(R.id.composerFrame, listView)
                 .commit();
     }
 
+    private FragmentManager.OnBackStackChangedListener backStackChangedListener = new FragmentManager.OnBackStackChangedListener() {
+        @Override
+        public void onBackStackChanged() {
+            uploadAction.setVisible(fragmentMgr.getBackStackEntryCount() == 0);
+        }
+    };
+
     private ComposerListFragment listView;
     private FragmentManager fragmentMgr;
+    private MenuItem uploadAction;
     @Inject ComposerQuestionViewSelector selector;
     @Inject IDraftClient draftClient;
     @Inject ViewModelConverter converter;

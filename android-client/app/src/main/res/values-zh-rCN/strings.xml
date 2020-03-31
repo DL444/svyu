@@ -73,4 +73,5 @@
     <string name="cancelSurveyConfirm">你已经回答一半的问题了，真的要放弃吗？</string>
     <string name="cancelSurveyOk">放弃</string>
     <string name="cancelSurveyCancel">继续作答</string>
+    <string name="composerUpload">上传问卷</string>
 </resources>

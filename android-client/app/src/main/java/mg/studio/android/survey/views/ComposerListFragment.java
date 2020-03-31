@@ -35,6 +35,7 @@ public class ComposerListFragment extends Fragment {
 
     public static ComposerListFragment newInstance(ArrayList<IQuestionViewModel> questions) {
         ComposerListFragment fragment = new ComposerListFragment();
+        fragment.questions = questions;
         Bundle args = new Bundle();
         args.putSerializable("questions", questions);
         fragment.setArguments(args);
@@ -51,6 +52,12 @@ public class ComposerListFragment extends Fragment {
         }
         adapter = new ComposerListAdapter(questions, itemClickListener);
         adapter.registerAdapterDataObserver(observer);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putSerializable("questions", questions);
+        super.onSaveInstanceState(outState);
     }
 
     @Override

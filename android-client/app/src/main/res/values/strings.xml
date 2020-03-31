@@ -73,4 +73,5 @@
     <string name="cancelSurveyConfirm">You have already answered half of the questions. Really want to give up?</string>
     <string name="cancelSurveyOk">Give up</string>
     <string name="cancelSurveyCancel">Continue answering</string>
+    <string name="composerUpload">Upload survey</string>
 </resources>
