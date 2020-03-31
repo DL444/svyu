@@ -67,4 +67,6 @@
     <string name="add">添加</string>
     <string name="questionRemoveHint">问题已删除。</string>
     <string name="undo">撤销</string>
+    <string name="composerNoOptions">还没有设置选项</string>
+    <string name="optionEditHint">输入选项…</string>
 </resources>

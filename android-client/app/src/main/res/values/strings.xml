@@ -67,4 +67,6 @@
     <string name="add">Add</string>
     <string name="questionRemoveHint">Question removed.</string>
     <string name="undo">Undo</string>
+    <string name="composerNoOptions">No options here yet.</string>
+    <string name="optionEditHint">Option here…</string>
 </resources>

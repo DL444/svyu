@@ -12,9 +12,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="@dimen/marginM"
         android:layout_marginStart="@dimen/marginM"
-        android:layout_marginLeft="@dimen/marginM"
         android:layout_marginEnd="@dimen/marginM"
-        android:layout_marginRight="@dimen/marginM"
         android:inputType="textMultiLine"
         android:maxLines="2"
         android:importantForAutofill="no"
@@ -23,19 +21,48 @@
 
     <TextView
         android:id="@+id/composerExplainTitle"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/composerQuestionInput"
         android:layout_marginTop="@dimen/marginM"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="@dimen/marginMP"
-        android:layout_marginLeft="@dimen/marginMP"
         android:layout_marginEnd="@dimen/marginMP"
-        android:layout_marginRight="@dimen/marginMP"
         style="@style/Title"
         android:text="@string/options"/>
 
-    <!-- Option list here. -->
+    <Button
+        android:id="@+id/addOptionBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="@dimen/marginMP"
+        android:layout_marginRight="@dimen/marginMP"
+        app:layout_constraintTop_toTopOf="@id/composerExplainTitle"
+        app:layout_constraintBottom_toBottomOf="@id/composerExplainTitle"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:text="@string/add"
+        app:drawableStartCompat="@drawable/ic_add_small"
+        app:drawableTint="@color/colorPrimary" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/optionListView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/marginXS"
+        app:layout_constraintTop_toBottomOf="@id/composerExplainTitle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:scrollbars="vertical" />
+
+    <TextView
+        android:id="@+id/optionEmptyHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/composerExplainTitle"
+        app:layout_constraintBottom_toTopOf="@id/composerConfirmBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/composerNoOptions"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/composerConfirmBtn"
