@@ -17,6 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginLeft="@dimen/marginM"
         android:layout_marginStart="@dimen/marginMP"
-        android:maxLines="1" />
+        android:maxLines="1"
+        android:textColor="@color/base"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
