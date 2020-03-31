@@ -1,5 +1,6 @@
 package mg.studio.android.survey.views;
 
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
@@ -14,6 +15,14 @@ public final class ComposerListItem extends RecyclerView.ViewHolder {
     public ComposerListItem(@NonNull ConstraintLayout root) {
         super(root);
         this.root = root;
+        root.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (clickCallback != null) {
+                    clickCallback.onItemClicked(index);
+                }
+            }
+        });
         header = root.findViewById(R.id.composerListItemHeader);
         caption = root.findViewById(R.id.composerListItemCaption);
     }
@@ -30,7 +39,17 @@ public final class ComposerListItem extends RecyclerView.ViewHolder {
         root.setBackgroundColor(color);
     }
 
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public void setClickCallback(IItemClickCallback callback) {
+        clickCallback = callback;
+    }
+
     private final ConstraintLayout root;
     private final TextView header;
     private final TextView caption;
+    private int index;
+    private IItemClickCallback clickCallback;
 }

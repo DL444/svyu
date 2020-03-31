@@ -2,7 +2,6 @@ package mg.studio.android.survey.views;
 
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +22,6 @@ import com.leinardi.android.speeddial.SpeedDialView;
 import java.util.ArrayList;
 
 import mg.studio.android.survey.R;
-import mg.studio.android.survey.models.IQuestion;
 import mg.studio.android.survey.models.QuestionType;
 import mg.studio.android.survey.viewmodels.IQuestionViewModel;
 
@@ -51,7 +49,7 @@ public class ComposerListFragment extends Fragment {
         } else {
             questions = new ArrayList<>();
         }
-        adapter = new ComposerListAdapter(questions);
+        adapter = new ComposerListAdapter(questions, itemClickListener);
         adapter.registerAdapterDataObserver(observer);
     }
 
@@ -83,17 +81,17 @@ public class ComposerListFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof IAddQuestionRequestListener) {
-            addQuestionRequestListener = (IAddQuestionRequestListener) context;
+        if (context instanceof IQuestionOperationRequestListener) {
+            questionOperationRequestListener = (IQuestionOperationRequestListener) context;
         } else {
-            throw new RuntimeException(context.toString() + " must implement IAddQuestionRequestListener.");
+            throw new RuntimeException(context.toString() + " must implement IQuestionOperationRequestListener.");
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        addQuestionRequestListener = null;
+        questionOperationRequestListener = null;
     }
 
     public void addQuestion(IQuestionViewModel question) {
@@ -101,19 +99,30 @@ public class ComposerListFragment extends Fragment {
         adapter.notifyItemInserted(questions.size() - 1);
     }
 
+    public void updateQuestion(int index) {
+        adapter.notifyItemChanged(index);
+    }
+
+    private IItemClickCallback itemClickListener = new IItemClickCallback() {
+        @Override
+        public void onItemClicked(int index) {
+            questionOperationRequestListener.onUpdateQuestionRequested(questions.get(index), index);
+        }
+    };
+
     private SpeedDialView.OnActionSelectedListener addQuestionListener = new SpeedDialView.OnActionSelectedListener() {
         @Override
         public boolean onActionSelected(SpeedDialActionItem actionItem) {
             ComposerListFragment.this.speedDial.close();
             switch (actionItem.getId()) {
                 case R.id.singleChoiceQuestonAdd:
-                    addQuestionRequestListener.onAddQuestionRequested(QuestionType.Single);
+                    questionOperationRequestListener.onAddQuestionRequested(QuestionType.Single);
                     return true;
                 case R.id.multiChoiceQuestionAdd:
-                    addQuestionRequestListener.onAddQuestionRequested(QuestionType.Multiple);
+                    questionOperationRequestListener.onAddQuestionRequested(QuestionType.Multiple);
                     return true;
                 case R.id.textQuestionAdd:
-                    addQuestionRequestListener.onAddQuestionRequested(QuestionType.Text);
+                    questionOperationRequestListener.onAddQuestionRequested(QuestionType.Text);
                     return true;
                 default:
                     return false;
@@ -232,5 +241,5 @@ public class ComposerListFragment extends Fragment {
     private ComposerListAdapter adapter;
     private TextView emptyIndicator;
 
-    private IAddQuestionRequestListener addQuestionRequestListener;
+    private IQuestionOperationRequestListener questionOperationRequestListener;
 }

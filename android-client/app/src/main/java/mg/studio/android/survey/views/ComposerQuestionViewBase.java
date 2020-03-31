@@ -12,10 +12,10 @@ public abstract class ComposerQuestionViewBase extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof IAddQuestionCompleteListener) {
-            addQuestionCompleteCallback = (IAddQuestionCompleteListener) context;
+        if (context instanceof IQuestionOperationCompleteListener) {
+            addQuestionCompleteCallback = (IQuestionOperationCompleteListener) context;
         } else {
-            throw new RuntimeException(context.toString() + " must implement IAddQuestionCompleteListener.");
+            throw new RuntimeException(context.toString() + " must implement IQuestionOperationCompleteListener.");
         }
     }
 
@@ -25,9 +25,9 @@ public abstract class ComposerQuestionViewBase extends Fragment {
         addQuestionCompleteCallback = null;
     }
 
-    protected IAddQuestionCompleteListener getAddQuestionCompleteCallback() {
+    protected IQuestionOperationCompleteListener getQuestionOperationCompleteCallback() {
         return addQuestionCompleteCallback;
     }
 
-    private IAddQuestionCompleteListener addQuestionCompleteCallback;
+    private IQuestionOperationCompleteListener addQuestionCompleteCallback;
 }

@@ -22,10 +22,12 @@ import mg.studio.android.survey.viewmodels.ChoiceQuestionViewModelBase;
 
 public final class ComposerChoiceQuestionView extends ComposerQuestionViewBase {
 
-    public static ComposerChoiceQuestionView createInstance(ChoiceQuestionViewModelBase question) {
+    public static ComposerChoiceQuestionView createInstance(ChoiceQuestionViewModelBase question, boolean isUpdate, int index) {
         ComposerChoiceQuestionView fragment = new ComposerChoiceQuestionView();
         Bundle args = new Bundle();
         args.putSerializable("question", question);
+        args.putBoolean("isUpdate", isUpdate);
+        args.putInt("index", index);
         fragment.setArguments(args);
         return fragment;
     }
@@ -35,6 +37,8 @@ public final class ComposerChoiceQuestionView extends ComposerQuestionViewBase {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             question = (ChoiceQuestionViewModelBase) getArguments().getSerializable("question");
+            isUpdate = getArguments().getBoolean("isUpdate");
+            index = getArguments().getInt("index");
         }
     }
 
@@ -72,14 +76,15 @@ public final class ComposerChoiceQuestionView extends ComposerQuestionViewBase {
             } else {
                 setConfirmButtonEnabled(true);
             }
-            question.setQuestion(s.toString());
         }
     };
 
     private Button.OnClickListener confirmListener = new Button.OnClickListener() {
         @Override
         public void onClick(View v) {
-            ComposerChoiceQuestionView.this.getAddQuestionCompleteCallback().onAddQuestionComplete(question);
+            EditText title = ComposerChoiceQuestionView.this.getView().findViewById(R.id.composerQuestionInput);
+            question.setQuestion(title.getText().toString());
+            ComposerChoiceQuestionView.this.getQuestionOperationCompleteCallback().onQuestionOperationComplete(question, isUpdate, index);
         }
     };
 
@@ -103,5 +108,7 @@ public final class ComposerChoiceQuestionView extends ComposerQuestionViewBase {
         animation.start();
     }
 
+    private boolean isUpdate;
+    private int index;
     private ChoiceQuestionViewModelBase question;
 }

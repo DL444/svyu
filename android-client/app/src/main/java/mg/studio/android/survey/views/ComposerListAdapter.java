@@ -1,6 +1,7 @@
 package mg.studio.android.survey.views;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -14,12 +15,14 @@ import mg.studio.android.survey.viewmodels.IQuestionViewModel;
 
 public final class ComposerListAdapter extends RecyclerView.Adapter<ComposerListItem> {
 
-    public ComposerListAdapter() {
-        this(new ArrayList<IQuestionViewModel>());
+    public ComposerListAdapter(IItemClickCallback itemClickCallback) {
+        this(new ArrayList<IQuestionViewModel>(), itemClickCallback);
     }
 
-    public ComposerListAdapter(ArrayList<IQuestionViewModel> questions) {
+    public ComposerListAdapter(ArrayList<IQuestionViewModel> questions,
+                               IItemClickCallback itemClickCallback) {
         source = questions;
+        clickCallback = itemClickCallback;
     }
 
     @NonNull
@@ -35,6 +38,8 @@ public final class ComposerListAdapter extends RecyclerView.Adapter<ComposerList
         IQuestionViewModel question = source.get(position);
         holder.setHeader(question.getQuestion());
         holder.setCaption(question.getDescription());
+        holder.setIndex(position);
+        holder.setClickCallback(clickCallback);
     }
 
     @Override
@@ -43,4 +48,5 @@ public final class ComposerListAdapter extends RecyclerView.Adapter<ComposerList
     }
 
     private ArrayList<IQuestionViewModel> source;
+    private IItemClickCallback clickCallback;
 }

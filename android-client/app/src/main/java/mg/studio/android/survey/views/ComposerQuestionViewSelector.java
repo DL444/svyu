@@ -19,24 +19,32 @@ public final class ComposerQuestionViewSelector {
     }
 
     public ComposerQuestionViewBase getView(QuestionType type) {
+        IQuestionViewModel vm = null;
         switch (type) {
             case Single:
-                return getView(new SingleChoiceQuestionViewModel(context));
+                vm = new SingleChoiceQuestionViewModel(context);
+                break;
             case Multiple:
-                return getView(new MultiChoiceQuestionViewModel(context));
+                vm = new MultiChoiceQuestionViewModel(context);
+                break;
             case Text:
-                return getView(new TextQuestionViewModel(context));
+                vm = new TextQuestionViewModel(context);
+                break;
         }
-        return null;
+        return getView(vm, false, -1);
     }
 
-    public ComposerQuestionViewBase getView(IQuestionViewModel question) {
+    public ComposerQuestionViewBase getView(IQuestionViewModel question, int index) {
+        return getView(question, true, index);
+    }
+
+    private ComposerQuestionViewBase getView(IQuestionViewModel question, boolean isUpdate, int index) {
         switch (question.getModel().getType()) {
             case Single:
             case Multiple:
-                return ComposerChoiceQuestionView.createInstance((ChoiceQuestionViewModelBase) question);
+                return ComposerChoiceQuestionView.createInstance((ChoiceQuestionViewModelBase) question, isUpdate, index);
             case Text:
-                return ComposerTextQuestionView.createInstance(question);
+                return ComposerTextQuestionView.createInstance(question, isUpdate, index);
         }
         return null;
     }

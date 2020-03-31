@@ -23,10 +23,12 @@ import mg.studio.android.survey.viewmodels.TextQuestionViewModel;
 
 public final class ComposerTextQuestionView extends ComposerQuestionViewBase {
 
-    public static ComposerTextQuestionView createInstance(IQuestionViewModel question) {
+    public static ComposerTextQuestionView createInstance(IQuestionViewModel question, boolean isUpdate, int index) {
         ComposerTextQuestionView fragment = new ComposerTextQuestionView();
         Bundle args = new Bundle();
         args.putSerializable("question", question);
+        args.putBoolean("isUpdate", isUpdate);
+        args.putInt("index", index);
         fragment.setArguments(args);
         return fragment;
     }
@@ -36,6 +38,8 @@ public final class ComposerTextQuestionView extends ComposerQuestionViewBase {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             question = (TextQuestionViewModel) getArguments().getSerializable("question");
+            isUpdate = getArguments().getBoolean("isUpdate");
+            index = getArguments().getInt("index");
         }
     }
 
@@ -73,14 +77,15 @@ public final class ComposerTextQuestionView extends ComposerQuestionViewBase {
             } else {
                 setConfirmButtonEnabled(true);
             }
-            question.setQuestion(s.toString());
         }
     };
 
     private Button.OnClickListener confirmListener = new Button.OnClickListener() {
         @Override
         public void onClick(View v) {
-            ComposerTextQuestionView.this.getAddQuestionCompleteCallback().onAddQuestionComplete(question);
+            EditText title = ComposerTextQuestionView.this.getView().findViewById(R.id.composerQuestionInput);
+            question.setQuestion(title.getText().toString());
+            ComposerTextQuestionView.this.getQuestionOperationCompleteCallback().onQuestionOperationComplete(question, isUpdate, index);
         }
     };
 
@@ -104,5 +109,7 @@ public final class ComposerTextQuestionView extends ComposerQuestionViewBase {
         animation.start();
     }
 
+    private boolean isUpdate;
+    private int index;
     private TextQuestionViewModel question;
 }
