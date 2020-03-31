@@ -96,7 +96,7 @@ public class InitiateScanActivity extends AppCompatActivity {
         client.getSurvey(id, new ISurveyClientCallback() {
             @Override
             public void onComplete(SurveyModel survey) {
-                Intent navIntent = new Intent(InitiateScanActivity.this, MainActivity.class);
+                Intent navIntent = new Intent(InitiateScanActivity.this, SurveyActivity.class);
                 navIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 navIntent.putExtra(getPackageName() + ".survey", survey);
                 startActivity(navIntent);

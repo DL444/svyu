@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".SurveyActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".CustomCaptureActivity"

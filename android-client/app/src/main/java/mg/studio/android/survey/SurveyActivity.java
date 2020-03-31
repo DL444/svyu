@@ -25,7 +25,7 @@ import mg.studio.android.survey.views.IResponseValidityChangedListener;
 import mg.studio.android.survey.views.QuestionViewBase;
 import mg.studio.android.survey.views.QuestionViewSelector;
 
-public class MainActivity extends AppCompatActivity implements IResponseValidityChangedListener {
+public class SurveyActivity extends AppCompatActivity implements IResponseValidityChangedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements IResponseValidity
             transaction.setCustomAnimations(R.anim.slide_left_in_anim, R.anim.slide_left_out_anim);
             transaction.replace(R.id.questionFrame, currentView);
             transaction.commit();
+            onResponseValidityChanged(false);
         } else {
             Intent finalizeNavIntent = new Intent(this, FinalizeActivity.class);
             finalizeNavIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
