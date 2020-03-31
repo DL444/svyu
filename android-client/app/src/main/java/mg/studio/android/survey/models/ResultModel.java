@@ -104,10 +104,10 @@ public final class ResultModel implements Serializable {
         return responses;
     }
 
-    private String id;
+    private String id = "";
     private double latitude;
     private double longitude;
     private long time;
-    private String imei;
+    private String imei = "";
     private ArrayList<IResponse> responses = new ArrayList<>();
 }

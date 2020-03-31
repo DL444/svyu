@@ -31,7 +31,10 @@ import mg.studio.android.survey.clients.ClientErrorType;
 import mg.studio.android.survey.clients.ClientFactory;
 import mg.studio.android.survey.clients.IResultClient;
 import mg.studio.android.survey.clients.IResultClientCallback;
+import mg.studio.android.survey.clients.ISurveyProgressClient;
+import mg.studio.android.survey.clients.ISurveyProgressClientCallback;
 import mg.studio.android.survey.models.ResultModel;
+import mg.studio.android.survey.models.SurveyModel;
 
 public class FinalizeActivity extends AppCompatActivity {
 
@@ -60,6 +63,7 @@ public class FinalizeActivity extends AppCompatActivity {
         client.postResult(result, new IResultClientCallback() {
             @Override
             public void onComplete(ResultModel result) {
+                progressClient.clearProgress(null);
                 setProgress(false);
                 if (prefs.getBoolean("lockDevice", false)
                         && policyManager.isAdminActive(new ComponentName(FinalizeActivity.this, DeviceAdminListener.class))) {
@@ -264,6 +268,7 @@ public class FinalizeActivity extends AppCompatActivity {
     }
 
     @Inject ClientFactory clientFactory;
+    @Inject ISurveyProgressClient progressClient;
 
     private ResultModel result;
     private String imei;

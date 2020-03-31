@@ -13,7 +13,7 @@ import mg.studio.android.survey.SurveyComposerActivity;
  * An abstraction of dagger components that performs dependency injection.
  */
 @Singleton
-@Component(modules = { AppContextModule.class, RandomModule.class, DraftClientModule.class})
+@Component(modules = { AppContextModule.class, RandomModule.class, DraftClientModule.class, TempResultClientModule.class})
 public interface InjectionComponent {
     void inject(InitiateScanActivity activity);
     void inject(FinalizeActivity activity);

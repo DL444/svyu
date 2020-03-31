@@ -69,4 +69,8 @@
     <string name="undo">Undo</string>
     <string name="composerNoOptions">No options here yet.</string>
     <string name="optionEditHint">Option here…</string>
+    <string name="cancelSurvey">Give up</string>
+    <string name="cancelSurveyConfirm">You have already answered half of the questions. Really want to give up?</string>
+    <string name="cancelSurveyOk">Give up</string>
+    <string name="cancelSurveyCancel">Continue answering</string>
 </resources>

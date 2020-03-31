@@ -69,4 +69,8 @@
     <string name="undo">撤销</string>
     <string name="composerNoOptions">还没有设置选项</string>
     <string name="optionEditHint">输入选项…</string>
+    <string name="cancelSurvey">放弃</string>
+    <string name="cancelSurveyConfirm">你已经回答一半的问题了，真的要放弃吗？</string>
+    <string name="cancelSurveyOk">放弃</string>
+    <string name="cancelSurveyCancel">继续作答</string>
 </resources>

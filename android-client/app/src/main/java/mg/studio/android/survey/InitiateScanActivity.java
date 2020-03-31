@@ -22,6 +22,9 @@ import mg.studio.android.survey.clients.ClientErrorType;
 import mg.studio.android.survey.clients.ClientFactory;
 import mg.studio.android.survey.clients.ISurveyClient;
 import mg.studio.android.survey.clients.ISurveyClientCallback;
+import mg.studio.android.survey.clients.ISurveyProgressClient;
+import mg.studio.android.survey.clients.ISurveyProgressClientCallback;
+import mg.studio.android.survey.models.ResultModel;
 import mg.studio.android.survey.models.SurveyModel;
 
 public class InitiateScanActivity extends AppCompatActivity {
@@ -32,11 +35,29 @@ public class InitiateScanActivity extends AppCompatActivity {
         ((SurveyApplication)getApplication()).getComponent().inject(this);
         prefs= getSharedPreferences(getPackageName() + ".pref", MODE_PRIVATE);
         setContentView(R.layout.init_scan);
+
+        progressClient.getProgress(new ISurveyProgressClientCallback() {
+            @Override
+            public void onComplete(SurveyModel survey, ResultModel result) {
+                if (survey != null && result != null) {
+                    Intent navIntent = new Intent(InitiateScanActivity.this, SurveyActivity.class);
+                    navIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    navIntent.putExtra(getPackageName() + ".survey", survey);
+                    navIntent.putExtra(getPackageName() + ".result", result);
+                    startActivity(navIntent);
+                    InitiateScanActivity.this.finish();
+                }
+            }
+            @Override
+            public void onError(ClientErrorType errorType, Exception exception) {
+                int i = 0;
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
+        getMenuInflater().inflate(R.menu.init_menu, menu);
         MenuItem item = menu.findItem(R.id.action_new_survey);
         Button newSurveyBtn = item.getActionView().findViewById(R.id.newSurveyBtn);
         newSurveyBtn.setOnClickListener(newSurveyListener);
@@ -136,6 +157,7 @@ public class InitiateScanActivity extends AppCompatActivity {
     };
 
     @Inject ClientFactory clientFactory;
+    @Inject ISurveyProgressClient progressClient;
     private SharedPreferences prefs;
     private static final String workOfflineKey = "workOffline";
 }
