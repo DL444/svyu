@@ -5,6 +5,7 @@
     <dimen name="title">20sp</dimen>
     <dimen name="qHeader">24sp</dimen>
     <dimen name="marginL">36dp</dimen>
+    <dimen name="marginMP">28dp</dimen>
     <dimen name="marginM">24dp</dimen>
     <dimen name="marginS">18dp</dimen>
     <dimen name="marginXS">12dp</dimen>

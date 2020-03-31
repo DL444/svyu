@@ -63,4 +63,5 @@
     <string name="questionHint">你的问题…</string>
     <string name="textQuestionExplain">被调查者可以任意回答。</string>
     <string name="options">选项</string>
+    <string name="composerNoQuestions">问点问题吧!</string>
 </resources>

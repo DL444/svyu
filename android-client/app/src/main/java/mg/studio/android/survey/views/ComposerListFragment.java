@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -47,6 +48,7 @@ public class ComposerListFragment extends Fragment {
             questions = new ArrayList<>();
         }
         adapter = new ComposerListAdapter(questions);
+        adapter.registerAdapterDataObserver(observer);
     }
 
     @Override
@@ -66,6 +68,9 @@ public class ComposerListFragment extends Fragment {
         speedDial = getView().findViewById(R.id.addQuestionMain);
         speedDial.inflate(R.menu.add_question_speed_dial);
         speedDial.setOnActionSelectedListener(addQuestionListener);
+
+        emptyIndicator = getView().findViewById(R.id.composerNoQuetionsHint);
+        emptyIndicator.setVisibility(questions.size() == 0 ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -109,9 +114,38 @@ public class ComposerListFragment extends Fragment {
         }
     };
 
+    private RecyclerView.AdapterDataObserver observer = new RecyclerView.AdapterDataObserver() {
+        @Override
+        public void onChanged() {
+            super.onChanged();
+            checkEmpty();
+        }
+
+        @Override
+        public void onItemRangeInserted(int positionStart, int itemCount) {
+            super.onItemRangeInserted(positionStart, itemCount);
+            checkEmpty();
+        }
+
+        @Override
+        public void onItemRangeRemoved(int positionStart, int itemCount) {
+            super.onItemRangeRemoved(positionStart, itemCount);
+            checkEmpty();
+        }
+
+        private void checkEmpty() {
+            if (adapter.getItemCount() == 0) {
+                ComposerListFragment.this.emptyIndicator.setVisibility(View.VISIBLE);
+            } else {
+                ComposerListFragment.this.emptyIndicator.setVisibility(View.GONE);
+            }
+        }
+    };
+
     private SpeedDialView speedDial;
     private ArrayList<IQuestionViewModel> questions;
     private ComposerListAdapter adapter;
+    private TextView emptyIndicator;
 
     private IAddQuestionRequestListener addQuestionRequestListener;
 }
