@@ -34,7 +34,7 @@ public final class LocalDraftClient implements IDraftClient {
     public void getSurveyDraft(ISurveyClientCallback callback) {
         String value = dbClient.getOne(draftSurveyCollection, draftSurveyKey);
         if (value == null) {
-            callback.onError(ClientErrorType.NotFound, null);
+            callback.onComplete(null);
         } else {
             try {
                 SurveyModel model = serializer.getModel(value);

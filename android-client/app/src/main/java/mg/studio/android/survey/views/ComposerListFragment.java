@@ -94,6 +94,10 @@ public class ComposerListFragment extends Fragment {
         questionOperationRequestListener = null;
     }
 
+    public ArrayList<IQuestionViewModel> getQuestions() {
+        return questions;
+    }
+
     public void addQuestion(IQuestionViewModel question) {
         questions.add(question);
         adapter.notifyItemInserted(questions.size() - 1);
