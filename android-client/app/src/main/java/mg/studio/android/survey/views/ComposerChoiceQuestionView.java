@@ -18,14 +18,12 @@ import androidx.annotation.Nullable;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import mg.studio.android.survey.R;
-import mg.studio.android.survey.viewmodels.IQuestionViewModel;
-import mg.studio.android.survey.viewmodels.MultiChoiceQuestionViewModel;
-import mg.studio.android.survey.viewmodels.SingleChoiceQuestionViewModel;
+import mg.studio.android.survey.viewmodels.ChoiceQuestionViewModelBase;
 
-final class ComposerMultiChoiceQuestionView extends ComposerQuestionViewBase {
+public final class ComposerChoiceQuestionView extends ComposerQuestionViewBase {
 
-    public static ComposerMultiChoiceQuestionView createInstance(IQuestionViewModel question) {
-        ComposerMultiChoiceQuestionView fragment = new ComposerMultiChoiceQuestionView();
+    public static ComposerChoiceQuestionView createInstance(ChoiceQuestionViewModelBase question) {
+        ComposerChoiceQuestionView fragment = new ComposerChoiceQuestionView();
         Bundle args = new Bundle();
         args.putSerializable("question", question);
         fragment.setArguments(args);
@@ -36,14 +34,14 @@ final class ComposerMultiChoiceQuestionView extends ComposerQuestionViewBase {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            question = (MultiChoiceQuestionViewModel) getArguments().getSerializable("question");
+            question = (ChoiceQuestionViewModelBase) getArguments().getSerializable("question");
         }
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.composer_multi_choice_view, container, false);
+        return inflater.inflate(R.layout.composer_choice_view, container, false);
     }
 
     @Override
@@ -81,7 +79,7 @@ final class ComposerMultiChoiceQuestionView extends ComposerQuestionViewBase {
     private Button.OnClickListener confirmListener = new Button.OnClickListener() {
         @Override
         public void onClick(View v) {
-            ComposerMultiChoiceQuestionView.this.getAddQuestionCompleteCallback().onAddQuestionComplete(question);
+            ComposerChoiceQuestionView.this.getAddQuestionCompleteCallback().onAddQuestionComplete(question);
         }
     };
 
@@ -105,5 +103,5 @@ final class ComposerMultiChoiceQuestionView extends ComposerQuestionViewBase {
         animation.start();
     }
 
-    private MultiChoiceQuestionViewModel question;
+    private ChoiceQuestionViewModelBase question;
 }

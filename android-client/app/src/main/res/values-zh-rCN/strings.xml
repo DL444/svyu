@@ -62,4 +62,5 @@
     <string name="textQuestionAdd">任意输入</string>
     <string name="questionHint">你的问题…</string>
     <string name="textQuestionExplain">被调查者可以任意回答。</string>
+    <string name="options">选项</string>
 </resources>

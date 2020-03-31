@@ -32,7 +32,7 @@
         android:layout_marginEnd="@dimen/appPadding"
         android:layout_marginRight="@dimen/appPadding"
         style="@style/Title"
-        android:text="@string/singleChoiceQuestionAdd"/>
+        android:text="@string/options"/>
 
     <!-- Option list here. -->
 

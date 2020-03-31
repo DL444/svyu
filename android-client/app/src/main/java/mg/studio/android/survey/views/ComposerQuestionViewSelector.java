@@ -5,6 +5,7 @@ import android.content.Context;
 import javax.inject.Inject;
 
 import mg.studio.android.survey.models.QuestionType;
+import mg.studio.android.survey.viewmodels.ChoiceQuestionViewModelBase;
 import mg.studio.android.survey.viewmodels.IQuestionViewModel;
 import mg.studio.android.survey.viewmodels.MultiChoiceQuestionViewModel;
 import mg.studio.android.survey.viewmodels.SingleChoiceQuestionViewModel;
@@ -32,9 +33,8 @@ public final class ComposerQuestionViewSelector {
     public ComposerQuestionViewBase getView(IQuestionViewModel question) {
         switch (question.getModel().getType()) {
             case Single:
-                return ComposerSingleChoiceQuestionView.createInstance(question);
             case Multiple:
-                return ComposerMultiChoiceQuestionView.createInstance(question);
+                return ComposerChoiceQuestionView.createInstance((ChoiceQuestionViewModelBase) question);
             case Text:
                 return ComposerTextQuestionView.createInstance(question);
         }

@@ -21,7 +21,7 @@ import mg.studio.android.survey.R;
 import mg.studio.android.survey.viewmodels.IQuestionViewModel;
 import mg.studio.android.survey.viewmodels.TextQuestionViewModel;
 
-final class ComposerTextQuestionView extends ComposerQuestionViewBase {
+public final class ComposerTextQuestionView extends ComposerQuestionViewBase {
 
     public static ComposerTextQuestionView createInstance(IQuestionViewModel question) {
         ComposerTextQuestionView fragment = new ComposerTextQuestionView();

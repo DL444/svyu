@@ -62,4 +62,5 @@
     <string name="textQuestionAdd">Free input</string>
     <string name="questionHint">Question here…</string>
     <string name="textQuestionExplain">Survey takers can answer as they wish.</string>
+    <string name="options">Options</string>
 </resources>
