@@ -10,7 +10,7 @@
 - [x] Refactor
 - [x] I18n for zh-CN
 - [x] Offline work
-- [ ] Survey composer
+- [x] Survey composer
 - [ ] New question types
 - [ ] UI scaling
 
