@@ -1,9 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ViewSwitcher
+    android:id="@+id/surveyuploadRootSwitcher"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ComposerUploadSurveyActivity">
+    tools:context=".ComposerUploadSurveyActivity"
+    android:padding="@dimen/appPadding">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/surveyUploadSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/surveyUploadWaitText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"/>
+
+        <TextView
+            android:id="@+id/surveyUploadWaitText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/surveyUploadSpinner"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/marginXS"
+            android:text="@string/surveyUploading"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/surveyUploadCompleteTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/Header"
+            android:text="@string/surveyUploadCompleteTitle"/>
+
+        <TextView
+            android:id="@+id/surveyUploadCompleteText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/surveyUploadCompleteTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/marginXXS"
+            android:text="@string/surveyUploadCompleteText" />
+
+        <ImageView
+            android:id="@+id/qrView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintWidth_percent="0.7"
+            app:layout_constraintDimensionRatio="W,1:1"
+            app:layout_constraintTop_toBottomOf="@id/surveyUploadCompleteText"
+            app:layout_constraintBottom_toTopOf="@id/surveyIdText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"/>
+
+        <TextView
+            android:id="@+id/surveyIdText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/qrView"
+            app:layout_constraintBottom_toTopOf="@id/surveyUploadFinishBtn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/marginXS"
+            android:text="@string/surveyId"/>
+
+        <Button
+            android:id="@+id/surveyUploadFinishBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            style="@style/PrimaryButton"
+            android:text="@string/finishUpload"
+            android:onClick="finish"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ViewSwitcher>

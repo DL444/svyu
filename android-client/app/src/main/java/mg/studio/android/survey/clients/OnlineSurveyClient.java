@@ -80,7 +80,7 @@ final class OnlineSurveyClient implements ISurveyClient {
         final ConflictRetryStatus conflictRetryStatus = new ConflictRetryStatus();
         do {
             conflictRetryStatus.conflict = false;
-            int id = random.nextInt();
+            int id = Math.abs(random.nextInt());
             survey.setId(String.valueOf(id));
             try {
                 httpClient.postJson("https://svyu.azure-api.net/survey/" + id,

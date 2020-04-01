@@ -18,7 +18,7 @@
     <string name="cacheFailed">Failed to save your response.</string>
     <string name="qrPrompt">Scan the code for the survey</string>
     <string name="surveyNotFound">Sorry, survey not found.</string>
-    <string name="connectFail">Unable to connect to the internet.</string>
+    <string name="connectFail">Unable to connect to the internet. Please check and try again.</string>
     <string name="unsupportedVersion">This survey uses features not available in this version of the app. Please update the app.</string>
     <string name="unexpectedSurveyJson">There\'s a problem connecting to the service. Please check your connection or contact support.</string>
     <string name="unexpectedResponseError">Something unexpected happened sending your answers. Please contact support.</string>
@@ -78,4 +78,9 @@
     <string name="surveyQuestionInvalidError">Some questions are not right. Try fixing them first.</string>
     <string name="surveyUploadOfflineError">You are working offline. Turn it off in settings to upload.</string>
     <string name="surveyUploadActivityTitle">Your new survey</string>
+    <string name="surveyUploadCompleteTitle">Your survey is ready</string>
+    <string name="surveyUploadCompleteText">Use this QR code to conduct survey. You may want to save the code now.</string>
+    <string name="finishUpload">Finish</string>
+    <string name="surveyUploading">Hold on while we upload your survey…</string>
+    <string name="surveyId">Survey ID: %s</string>
 </resources>

@@ -3,6 +3,7 @@ package mg.studio.android.survey.di;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import mg.studio.android.survey.ComposerUploadSurveyActivity;
 import mg.studio.android.survey.FinalizeActivity;
 import mg.studio.android.survey.InitiateScanActivity;
 import mg.studio.android.survey.SurveyActivity;
@@ -20,4 +21,5 @@ public interface InjectionComponent {
     void inject(SurveyActivity activity);
     void inject(SettingsActivity activity);
     void inject(SurveyComposerActivity activity);
+    void inject(ComposerUploadSurveyActivity activity);
 }
