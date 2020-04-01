@@ -11,7 +11,7 @@
 - [x] I18n for zh-CN
 - [x] Offline work
 - [x] Survey composer
-- [ ] New question types
+- [x] New question types
 - [ ] UI scaling
 
 ## Collaborators
