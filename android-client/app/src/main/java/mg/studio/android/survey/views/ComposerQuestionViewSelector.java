@@ -9,6 +9,7 @@ import mg.studio.android.survey.viewmodels.ChoiceQuestionViewModelBase;
 import mg.studio.android.survey.viewmodels.IQuestionViewModel;
 import mg.studio.android.survey.viewmodels.MultiChoiceQuestionViewModel;
 import mg.studio.android.survey.viewmodels.SingleChoiceQuestionViewModel;
+import mg.studio.android.survey.viewmodels.StarRateQuestionViewModel;
 import mg.studio.android.survey.viewmodels.TextQuestionViewModel;
 
 public final class ComposerQuestionViewSelector {
@@ -30,6 +31,8 @@ public final class ComposerQuestionViewSelector {
             case Text:
                 vm = new TextQuestionViewModel(context);
                 break;
+            case StarRate:
+                vm = new StarRateQuestionViewModel(context);
         }
         return getView(vm, false, -1);
     }
@@ -45,6 +48,8 @@ public final class ComposerQuestionViewSelector {
                 return ComposerChoiceQuestionView.createInstance((ChoiceQuestionViewModelBase) question, isUpdate, index);
             case Text:
                 return ComposerTextQuestionView.createInstance(question, isUpdate, index);
+            case StarRate:
+                return ComposerStarRateQuestionView.createInstance(question, isUpdate, index);
         }
         return null;
     }

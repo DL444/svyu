@@ -24,11 +24,12 @@ public final class ResponseSerializerSelector {
         dispatchTable.put(QuestionType.Single.toString(), new SingleChoiceResponseSerializer());
         dispatchTable.put(QuestionType.Multiple.toString(), new MultiChoiceResponseSerializer());
         dispatchTable.put(QuestionType.Text.toString(), new TextResponseSerializer());
+        dispatchTable.put(QuestionType.StarRate.toString().toLowerCase(), new StarRateResponseSerializer());
     }
 
     JSONObject serialize(IResponse model)
             throws JSONException, QuestionTypeNotSupportedException {
-        String type = model.getType().toString();
+        String type = model.getType().toString().toLowerCase();
         if (dispatchTable.containsKey(type)) {
             return dispatchTable.get(type).serialize(model);
         } else {

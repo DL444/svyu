@@ -56,12 +56,15 @@
     <string name="multiChoiceQuestionDescription">多选，共 %1$d 项</string>
     <string name="multiChoiceQuestionEmptyDescription">多选，点按添加选项</string>
     <string name="textQuestionDescription">任意输入</string>
+    <string name="starRateQuestionDescription">评分</string>
     <string name="questionPlaceholder">(你的问题…)</string>
     <string name="singleChoiceQuestionAdd">单选</string>
     <string name="multiChoiceQuestionAdd">多选</string>
     <string name="textQuestionAdd">任意输入</string>
+    <string name="starRateQuestionAdd">评分</string>
     <string name="questionHint">你的问题…</string>
     <string name="textQuestionExplain">被调查者可以任意回答。</string>
+    <string name="starRateQuestionExplain">被调查者在 0.5 至 5 之间评分。</string>
     <string name="options">选项</string>
     <string name="composerNoQuestions">问点问题吧!</string>
     <string name="add">添加</string>

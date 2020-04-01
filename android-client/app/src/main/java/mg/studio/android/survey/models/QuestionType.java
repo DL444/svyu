@@ -17,7 +17,11 @@ public enum QuestionType {
     /**
      * Represents a question that accepts arbitrary text input response.
      */
-    Text("text");
+    Text("text"),
+    /**
+     * Represents a question that accepts star rating response.
+     */
+    StarRate("starRate");
 
     private final String value;
     QuestionType(final String value) {

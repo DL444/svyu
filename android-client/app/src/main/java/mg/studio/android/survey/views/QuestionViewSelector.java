@@ -17,6 +17,8 @@ public final class QuestionViewSelector {
                 return MultiChoiceQuestionView.createInstance(question);
             case Text:
                 return TextQuestionView.createInstance(question);
+            case StarRate:
+                return StarRateQuestionView.createInstance(question);
             default:
                 return null;
         }

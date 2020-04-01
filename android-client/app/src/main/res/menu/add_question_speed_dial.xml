@@ -9,4 +9,7 @@
     <item android:id="@+id/textQuestionAdd"
         android:icon="@drawable/ic_cursor"
         android:title="@string/textQuestionAdd" />
+    <item android:id="@+id/starRateQuestionAdd"
+        android:icon="@drawable/ic_star"
+        android:title="@string/starRateQuestionAdd" />
 </menu>

@@ -135,6 +135,9 @@ public class ComposerListFragment extends Fragment {
                 case R.id.textQuestionAdd:
                     questionOperationRequestListener.onAddQuestionRequested(QuestionType.Text);
                     return true;
+                case R.id.starRateQuestionAdd:
+                    questionOperationRequestListener.onAddQuestionRequested(QuestionType.StarRate);
+                    return true;
                 default:
                     return false;
             }
