@@ -59,7 +59,7 @@ namespace SvyU.Test
         {
             string json = "{\"id\":\"1234567\",\"len\":4,\"longitude\":18.23,\"latitude\":19.25,\"time\":12345,\"imei\":\"ABC\"," +
                 "\"answers\":[{\"type\":\"single\",\"answer\":1},{\"type\":\"multiple\",\"answer\":[0,1,3]},{\"type\":\"text\",\"answer\":\"something\"}," +
-                "{\"type\":\"starRate\",\"answer\":3}]}";
+                "{\"type\":\"starRate\",\"answer\":3.5}]}";
             Response response = Response.Parse(json);
 
             Assert.Equal("1234567", response.Id);
@@ -84,7 +84,7 @@ namespace SvyU.Test
 
             Assert.Equal(QuestionType.StarRate, response.Responses[3].Type);
             Assert.IsType<StarRateResponse>(response.Responses[3]);
-            Assert.Equal(3, ((StarRateResponse)response.Responses[3]).Response);
+            Assert.Equal(3.5, ((StarRateResponse)response.Responses[3]).Response);
         }
     }
 }
