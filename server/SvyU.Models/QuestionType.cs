@@ -4,6 +4,7 @@
     {
         Single = 0,
         Multiple = 1,
-        Text = 2
+        Text = 2,
+        StarRate = 3
     }
 }

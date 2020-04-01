@@ -21,6 +21,8 @@ namespace SvyU.Models
                     return obj.ToObject<MultipleResponse>(serializer);
                 case "TEXT":
                     return obj.ToObject<TextResponse>(serializer);
+                case "STARRATE":
+                    return obj.ToObject<StarRateResponse>(serializer);
                 default:
                     throw new NotSupportedException($"The question type {type} is not supported.");
             }
