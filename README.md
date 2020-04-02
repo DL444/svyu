@@ -4,15 +4,13 @@
 ![SvyU icon: two checkmarks forming the shape of letter S.](./android-client/res/svyu-icon.png)
 
 ## Demo
-[![Click to play a video demonstration.](./android-client/res/demo-play.png)](https://svyuwebsite.blob.core.windows.net/res/svyu-demo.webm)
+**Composer**  
 
-## Roadmap
-- [x] Refactor
-- [x] I18n for zh-CN
-- [x] Offline work
-- [x] Survey composer
-- [x] New question types
-- [ ] UI scaling
+[![Click to play a video demonstration of composer.](./android-client/res/svyu-composer-play.png)](https://svyuwebsite.blob.core.windows.net/res/svyu-composer.mp4)  
+
+**Survey**
+
+[![Click to play a video demonstration of survey.](./android-client/res/svyu-survey-play.png)](https://svyuwebsite.blob.core.windows.net/res/svyu-survey.mp4)
 
 ## Collaborators
 **For contributions before 3/25/2020**  
