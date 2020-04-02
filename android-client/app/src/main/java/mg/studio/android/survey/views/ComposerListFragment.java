@@ -187,6 +187,7 @@ public class ComposerListFragment extends Fragment {
             recentDeletion = questions.get(recentDeletionIndex);
             questions.remove(recentDeletionIndex);
             adapter.notifyItemRemoved(recentDeletionIndex);
+            adapter.notifyItemRangeChanged(recentDeletionIndex, adapter.getItemCount());
 
             Snackbar removeSnack = Snackbar.make(ComposerListFragment.this.getView(), R.string.questionRemoveHint, Snackbar.LENGTH_LONG);
             removeSnack.setAction(R.string.undo, undoListender);
@@ -215,6 +216,7 @@ public class ComposerListFragment extends Fragment {
             super.clearView(recyclerView, viewHolder);
             ComposerListItem item = (ComposerListItem) viewHolder;
             item.setBackground(getResources().getColor(R.color.alt));
+            adapter.notifyDataSetChanged();
         }
 
         @Override
@@ -236,6 +238,7 @@ public class ComposerListFragment extends Fragment {
             }
             questions.add(recentDeletionIndex, recentDeletion);
             adapter.notifyItemInserted(recentDeletionIndex);
+            adapter.notifyItemRangeChanged(recentDeletionIndex, adapter.getItemCount());
             recentDeletion = null;
         }
     };

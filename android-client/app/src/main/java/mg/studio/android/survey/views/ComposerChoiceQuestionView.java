@@ -160,6 +160,7 @@ public final class ComposerChoiceQuestionView extends ComposerQuestionViewBase {
             int index = viewHolder.getAdapterPosition();
             options.remove(index);
             adapter.notifyItemRemoved(index);
+            adapter.notifyItemRangeChanged(index, adapter.getItemCount());
         }
 
         @Override
@@ -184,6 +185,7 @@ public final class ComposerChoiceQuestionView extends ComposerQuestionViewBase {
             super.clearView(recyclerView, viewHolder);
             OptionListItem item = (OptionListItem) viewHolder;
             item.setBackground(getResources().getColor(R.color.alt));
+            adapter.notifyDataSetChanged();
         }
 
         @Override
