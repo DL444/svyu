@@ -1,64 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/marginM"
+    android:padding="@dimen/marginM"
     tools:context=".SettingsActivity">
 
-    <Switch
-        android:id="@+id/lockDeviceCheck"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:text="@string/lockDevice" />
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/deviceAdminTip"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/lockDeviceCheck"
-        android:text="@string/deviceAdminDisabledTip" />
+        <Switch
+            android:id="@+id/lockDeviceCheck"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/lockDevice" />
 
-    <Button
-        android:id="@+id/enableDeviceAdminBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/deviceAdminTip"
-        android:onClick="enabledAdmin"
-        android:text="@string/enable" />
+        <TextView
+            android:id="@+id/deviceAdminTip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lockDeviceCheck"
+            android:text="@string/deviceAdminDisabledTip" />
 
-    <Switch
-        android:id="@+id/workOfflineCheck"
-        android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:layout_below="@id/enableDeviceAdminBtn"
-        android:layout_marginTop="@dimen/marginS"
-        android:text="@string/workOffline" />
+        <Button
+            android:id="@+id/enableDeviceAdminBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/deviceAdminTip"
+            android:onClick="enabledAdmin"
+            android:text="@string/enable" />
 
-    <TextView
-        android:id="@+id/workOfflineHint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/workOfflineCheck"
-        android:text="@string/workOfflineHintOnline" />
+        <Switch
+            android:id="@+id/workOfflineCheck"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/enableDeviceAdminBtn"
+            android:layout_marginTop="@dimen/marginS"
+            android:text="@string/workOffline" />
 
-    <Button
-        android:id="@+id/syncBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/workOfflineHint"
-        android:onClick="syncData"
-        android:text="@string/sync" />
+        <TextView
+            android:id="@+id/workOfflineHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/workOfflineCheck"
+            android:text="@string/workOfflineHintOnline" />
 
-    <ProgressBar
-        android:id="@+id/syncProgress"
-        android:layout_width="24dp"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/syncBtn"
-        android:layout_toEndOf="@id/syncBtn"
-        android:layout_marginLeft="@dimen/marginXS"
-        android:layout_marginStart="@dimen/marginXS"
-        android:layout_below="@id/workOfflineHint"
-        android:visibility="gone"/>
+        <Button
+            android:id="@+id/syncBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/workOfflineHint"
+            android:onClick="syncData"
+            android:text="@string/sync" />
 
-</RelativeLayout>
+        <ProgressBar
+            android:id="@+id/syncProgress"
+            android:layout_width="24dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/syncBtn"
+            android:layout_toEndOf="@id/syncBtn"
+            android:layout_marginLeft="@dimen/marginXS"
+            android:layout_marginStart="@dimen/marginXS"
+            android:layout_below="@id/workOfflineHint"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+
+</ScrollView>
